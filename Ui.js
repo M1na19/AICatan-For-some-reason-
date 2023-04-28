@@ -148,4 +148,6 @@ function MakeMap()
     MakeTile(5,3,12,"wood");
 }
 
+/// To do buildings/ Cards/ Playable Area
+
 MakeMap();
