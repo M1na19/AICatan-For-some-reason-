@@ -3,3 +3,8 @@
 # prune values that go beyond a point
 # robber randomly
 # have to discover balance breadth vs depth
+
+# ddpg for the 2 ais
+
+
+hand: lemn,argila,fan,oaie,piatra
