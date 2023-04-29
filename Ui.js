@@ -116,12 +116,6 @@ function MakeHarbour(pos,type)
     document.body.appendChild(harbourtype.html);
 }
 
-class settlement {
-  type
-
-  constructor()
-};
-
 function MakeSettlement(pozx,pozy,type,player)
 {
     let newsettlement = {};
