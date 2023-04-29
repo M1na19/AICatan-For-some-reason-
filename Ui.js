@@ -122,16 +122,40 @@ function MakeSettlement(pozx,pozy,type,player)
 
     newsettlement.html= document.createElement("img");
 
-    pozx=pozx*2-1+Math.abs(3-Math.floor(pozy/2));
-    pozy=pozy+Math.floor((pozy-1)/2);
-
-    newsettlement.html.style.top = pozy*60 + "px";
-    newsettlement.html.style.left = pozx*104+60 + "px";
+    if(type!="road")
+    {
+      pozx=pozx*2-1+Math.abs(3-Math.floor(pozy/2));
+      pozy=pozy+Math.floor((pozy-1)/2);
+      newsettlement.html.style.top = pozy*60 + "px";
+      newsettlement.html.style.left = pozx*104+60 + "px";
+    }
+    else
+    {
+      if(pozy%2==0)
+      {
+        pozx += Math.abs(6 - pozy) * 0.25;
+        pozy += Math.floor((pozy-1)/2);
+        newsettlement.html.style.top = pozy*60+90 + "px";
+        newsettlement.html.style.left = pozx*208-10 + "px";
+      }
+      else
+      {
+        if ((pozx%2==0 && pozy < 6) || (pozx%2==1 && pozy > 6))
+          newsettlement.html.style.transform="rotate(120deg)";
+        else
+          newsettlement.html.style.transform="rotate(-120deg)";
+        pozx+=Math.abs(2.5 - (pozy - 1)/2);
+        newsettlement.html.style.left = pozx*104 + 96 + "px";
+        newsettlement.html.style.top = pozy*90 + 30 + "px";
+      }
+    }
 
     if(type=="town")
       newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
-    else
+    else if(type=="city")
       newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
+    else
+      newsettlement.html.classList.add("rectangle");
     switch(player)
     {
       case 1:
@@ -150,17 +174,36 @@ function MakeSettlement(pozx,pozy,type,player)
     document.body.appendChild(newsettlement.html);
 }
 
-MakeSettlement(1,1,"town",1)
-MakeSettlement(1,2,"town",2)
-MakeSettlement(1,3,"city",3)
-MakeSettlement(2,11,"city",4)
-MakeSettlement(5,5,"town",2)
-MakeSettlement(4,8,"town",3)
-MakeSettlement(3,3,"city",4)
-MakeSettlement(4,11,"city",1)
+function MakeAndMoveThief(pozx,pozy)
+{
+    //document.body.getElementById("theif").remove();
+    let newthief = {};
+    newthief.html= document.createElement("img");
+    newthief.html.src="https://i.imgur.com/x0MnP5O.png";
+    newthief.html.classList.add("thief");
+    //newthief.setAttribute("thief","thief"); 
+    pozx += Math.abs(3 - pozy) * 0.5;
+    newthief.html.style.left = pozx*204-10+"px";
+    newthief.html.style.top = pozy*179-40 + "px";
+
+    document.body.appendChild(newthief.html);
+}
 
 function MakeMap()
 {
+    var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
+    for (let j = 0; j < temp.length; j++)
+      for (let i = 1; i <= temp[j]; i++)
+        MakeSettlement(i,j + 1, "road", Math.floor(1 + Math.random() * 4))
+
+    MakeSettlement(1,1,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(1,2,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(1,3,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(2,11,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(5,5,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(4,8,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(3,3,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(4,11,"city",Math.floor(1 + Math.random() * 4));
     for(var i=1;i<=9;i++)
     {
         if(i%2==0)MakeHarbour(i,"all");
@@ -189,8 +232,20 @@ function MakeMap()
     MakeTile(5,1,8,"ore");
     MakeTile(5,2,9,"grain");
     MakeTile(5,3,12,"wood");
+
+    MakeAndMoveThief(3,3);
 }
 
-/// To do buildings/ Cards/ Playable Area
+/* Open */
+function openNav() {
+  document.getElementById("myNav").style.width = "100%";
+}
+
+/* Close */
+function closeNav() {
+  document.getElementById("myNav").style.width = "0%";
+}
+
+/// TODO  Cards/ Playable Area / deleting thief
 
 MakeMap();

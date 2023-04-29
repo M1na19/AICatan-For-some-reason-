@@ -2,9 +2,20 @@
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <p></p>
     <script src="Ui.js"></script>
+
+    <div id="myNav" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="overlay-content">
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Clients</a>
+          <a href="#">Contact</a>
+        </div>
+    </div>
+    <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0" onclick="openNav()">OPEN &#9776;</span>
 </body>
 </html>
