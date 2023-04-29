@@ -116,6 +116,55 @@ function MakeHarbour(pos,type)
     document.body.appendChild(harbourtype.html);
 }
 
+class settlement {
+  type
+
+  constructor()
+};
+
+function MakeSettlement(pozx,pozy,type,player)
+{
+    let newsettlement = {};
+
+    newsettlement.html= document.createElement("img");
+
+    pozx=pozx*2-1+Math.abs(3-Math.floor(pozy/2));
+    pozy=pozy+Math.floor((pozy-1)/2);
+
+    newsettlement.html.style.top = pozy*60 + "px";
+    newsettlement.html.style.left = pozx*104+60 + "px";
+
+    if(type=="town")
+      newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
+    else
+      newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
+    switch(player)
+    {
+      case 1:
+        newsettlement.html.style.filter = "invert(21%) sepia(77%) saturate(5326%) hue-rotate(336deg) brightness(92%) contrast(101%)";
+        break;
+      case 2:
+        newsettlement.html.style.filter="invert(66%) sepia(93%) saturate(402%) hue-rotate(1deg) brightness(92%) contrast(99%)";
+        break;
+      case 3:
+        newsettlement.html.style.filter = "invert(20%) sepia(73%) saturate(5005%) hue-rotate(238deg) brightness(84%) contrast(102%)";
+        break;
+      case 4:
+        newsettlement.html.style.filter = "invert(100%) sepia(0%) saturate(7491%) hue-rotate(339deg) brightness(105%) contrast(103%)";
+    }
+
+    document.body.appendChild(newsettlement.html);
+}
+
+MakeSettlement(1,1,"town",1)
+MakeSettlement(1,2,"town",2)
+MakeSettlement(1,3,"city",3)
+MakeSettlement(2,11,"city",4)
+MakeSettlement(5,5,"town",2)
+MakeSettlement(4,8,"town",3)
+MakeSettlement(3,3,"city",4)
+MakeSettlement(4,11,"city",1)
+
 function MakeMap()
 {
     for(var i=1;i<=9;i++)

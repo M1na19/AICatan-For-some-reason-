@@ -6,6 +6,14 @@ body {
     background-color: rgb(40, 177, 223);
   }
 
+  img {
+    width: 100px;
+    height: 100px;
+    position:absolute;
+    z-index: 1002;
+    shape-outside: url(https://i.imgur.com/lEuOmXn.png);
+  }
+
   .circle2{
     padding: 10px;
     height:2px;
