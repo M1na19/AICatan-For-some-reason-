@@ -1,88 +1,58 @@
 import numpy as np
+import queue
 number_of_players=1
-
+config=[[1,2,(3,4,5),(11,10,9)],
+        [1,3,(5,6,7),(1,12,11)],
+        [],
+        [],
+        [],
+        []]
+class piece:
+    def __init__(self) -> None:
+        self.name="none"
+        self.player=0
+        self.echiv=np.array(dtype=piece)
+        self.neigh=np.array(dtype=piece)
+    def tie(self,nod):
+        self.neigh.append(nod)
+        nod.neigh.append(self)
+    def merge(x,y):
+        x.echiv=y
+        y.echiv=x
 class tile:
-    #because easier
-    def __init__(self):
-        self.num=0
-        self.resource="none"
-        self.pieces=np.array(12)
-        self.mappoz=(0,0)
+    def __init__(self) -> None:
+        self.value=0
+        self.pieces=np.array(12,dtype=piece)
+        for i in range(len(self.pieces)):
+            self.pieces[i].tie(self.pieces[i-1])
 
-class player_structure:
- #e pur si simplu un graf care are doua tipuri de noduri
-    class drum:
-        def __init__(self):
-            self.player=0
-            self.poz=(tile(),0)
-            self.piece="none"
-        def __init__(self,pozition,name,player):
-            self.player=player
-            self.poz=pozition
-            self.isdrum=True
-        def get_points(self):
-            points=np.array(self.poz[0].pieces[self.poz[1]-1],self.poz[0].pieces[self.poz[1]+1])
-        def get_muchi(self):
-            muchi=np.array(self.poz[0].pieces[self.poz[1]-2],self.poz[0].pieces[self.poz[1]+2])
-
-    #asta e pt drumuri ca stau pe muchi nu pe colturi
-
-    class oras:
-        def __init__(self):
-            self.player=0
-            self.poz=(tile(),0)
-            self.piece="none"
-        def __init__(self,pozition,name,player):
-            self.poz=pozition
-            self.piece=name
-            self.player=player
-        def get_muchi(self):
-            pass
-    #asta e pt orase si asezari pe colturi
-
-    def __init__(self):
-        self.root=player_structure.point()
-        self.kids=np.array()
-
-    def add(self,parent,piece,pozition,player):
-        if(parent==None):
-            self.root.poz=pozition
-            self.root.piece=piece
-        elif(piece!='drum'):
-            parent.kids.add(player_structure.point(pozition,piece))
-        else:
-            parent.kids.add(player_structure.muchie(pozition,piece))
-    
-    def upgrade(loc):
-        if(loc.piece=="asezare"):
-            loc.piece="oras"
-
-
-class mapconfig:
-    def __init__(self):
-        self.map=np.array([tile(),tile(),tile()],
-                          [tile(),tile(),tile(),tile()],
-                          [tile(),tile(),tile(),tile(),tile()],
-                          [tile(),tile(),tile(),tile()],
-                          [tile(),tile(),tile()])
-        self.infrastructure=np.array(number_of_players)
-
-    def add_piece(self,player,parent,pozition,piece):
-        self.infrastructure[player].add(parent,piece,pozition)
-        self.map[pozition[0].mappoz[0]][[pozition[0].mappoz[1]]].pieces[pozition[1]].piece=piece
+    def merge(x,y,pozx,pozy):
+        for i in range(len(pozx)):
+            piece.merge(x.pieces[pozx],y.pieces[pozy])
+            
 
 class game_state:
+    def __setup(self):
+        tile.merge(self.tiles[1],self.tiles[2],(),())
     def __init__(self):
-        self.hand=np.zeros(number_of_players,5)
-        self.dezvoltari=np.array(5)
-        self.other_player_dezvoltari=np.zeros(number_of_players-1)
-        config=mapconfig()
-    def zar(self,x):
-        for i in range(len(self.config.map)):
-            for j in range(len(self.config.map[i])):
-                if(self.config.map[i][j][0].num==x):
-                    for k in range (len(self.config.map[i][j][0].pieces)):
-                        if(self.config.map[i][j][0].pieces[k].piece=="asezare"):
-                            self.hand[self.config.map[i][j][0].pieces[k].player]+=1
-                        if(self.config.map[i][j][0].pieces[k].piece=="oras"):
-                            self.hand[self.config.map[i][j][0].pieces[k].player]+=2
+        self.hand=np.zeros(number_of_players,5,dtype=int)
+        self.dezvoltari=np.array(5,dtype=int)
+        self.other_player_dezvoltari=np.zeros(number_of_players-1,dtype=int)
+        self.tiles=np.array(19,dtype=tile)
+        self.__setup()
+    def zar(self,zar):
+        for i in range(len(self.tiles)):
+            if self.tiles[i].value==zar:
+                for j in range(len(self.tiles[i].pieces)):
+                    if self.tiles[i].pieces[j].name=="sat":
+                        self.hand[self.tiles[i].pieces[j].player]+=1
+                    elif self.tiles[i].pieces[j].name=="oras":
+                        self.hand[self.tiles[i].pieces[j].player]+=2
+    def add_piece(self,name,player,tilenr,tileindx):
+        self.tiles[tilenr].pieces[tileindx].name=name
+        self.tiles[tilenr].pieces[tileindx].player=player
+        for i in range(len(self.tiles[tilenr].pieces[tileindx].echiv)):
+            self.tiles[tilenr].pieces[tileindx].echiv[i].name=name
+            self.tiles[tilenr].pieces[tileindx].echiv[i].player=player
+
+        
