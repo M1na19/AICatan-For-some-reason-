@@ -1,4 +1,5 @@
 var tiles = [];
+var cardvector = ["brick","wool","wood","wool"];
 
 function MakeTile(pozy,pozx,numar,material)
 {
@@ -236,12 +237,25 @@ function MakeMap()
     MakeAndMoveThief(3,3);
 }
 
-/* Open */
+//--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
+
+function UpdateCards(cardvector)
+{
+  for(var i=0;i<cardvector.length;i++)
+  {
+      const newcard=document.getElementById("card"+i);
+      if(cardvector[i]=="wood") newcard.style.backgroundImage="url(https://i.imgur.com/jlBkJux.jpg)";
+      if(cardvector[i]=="brick") newcard.style.color="red";
+      if(cardvector[i]=="wool") newcard.style.color="red";
+      if(cardvector[i]=="grain") newcard.style.color="red";
+      if(cardvector[i]=="ore") newcard.style.color="red";
+  }
+}
+
 function openNav() {
   document.getElementById("myNav").style.width = "100%";
 }
 
-/* Close */
 function closeNav() {
   document.getElementById("myNav").style.width = "0%";
 }
@@ -249,3 +263,4 @@ function closeNav() {
 /// TODO  Cards/ Playable Area / deleting thief
 
 MakeMap();
+UpdateCards(cardvector);
