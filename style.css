@@ -7,13 +7,21 @@ body {
   }
 
   .card {
+    /*position: absolute;*/
     height: 176px;
     width: 110px;
     background-color: #555;
     border-radius: 10%;
     display:inline-block;
     margin: top 10px;
-    /*background-image: url(https://i.imgur.com/jlBkJux.jpg);*/
+  }
+  .cardholder{
+    height: 176px;
+    width: 110px;
+    background-color: #555;
+    border-radius: 10%;
+    display:inline-block;
+    margin: top 10px;
   }
 
   .rectangle {
@@ -47,16 +55,16 @@ body {
     text-decoration: none;
     outline: none;
     color: #fff;
-    background-color: #4CAF50;
+    background-color: #EADDCA;
     border: none;
     border-radius: 15px;
     box-shadow: 0 9px #999;
   }
   
-  .button:hover {background-color: #3e8e41}
+  .button:hover {background-color: #E4C69A}
   
   .button:active {
-    background-color: #3e8e41;
+    background-color: #E4C69A;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
@@ -143,7 +151,7 @@ body {
   position: relative;
   top: 25%; /* 25% from the top */
   width: 100%; /* 100% width */
-  text-align: center;
+  text-align: right;
   margin-top: 20px; /* Centered text/links */
 }
 

@@ -1,5 +1,6 @@
 var tiles = [];
-var cardvector = ["brick","wool","wood","wool"];
+var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore","grain","brick","wool","wood","ore","grain"];
+var specialcardvector = ["vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop"];
 
 function MakeTile(pozy,pozx,numar,material)
 {
@@ -241,18 +242,33 @@ function MakeMap()
 
 function UpdateCards(cardvector)
 {
-  for(var i=0;i<cardvector.length;i++)
+  for(var i=1;i<=cardvector.length;i++)
   {
       const newcard=document.getElementById("card"+i);
-      if(cardvector[i]=="wood") newcard.style.backgroundImage="url(https://i.imgur.com/jlBkJux.jpg)";
-      if(cardvector[i]=="brick") newcard.style.color="red";
-      if(cardvector[i]=="wool") newcard.style.color="red";
-      if(cardvector[i]=="grain") newcard.style.color="red";
-      if(cardvector[i]=="ore") newcard.style.color="red";
+      if(cardvector[i-1]=="wood") newcard.style.backgroundImage="url(https://i.imgur.com/amAWx6q.png)";
+      if(cardvector[i-1]=="brick") newcard.style.backgroundImage="url(https://i.imgur.com/jldnqDd.png)";
+      if(cardvector[i-1]=="wool") newcard.style.backgroundImage="url(https://i.imgur.com/CEl8Sij.png)";
+      if(cardvector[i-1]=="grain") newcard.style.backgroundImage="url(https://i.imgur.com/KILdl8B.png)";
+      if(cardvector[i-1]=="ore") newcard.style.backgroundImage="url(https://i.imgur.com/l9yIY2E.png)";
+  }
+}
+
+function UpdateSpecialCards(specialcardvector)
+{
+  for(var i=1;i<=specialcardvector.length;i++)
+  {
+      const newspecialcard=document.getElementById("scard"+i);
+      if(specialcardvector[i-1]=="vp") newspecialcard.style.backgroundImage="url(https://i.imgur.com/C2KAoAh.jpg)";
+      if(specialcardvector[i-1]=="soldier") newspecialcard.style.backgroundImage="url(https://i.imgur.com/mE5rUe0.jpg)";
+      if(specialcardvector[i-1]=="2newroads") newspecialcard.style.backgroundImage="url(https://i.imgur.com/vgsER0n.jpg)";
+      if(specialcardvector[i-1]=="monopoly") newspecialcard.style.backgroundImage="url(https://i.imgur.com/VUcO8CX.jpg)";
+      if(specialcardvector[i-1]=="yop") newspecialcard.style.backgroundImage="url(https://i.imgur.com/XcTalgR.jpg)";
   }
 }
 
 function openNav() {
+  UpdateCards(cardvector);
+  UpdateSpecialCards(specialcardvector);
   document.getElementById("myNav").style.width = "100%";
 }
 
@@ -263,4 +279,3 @@ function closeNav() {
 /// TODO  Cards/ Playable Area / deleting thief
 
 MakeMap();
-UpdateCards(cardvector);
