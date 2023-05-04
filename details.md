@@ -7,3 +7,4 @@
 
 
 hand: lemn,argila,fan,oaie,piatra
+dezvoltari:1pct,hot,2 resurse,2 drumuri,monopol

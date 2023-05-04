@@ -45,20 +45,27 @@ class piece:
     def __init__(self) -> None:
         self.name="none"
         self.player=0
-        self.echiv=np.array(dtype=piece)
-        self.neigh=np.array(dtype=piece)
+        self.tileinfo=(0,0)
+        self.neigh=list()
     def tie(self,nod):
         self.neigh.append(nod)
         nod.neigh.append(self)
     def merge(x,y):
-        x.echiv=y
-        y.echiv=x
+        for i in range(len(y.neigh)):
+            for j in range(y.neigh[i].neigh):
+                if y.neigh[i].neigh[j]==y:
+                    y.neigh[i].neigh[j]=x
+        x.neigh+=y.neigh
+        y=x
 class tile:
     def __init__(self) -> None:
+        self.index=0
         self.value=0
+        self.resource=0
         self.pieces=np.array(12,dtype=piece)
         for i in range(len(self.pieces)):
             self.pieces[i].tie(self.pieces[i-1])
+            self.pieces[i].tileinfo=(self.index,i)
 
     def merge(x,y,pozx,pozy):
         for i in range(len(pozx)):
@@ -66,29 +73,36 @@ class tile:
             
 
 class game_state:
-    def __setup(self):
+    def __setup(self,tileconfig):
+        for i in range(self.tiles):
+            self.tiles[i].index=i
         for i in range(len(config)):
             tile.merge(self.tiles[config[i][0]],self.tiles[config[i][1]],config[i][2],config[i][3])
-    def __init__(self):
+        for i in range(len(tileconfig)):
+            self.tiles[i].value=tileconfig[0]
+            self.tiles[i].resource=tileconfig[1]
+    def __init__(self,tileconfig,playerturn):
+        self.player_turn=playerturn
         self.hand=np.zeros((number_of_players,5),dtype=int)
         self.dezvoltari=np.array(5,dtype=int)
         self.other_player_dezvoltari=np.zeros(number_of_players-1,dtype=int)
         self.tiles=np.array(19,dtype=tile)
         self.players=np.array(number_of_players,dtype=(piece,piece))
-        self.__setup()
+        self.__setup(tileconfig)
     def zar(self,zar):
         for i in range(len(self.tiles)):
             if self.tiles[i].value==zar:
                 for j in range(len(self.tiles[i].pieces)):
                     if self.tiles[i].pieces[j].name=="sat":
-                        self.hand[self.tiles[i].pieces[j].player]+=1
+                        self.hand[self.tiles[i].pieces[j].player][self.tiles[i].resource]+=1
                     elif self.tiles[i].pieces[j].name=="oras":
-                        self.hand[self.tiles[i].pieces[j].player]+=2
-    def add_piece(self,name,player,tilenr,tileindx):
-        self.tiles[tilenr].pieces[tileindx].name=name
-        self.tiles[tilenr].pieces[tileindx].player=player
-        for i in range(len(self.tiles[tilenr].pieces[tileindx].echiv)):
-            self.tiles[tilenr].pieces[tileindx].echiv[i].name=name
-            self.tiles[tilenr].pieces[tileindx].echiv[i].player=player
+                        self.hand[self.tiles[i].pieces[j].player][self.tiles[i].resource]+=2
+    def add_piece(self,name,player,tileinfo):
+        self.tiles[tileinfo[0]].pieces[tileinfo[1]].name=name
+        self.tiles[tileinfo[0]].pieces[tileinfo[1]].player=player
+    def add_dezv(self,dezv,player):
+        self.dezvoltari[dezv]+=1
+
+
 
         
