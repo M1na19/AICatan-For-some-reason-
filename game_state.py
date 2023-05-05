@@ -163,19 +163,20 @@ class piece:
         return hash(self.tileinfo)
     def __eq__(self, other):
         if isinstance(other, piece):
-            return other.tileinfo in echiv[self.tileinfo]
+            return other.tileinfo==self.tileinfo or other.tileinfo in echiv[self.tileinfo]
     def tie(self,nod):
         self.neigh.append(nod)
         nod.neigh.append(self)
    
     def merge(list):
         z=piece()
+        z.name="inlocuire"
         z.tileinfo=list[0].tileinfo
         for x in list:
-            for neigh in x.neigh:
-                for neigh2 in neigh.neigh:
-                    if neigh2==x:
-                        neigh2=z
+            for n1 in range(len(x.neigh)):
+                for n2 in range(len(x.neigh[n1].neigh)):
+                    if(x.neigh[n1].neigh[n2]==x):
+                        x.neigh[n1].neigh[n2]=z
         for x in list:
             z.neigh+=x.neigh
         z.neigh=unique_list(z.neigh)

@@ -12,18 +12,12 @@ for i in range(2):
       tile=random.randint(0,18)
       poz=random.randint(0,5)*2
     
-    print(tile,poz)
     sg.add_piece("asezare",j,(tile,poz))
-    sg.add_piece("drum",j,sg.tiles[tile].pieces[poz].neigh[random.randint(0,len(sg.tiles[tile].pieces[poz].neigh)-1)].tileinfo)
+    dir=random.randint(0,len(sg.tiles[tile].pieces[poz].neigh)-1)
+    sg.add_piece("drum",j,sg.tiles[tile].pieces[poz].neigh[dir].tileinfo)
 
 print(sg.players[0][0].tileinfo)
 print(sg.players[0][1].tileinfo)
-sg.add_piece("asezare",1,(1,2))
-#for key in gs.echiv:
-# print(key,gs.echiv[key])
-for tile in sg.tiles:
-  for piece in tile.pieces:
-    print(piece.tileinfo,end=":\n")
-    for neighbour in piece.neigh:
-      print(end="      ")
-      print(neighbour.tileinfo)
+print()
+for i in mc.place_piece(sg,0):
+  print(i.tileinfo)

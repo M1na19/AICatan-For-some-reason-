@@ -49,12 +49,12 @@ def place_piece(state:gs.game_state,player:int):
     while not q.empty():
         now=q.get()
         visited[now]=True
-        for i in range(len(now.neigh)):
-            if(now.neigh[i].player==-1):
-                to_visit.append(now.neigh[i])
-            if (not now.neigh[i] in visited or visited[now.neigh[i]]==False) and (now.neigh[i].player==player or now.neigh[i].tileinfo[1]%2==0):
-                q.put(now.neigh[i])
-                visited[now.neigh[i]]=True
+        for ngh in now.neigh:
+            if(ngh.player==-1):
+                to_visit.append(ngh)
+            if (not ngh in visited or visited[ngh]==False) and (ngh.player==player or ngh.tileinfo[1]%2==0):
+                q.put(ngh)
+                visited[ngh]=True
     return to_visit
 
 #vad daca pot sa pun asezare
