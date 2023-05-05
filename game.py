@@ -13,3 +13,5 @@ for i in range(2)
       poz=random.randint(0,11)
     sg.add_piece("asezare",i,tile,poz)
     sg.add_piece("oras",i,sg.tiles[tile].pieces[poz].neigh[random.randint(0,len(sg.tiles[tile].pieces[poz].neigh))].tileinfo[0],sg.tiles[tile].pieces[poz].neigh[random.randint(0,len(sg.tiles[tile].pieces[poz].neigh))].tileinfo[1
+sg.zar(9)
+print(sg.bestmove(sg))
