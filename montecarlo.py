@@ -123,7 +123,7 @@ def find_moves(state:gs.game_state,player:int):
         for i in range(len(upgrade_options)):
             moves.append(new_state.copy().add_piece("oras",player,piece_options[i].tileinfo))
     
-    #cumpar drum
+    #cumpar dezvoltare
     if state.hand[player][2]>=1 and state.hand[player][3]>=1 and state.hand[player][4]>=1:
         new_state=state.copy()
         new_state.hand[player][2]-=1
