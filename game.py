@@ -16,8 +16,3 @@ for i in range(2):
     dir=random.randint(0,len(sg.tiles[tile].pieces[poz].neigh)-1)
     sg.add_piece("drum",j,sg.tiles[tile].pieces[poz].neigh[dir].tileinfo)
 
-print(sg.players[0][0].tileinfo)
-print(sg.players[0][1].tileinfo)
-print()
-for i in mc.place_piece(sg,0):
-  print(i.tileinfo)
