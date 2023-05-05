@@ -183,7 +183,7 @@ function MakeAndMoveThief(pozx,pozy)
     newthief.html= document.createElement("img");
     newthief.html.src="https://i.imgur.com/x0MnP5O.png";
     newthief.html.classList.add("thief");
-    //newthief.setAttribute("thief","thief"); 
+    newthief.id="thief";
     pozx += Math.abs(3 - pozy) * 0.5;
     newthief.html.style.left = pozx*204-10+"px";
     newthief.html.style.top = pozy*179-40 + "px";
@@ -240,34 +240,59 @@ function MakeMap()
 
 //--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
 
-function UpdateCards(cardvector)
+function UpdateDice(val1,val2)
+{
+    document.getElementById("dice1").textContent=val1;
+    document.getElementById("dice2").textContent=val2;
+}
+
+function NewCards(cardvector)
 {
   for(var i=1;i<=cardvector.length;i++)
   {
-      const newcard=document.getElementById("card"+i);
-      if(cardvector[i-1]=="wood") newcard.style.backgroundImage="url(https://i.imgur.com/amAWx6q.png)";
-      if(cardvector[i-1]=="brick") newcard.style.backgroundImage="url(https://i.imgur.com/jldnqDd.png)";
-      if(cardvector[i-1]=="wool") newcard.style.backgroundImage="url(https://i.imgur.com/CEl8Sij.png)";
-      if(cardvector[i-1]=="grain") newcard.style.backgroundImage="url(https://i.imgur.com/KILdl8B.png)";
-      if(cardvector[i-1]=="ore") newcard.style.backgroundImage="url(https://i.imgur.com/l9yIY2E.png)";
+      if(document.getElementById("card"+i)==null)
+      {
+        let newcard = {};
+        newcard.html=document.createElement("div");
+        newcard.html.classList.add("card");
+        newcard.html.style.left=(i-1)*120+10+"px";
+        newcard.html.id="card"+i;
+        dragElement(newcard.html);
+        document.getElementById("cardpadding1").appendChild(newcard.html);
+        if(cardvector[i-1]=="wood") newcard.html.style.backgroundImage="url(https://i.imgur.com/amAWx6q.png)";
+        if(cardvector[i-1]=="brick") newcard.html.style.backgroundImage="url(https://i.imgur.com/jldnqDd.png)";
+        if(cardvector[i-1]=="wool") newcard.html.style.backgroundImage="url(https://i.imgur.com/CEl8Sij.png)";
+        if(cardvector[i-1]=="grain") newcard.html.style.backgroundImage="url(https://i.imgur.com/KILdl8B.png)";
+        if(cardvector[i-1]=="ore") newcard.html.style.backgroundImage="url(https://i.imgur.com/l9yIY2E.png)";
+      }
   }
 }
-
 function UpdateSpecialCards(specialcardvector)
 {
   for(var i=1;i<=specialcardvector.length;i++)
   {
-      const newspecialcard=document.getElementById("scard"+i);
-      if(specialcardvector[i-1]=="vp") newspecialcard.style.backgroundImage="url(https://i.imgur.com/C2KAoAh.jpg)";
-      if(specialcardvector[i-1]=="soldier") newspecialcard.style.backgroundImage="url(https://i.imgur.com/mE5rUe0.jpg)";
-      if(specialcardvector[i-1]=="2newroads") newspecialcard.style.backgroundImage="url(https://i.imgur.com/vgsER0n.jpg)";
-      if(specialcardvector[i-1]=="monopoly") newspecialcard.style.backgroundImage="url(https://i.imgur.com/VUcO8CX.jpg)";
-      if(specialcardvector[i-1]=="yop") newspecialcard.style.backgroundImage="url(https://i.imgur.com/XcTalgR.jpg)";
+    if(document.getElementById("scard"+i)==null)
+    {
+      let newspecialcard= {};
+      newspecialcard.html=document.createElement("div");
+      newspecialcard.html.classList.add("card");
+      newspecialcard.html.style.top=176+"px";
+      newspecialcard.html.style.left=(i-1)*120+10+"px";
+      newspecialcard.html.id="scard"+i;
+      dragElement(newspecialcard.html);
+      document.getElementById("cardpadding2").appendChild(newspecialcard.html);
+      if(specialcardvector[i-1]=="vp") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/C2KAoAh.jpg)";
+      if(specialcardvector[i-1]=="soldier") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/mE5rUe0.jpg)";
+      if(specialcardvector[i-1]=="2newroads") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/vgsER0n.jpg)";
+      if(specialcardvector[i-1]=="monopoly") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/VUcO8CX.jpg)";
+      if(specialcardvector[i-1]=="yop") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/XcTalgR.jpg)";
+    }
   }
 }
 
 function openNav() {
-  UpdateCards(cardvector);
+  UpdateDice(4,6);
+  NewCards(cardvector);
   UpdateSpecialCards(specialcardvector);
   document.getElementById("myNav").style.width = "100%";
 }
@@ -276,6 +301,38 @@ function closeNav() {
   document.getElementById("myNav").style.width = "0%";
 }
 
-/// TODO  Cards/ Playable Area / deleting thief
-
 MakeMap();
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id)) {
+    document.getElementById(elmnt.id).onmousedown = dragMouseDown;
+  } else {
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
