@@ -21,10 +21,10 @@ class node:
         moves=find_moves(self.state,self.state.player_turn)
         for i in range(len(moves)):
             if(type(moves[i])==gs.game_state):
-                self.kids.append(None,moves[i],self)
+                self.kids.append(node(None,moves[i],self))
                 self.kids[-1].depth=self.depth+1
             elif(type(moves[i])==str):
-                self.kids.append(moves[i],None,self)
+                self.kids.append(node(moves[i],None,self))
                 self.kids[-1].depth=self.depth
                 
     
@@ -39,24 +39,25 @@ class MonteCarlo_tree:
         self.start=node("start",startstate,None)
 
 #ma uit unde pot sa pun drum sau asezare
-
+#am verificat,pare ca functioneaza
 def place_piece(state:gs.game_state,player:int):
     to_visit=list()
     visited=dict()
     q=queue.Queue()
-    q.put(state.players[player])
+    q.put(state.players[player][0])
+    q.put(state.players[player][1])
     while not q.empty():
         now=q.get()
+        visited[now]=True
         for i in range(len(now.neigh)):
-            if(now.neigh[i].player==0):
+            if(now.neigh[i].player==-1):
                 to_visit.append(now.neigh[i])
             if (not now.neigh[i] in visited or visited[now.neigh[i]]==False) and (now.neigh[i].player==player or now.neigh[i].tileinfo[1]%2==0):
-                q.push(now.neigh[i])
+                q.put(now.neigh[i])
                 visited[now.neigh[i]]=True
     return to_visit
 
 #vad daca pot sa pun asezare
-
 def check_avail(piece,depth):
     condition=True
     if(depth>0):
@@ -71,21 +72,22 @@ def check_avail(piece,depth):
         
 
 #ma uit unde pot sa pun oras
-
+#am verificat,pare ca functioneaza
 def upgradeable(state:gs.game_state,player:int):
     to_upgrade=list()
     visited=dict()
     q=queue.Queue()
-    q.put(state.players[player])
+    q.put(state.players[player][0])
+    q.put(state.players[player][1])
     while not q.empty():
         now=q.get()
+        visited[now]=True
         if now.name=="asezare":
-            upgradeable.append(now)
-        else:
-            for i in range(len(now.neigh)):
-                if (not now.neigh[i] in visited or visited[now.neigh[i]]==False) and (now.neigh[i].player==player or now.neigh[i].tileinfo[1]%2==0):
-                    q.push(now.neigh[i])
-                    visited[now.neigh[i]]=True
+            to_upgrade.append(now)
+        for nod in now.neigh:
+            if (not nod in visited or visited[nod]==False) and (nod.player==player or nod.tileinfo[1]%2==0):
+                q.put(nod)
+                visited[nod]=True
     return to_upgrade
 
 #toate mutarile posibile, btw fuck u mache trb efectiv sa facem sah
@@ -161,14 +163,14 @@ def find_moves(state:gs.game_state,player:int):
 
     #go nuts
     moves.append("trading")
+    return moves
         
 def best_move(gamestate):
     starttime=time.time()
     mc=MonteCarlo_tree(gamestate)
     leafs=[mc.start]
     while(time.time()-starttime<decision):
-        now=heapq.heappop(leafs)
-        now.make_kids()
+        pass
 
 
 

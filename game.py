@@ -7,13 +7,23 @@ sg=gs.game_state(tileconfig,first_player)
 for i in range(2):
   for j in range(4):
     tile=random.randint(0,18)
-    poz=random.randint(0,11)
+    poz=random.randint(0,5)*2
     while not mc.check_avail(sg.tiles[tile].pieces[poz],2):
       tile=random.randint(0,18)
-      poz=random.randint(0,11)
-    sg.add_piece("asezare",i,(tile,poz))
-    sg.add_piece("oras",i,sg.tiles[tile].pieces[poz].neigh[random.randint(0,len(sg.tiles[tile].pieces[poz].neigh)-1)].tileinfo)
-sg.zar(9)
-print(mc.best_move(sg))
+      poz=random.randint(0,5)*2
+    
+    print(tile,poz)
+    sg.add_piece("asezare",j,(tile,poz))
+    sg.add_piece("drum",j,sg.tiles[tile].pieces[poz].neigh[random.randint(0,len(sg.tiles[tile].pieces[poz].neigh)-1)].tileinfo)
 
-#set player for gamestate
+print(sg.players[0][0].tileinfo)
+print(sg.players[0][1].tileinfo)
+sg.add_piece("asezare",1,(1,2))
+#for key in gs.echiv:
+# print(key,gs.echiv[key])
+for tile in sg.tiles:
+  for piece in tile.pieces:
+    print(piece.tileinfo,end=":\n")
+    for neighbour in piece.neigh:
+      print(end="      ")
+      print(neighbour.tileinfo)
