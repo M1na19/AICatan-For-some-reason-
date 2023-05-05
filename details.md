@@ -6,5 +6,13 @@
 
 
 
-hand: lemn,argila,fan,oaie,piatra
+hand: 
+lemn=0
+argila=1
+fan=2
+oaie=3
+piatra=4
+
+
+
 dezvoltari:1pct,hot,2 resurse,2 drumuri,monopol
