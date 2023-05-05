@@ -15,22 +15,22 @@ class node:
         self.kids=list()
     def __lt__(self,other):
         return self.depth<other.depth
-    def make_kids(nod):
-        if(nod.action!=None):
-            node.do_action(nod)
-        moves=find_moves(nod)
+    def make_kids(self):
+        if(self.action!=None):
+            node.do_action(self)
+        moves=find_moves(self.state,self.state.player_turn)
         for i in range(len(moves)):
             if(type(moves[i])==gs.game_state):
-                nod.kids.append(None,moves[i],nod)
-                nod.kids[-1].depth=nod.depth+1
+                self.kids.append(None,moves[i],self)
+                self.kids[-1].depth=self.depth+1
             elif(type(moves[i])==str):
-                nod.kids.append(moves[i],None,nod)
-                nod.kids[-1].depth=nod.depth
+                self.kids.append(moves[i],None,self)
+                self.kids[-1].depth=self.depth
                 
     
     #aici daca am spre ex oponentul joaca o dezvoltare nu pot sa stiu ce dezvoltare va juca
     #de acea voi ramifica in toate dezvoltarile si valoare nodului finala va fi media posibilitatilor
-    def do_action():
+    def do_action(X):
         pass
             
 
@@ -60,7 +60,7 @@ def place_piece(state:gs.game_state,player:int):
 def check_avail(piece,depth):
     condition=True
     if(depth>0):
-        for i in range(piece.neigh):
+        for i in range(len(piece.neigh)):
             if(piece.neigh[i].name=="asezare"):
                 condition=False
             condition=condition and check_avail(piece.neigh[i],depth-1)
@@ -163,12 +163,12 @@ def find_moves(state:gs.game_state,player:int):
     moves.append("trading")
         
 def best_move(gamestate):
-    starttime=time.time
+    starttime=time.time()
     mc=MonteCarlo_tree(gamestate)
     leafs=[mc.start]
-    while(time.time-starttime<decision):
+    while(time.time()-starttime<decision):
         now=heapq.heappop(leafs)
-        node.make_kids(now)
+        now.make_kids()
 
 
 
