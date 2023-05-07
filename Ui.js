@@ -1,5 +1,6 @@
 var tiles = [];
 var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore","grain","brick","wool","wood","ore","grain"];
+var cardloc = [];
 var specialcardvector = ["vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop"];
 
 function MakeTile(pozy,pozx,numar,material)
@@ -253,11 +254,13 @@ function NewCards(cardvector)
       if(document.getElementById("card"+i)==null)
       {
         let newcard = {};
+        newcard.mat=cardvector[i-1];
         newcard.html=document.createElement("div");
         newcard.html.classList.add("card");
         newcard.html.style.left=(i-1)*120+10+"px";
         newcard.html.id="card"+i;
         dragElement(newcard.html);
+        cardloc.push(newcard);
         document.getElementById("cardpadding1").appendChild(newcard.html);
         if(cardvector[i-1]=="wood") newcard.html.style.backgroundImage="url(https://i.imgur.com/amAWx6q.png)";
         if(cardvector[i-1]=="brick") newcard.html.style.backgroundImage="url(https://i.imgur.com/jldnqDd.png)";
@@ -292,8 +295,8 @@ function UpdateSpecialCards(specialcardvector)
 
 function openNav() {
   UpdateDice(4,6);
-  NewCards(cardvector);
   UpdateSpecialCards(specialcardvector);
+  NewCards(cardvector);
   document.getElementById("myNav").style.width = "100%";
 }
 
@@ -302,6 +305,37 @@ function closeNav() {
 }
 
 MakeMap();
+
+function updatenumbermat()
+{
+  var wood=0,wool=0,ore=0,brick=0,grain=0;
+  if(document.getElementById("myNav").style.width=="100%")
+  {
+    for(var i=0;i<cardloc.length;i++)
+    {
+      if(parseInt(cardloc[i].html.style.top)>500 && parseInt(cardloc[i].html.style.top)<924 && parseInt(cardloc[i].html.style.left)>800 && parseInt(cardloc[i].html.style.left)<1300)
+      {
+        if(cardloc[i].mat=="wood")wood++;
+        if(cardloc[i].mat=="wool")wool++;
+        if(cardloc[i].mat=="ore")ore++;
+        if(cardloc[i].mat=="brick")brick++;
+        if(cardloc[i].mat=="grain")grain++;
+        //=parseInt(document.getElementById("c"+cardloc[i].mat).textContent)+1;
+      }
+      document.getElementById("cwood").textContent=wood;
+      document.getElementById("cwool").textContent=wool;
+      document.getElementById("core").textContent=ore;
+      document.getElementById("cbrick").textContent=brick;
+      document.getElementById("cgrain").textContent=grain;
+    }
+  }
+}
+
+var intervalId = window.setInterval(function()
+{
+  updatenumbermat();
+}, 1);
+
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

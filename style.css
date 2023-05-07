@@ -13,7 +13,7 @@ body {
     border-radius: 5%;
     height: 100px;
     width: 100px;
-    background-color: gainsboro;
+    background-color: #EADDCA;
     display:inline-block;
   }
 
@@ -26,6 +26,7 @@ body {
     border-radius: 10%;
     display:inline-block;
     margin: top 10px;
+    z-index: 2;
   }
   .cardholder{
     position: absolute;
@@ -35,6 +36,17 @@ body {
     border-radius: 10%;
     display:inline-block;
     margin: top 10px;
+  }
+
+  .tradeplace {
+    border-radius: 5%;
+    position: absolute;
+    left: 800px;
+    top:500px;
+    height: 600px;
+    width: 600px;
+    background-color: rgba(54,26,8,0.9);
+    z-index: 1;
   }
 
   .rectangle {
@@ -86,6 +98,17 @@ body {
     padding: 10px;
     height:2px;
     width: 2px;
+    background-color: white;
+    border-radius: 50%;
+    display:inline-block;
+    position:absolute;
+    z-index: 1;
+  }
+
+  .circle3{
+    padding: 20px;
+    height:40px;
+    width: 40px;
     background-color: white;
     border-radius: 50%;
     display:inline-block;
@@ -201,3 +224,26 @@ body {
   }
 }
 
+.button1 {
+  position: absolute;
+  display: absolute;
+  padding: 15px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  background-color: #EADDCA;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 9px #999;
+}
+
+.button1:hover {background-color: #E4C69A}
+
+.button1:active {
+  background-color: #E4C69A;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
