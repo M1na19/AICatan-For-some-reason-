@@ -1,0 +1,249 @@
+#text {
+  padding: 10px;
+}
+
+body {
+    background-color: rgb(40, 177, 223);
+  }
+
+  .dice {
+    font-size: 80px;
+    vertical-align: text-top;
+    text-align: center;
+    border-radius: 5%;
+    height: 100px;
+    width: 100px;
+    background-color: #EADDCA;
+    display:inline-block;
+  }
+
+  .card {
+    position: absolute;
+    cursor: move;
+    height: 176px;
+    width: 110px;
+    background-color: #555;
+    border-radius: 10%;
+    display:inline-block;
+    margin: top 10px;
+    z-index: 2;
+  }
+  .cardholder{
+    position: absolute;
+    height: 176px;
+    width: 110px;
+    background-color: #555;
+    border-radius: 10%;
+    display:inline-block;
+    margin: top 10px;
+  }
+
+  .tradeplace {
+    border-radius: 5%;
+    position: absolute;
+    left: 800px;
+    top:500px;
+    height: 600px;
+    width: 600px;
+    background-color: rgba(54,26,8,0.9);
+    z-index: 1;
+  }
+
+  .rectangle {
+    height: 60px;
+    width: 20px;
+    background-color: black;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    position:absolute;
+    z-index: 2;
+    shape-outside: url(https://i.imgur.com/lEuOmXn.png);
+  }
+
+  .thief{
+    width: 265px;
+    height: 200px;
+    position:absolute;
+    z-index: 2;
+    shape-outside: url(https://i.imgur.com/lEuOmXn.png);
+  }
+
+  .button {
+    display: inline-block;
+    padding: 25px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #EADDCA;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  
+  .button:hover {background-color: #E4C69A}
+  
+  .button:active {
+    background-color: #E4C69A;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+  .circle2{
+    padding: 10px;
+    height:2px;
+    width: 2px;
+    background-color: white;
+    border-radius: 50%;
+    display:inline-block;
+    position:absolute;
+    z-index: 1;
+  }
+
+  .circle3{
+    padding: 20px;
+    height:40px;
+    width: 40px;
+    background-color: white;
+    border-radius: 50%;
+    display:inline-block;
+    position:absolute;
+    z-index: 1;
+  }
+
+  .circle {
+    padding: 20px;
+    height:15px;
+    width: 15px;
+    background-color: white;
+    border-radius: 50%;
+    display:inline-block;
+    position:absolute;
+    z-index: 1;
+  }
+
+  .trapezoid {
+    border-bottom: 30px solid #ddc77a;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    height: 0;
+    width: 72px;
+    position: absolute;
+    display: inline-block;
+  }
+
+.hex {
+    width: 208px;
+    height: 120px;
+    background-color: rgba(180, 100, 35, 1);
+    border-color: rgba(180, 100, 35, 1);
+    position: absolute;
+    display: inline-block;
+}
+.hex:before {
+    content: " ";
+    width: 0; height: 0;
+    border-bottom: 60px solid;
+    border-color: inherit;
+    border-left: 104px solid transparent;
+    border-right: 104px solid transparent;
+    position: absolute;
+    top: -60px;
+}
+.hex:after {
+    content: "";
+    width: 0;
+    position: absolute;
+    bottom: -60px;
+    border-top: 60px solid;
+    border-color: inherit;
+    border-left: 104px solid transparent;
+    border-right: 104px solid transparent;
+}
+/*STYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLSSTYLE FOR CONTROLS*/
+
+/* The Overlay (background) */
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */   
+  height: 100%;
+  width: 0%;
+  position: fixed; /* Stay in place */
+  z-index: 10; /* Sit on top */
+  right: 0;
+  top: 0;
+  background-color: rgb(64,36,15); /* Black fallback color */
+  background-color: rgba(64,36,15, 0.9); /* Black w/opacity */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  top: 25%; /* 25% from the top */
+  width: 100%; /* 100% width */
+  text-align: right;
+  margin-top: 20px; /* Centered text/links */
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block; /* Display block instead of inline */
+  transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+/* Position the close button (top right corner) */
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+.button1 {
+  position: absolute;
+  display: absolute;
+  padding: 15px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  background-color: #EADDCA;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 9px #999;
+}
+
+.button1:hover {background-color: #E4C69A}
+
+.button1:active {
+  background-color: #E4C69A;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
