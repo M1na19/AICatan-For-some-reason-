@@ -282,13 +282,13 @@ function UpdateSpecialCards(specialcardvector)
       newspecialcard.html.style.top=176+"px";
       newspecialcard.html.style.left=(i-1)*120+10+"px";
       newspecialcard.html.id="scard"+i;
-      dragElement(newspecialcard.html);
+      dragElement(newspecialcard.html); 
       document.getElementById("cardpadding2").appendChild(newspecialcard.html);
-      if(specialcardvector[i-1]=="vp") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/C2KAoAh.jpg)";
-      if(specialcardvector[i-1]=="soldier") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/mE5rUe0.jpg)";
-      if(specialcardvector[i-1]=="2newroads") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/vgsER0n.jpg)";
-      if(specialcardvector[i-1]=="monopoly") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/VUcO8CX.jpg)";
-      if(specialcardvector[i-1]=="yop") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/XcTalgR.jpg)";
+      if(specialcardvector[i-1]=="vp") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/cIVhMQv.png)";
+      if(specialcardvector[i-1]=="soldier") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/ikUPxHo.png)";
+      if(specialcardvector[i-1]=="2newroads") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/O23yKZR.png)";
+      if(specialcardvector[i-1]=="monopoly") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/mbxoOLf.png)";
+      if(specialcardvector[i-1]=="yop") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/H9KBWNy.png)";
     }
   }
 }

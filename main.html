@@ -46,8 +46,27 @@
                 <button style="top: 250px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tore').textContent)>0)document.getElementById('tore').textContent=parseInt(document.getElementById('tore').textContent)-1">-</button>
                 <button style="top: 125px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tgrain').textContent)>0)document.getElementById('tgrain').textContent=parseInt(document.getElementById('tgrain').textContent)-1">-</button>
                 <button style="top: 10px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('twool').textContent)>0)document.getElementById('twool').textContent=parseInt(document.getElementById('twool').textContent)-1">-</button>
-                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" onclick="closeNav()">TRADE</button>
+                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" onclick="">SEND TRADE</button>
+                <div style="top:0px;width: 250px;left:860px" class="tradeplace"></div>
             </div>
+        </div>
+        <div style="padding-left:0px;left:2000px;" class="tradeplace">
+            <p style="color:#EADDCA;font-size: 30px;top:325px;left:175px;position: absolute;text-align: center;" id="TradePlayerName">Trade from: Name</p>
+            <p style="color:#EADDCA;font-size: 40px;left:120px;position: absolute;"><i class="arrow left"></i>Materials you give</p>
+            <p style="color:#EADDCA;font-size: 40px;top:400px;left:120px;position: absolute;">Materials you get<i class="arrow right"></i></p>
+            <div class="circle3" style="top:500px;left:25px;background-image: url(https://i.imgur.com/amAWx6q.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ylwood">0</div>
+            <div class="circle3" style="top:375px;left:25px;background-image: url(https://i.imgur.com/jldnqDd.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ylbrick">0</div>
+            <div class="circle3" style="top:250px;left:25px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ylore">0</div>
+            <div class="circle3" style="top:125px;left:25px;background-image: url(https://i.imgur.com/KILdl8B.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ylgrain">0</div>
+            <div class="circle3" style="top:10px;left:25px;background-image: url(https://i.imgur.com/CEl8Sij.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ylwool">0</div>
+            <div class="circle3" style="top:500px;left:500px;background-image: url(https://i.imgur.com/amAWx6q.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ywwood">0</div>
+            <div class="circle3" style="top:375px;left:500px;background-image: url(https://i.imgur.com/jldnqDd.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ywbrick">0</div>
+            <div class="circle3" style="top:250px;left:500px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ywore">0</div>
+            <div class="circle3" style="top:125px;left:500px;background-image: url(https://i.imgur.com/KILdl8B.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="ywgrain">0</div>
+            <div class="circle3" style="top:10px;left:500px;background-image: url(https://i.imgur.com/CEl8Sij.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue" id="ywwool">0</div>  
+            <button style="top: 225px;left:200px;width: 200px;height: 100px;position: absolute;color: black;" class="button" onclick="">ACCEPT TRADE</button>
+        </div>
+        <div style="top:-100px;" class="cardholder">
         </div>
     </div>
     <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0" onclick="openNav()">OPEN &#9776;</span>

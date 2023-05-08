@@ -3,10 +3,12 @@
 }
 
 body {
+  user-select:none;
     background-color: rgb(40, 177, 223);
   }
 
   .dice {
+    user-select:none;
     font-size: 80px;
     vertical-align: text-top;
     text-align: center;
@@ -18,6 +20,9 @@ body {
   }
 
   .card {
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
     position: absolute;
     cursor: move;
     height: 176px;
@@ -30,15 +35,16 @@ body {
   }
   .cardholder{
     position: absolute;
-    height: 176px;
-    width: 110px;
-    background-color: #555;
-    border-radius: 10%;
+    height: 476px;
+    width: 2600px;
+    background-color: rgba(54,26,8,0.9);
+    border-radius: 5%;
     display:inline-block;
-    margin: top 10px;
+    margin: top 10px left 10px;
   }
 
   .tradeplace {
+    user-select:none;
     border-radius: 5%;
     position: absolute;
     left: 800px;
@@ -46,7 +52,7 @@ body {
     height: 600px;
     width: 600px;
     background-color: rgba(54,26,8,0.9);
-    z-index: 1;
+    z-index: 0;
   }
 
   .rectangle {
@@ -56,6 +62,7 @@ body {
   }
 
   img {
+    user-select:none;
     width: 100px;
     height: 100px;
     position:absolute;
@@ -72,6 +79,7 @@ body {
   }
 
   .button {
+    user-select:none;
     display: inline-block;
     padding: 25px 25px;
     font-size: 24px;
@@ -176,8 +184,8 @@ body {
   z-index: 10; /* Sit on top */
   right: 0;
   top: 0;
-  background-color: rgb(64,36,15); /* Black fallback color */
-  background-color: rgba(64,36,15, 0.9); /* Black w/opacity */
+  background-color: rgb(63,36,20); /* Black fallback color */
+  background-color: rgba(63,36,20, 0.9); /* Black w/opacity */
   overflow-x: hidden; /* Disable horizontal scroll */
   transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
 }
@@ -225,6 +233,8 @@ body {
 }
 
 .button1 {
+  z-index: 2;
+  user-select:none;
   position: absolute;
   display: absolute;
   padding: 15px 20px;
@@ -246,4 +256,26 @@ body {
   background-color: #E4C69A;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+ .tradetext{ 
+  background-color: lightblue;
+  border: 5px solid black;
+}
+
+.arrow {
+  border: solid #EADDCA;
+  border-width: 0 20px 20px 0;
+  display: inline-block;
+  padding: 20px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
 }
