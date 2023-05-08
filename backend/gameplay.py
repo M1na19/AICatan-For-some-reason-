@@ -42,6 +42,14 @@ def resolve_get(rq,player,info):
         pass
     elif(rq=="tradeProposal"):
         pass
+    elif(rq=='possiblePiecePlace'):
+        answear=mc.place_piece(game,player)
+        name=info.get("name")
+        for piece in answear:
+            if(piece.name!=name):
+                answear.remove(piece)
+        for i in range(len(answear)):
+            answear[i]=answear[i].tileinfo
     endState()
     return answear
 
@@ -51,7 +59,7 @@ def resolve_put(rq,player,info):
         name=info.get('name')
         tile=info.get('tile')
         poz=info.get('poz')
-        game.add_piece(name,player,(tile,poz))#check if possible
+        game.add_piece(name,player,(tile,poz))
     elif(rq=="pas"):
           game.playerturn+=1
           game.playerturn%=(dezvoltari.count()+1)
@@ -77,7 +85,7 @@ def resolve_put(rq,player,info):
         tile2=info.get('tile2')
         poz2=info.get('poz2')
         game.add_piece("drum",player,(tile1,poz1))
-        game.add_piece("drum",player,(tile2,poz2))#check if possible
+        game.add_piece("drum",player,(tile2,poz2))
     elif(rq=="monopol"):
         res=info.get('resource')
         for i in range(game.number_of_players):

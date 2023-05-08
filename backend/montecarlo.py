@@ -50,7 +50,7 @@ def place_piece(state:gs.game_state,player:int):
         now=q.get()
         visited[now]=True
         for ngh in now.neigh:
-            if(ngh.player==-1):
+            if(ngh.player==-1 and (ngh.tileinfo[1]%2==1 or check_avail(ngh,2))):
                 to_visit.append(ngh)
             if (not ngh in visited or visited[ngh]==False) and (ngh.player==player or ngh.tileinfo[1]%2==0):
                 q.put(ngh)
