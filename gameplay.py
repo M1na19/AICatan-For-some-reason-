@@ -46,19 +46,11 @@ def resolve_action(action):
     elif(action=="getAIaction"):
         #return jsonify(mc.bestmove())
         pass
-    elif(action=="getZar"):
-        zar=dice()
-        #game.zar(zar)
-        return jsonify(zar)
-    elif(action=="addPiece"):
-        pass
     elif(action=="getDezvoltare"):
         pass
     elif(action=="joacaDezvoltare"):#split into more
         pass
     elif(action=="tradeProposal"):#pt ai
         pass#add counter proposal
-    elif(action=="trade_done"):#eventual intre playeri
-        pass
-    elif(action=="pas"):
-        pass
+#put actions:add Piece,pas,trade intre playeri
+#get actions:zar
