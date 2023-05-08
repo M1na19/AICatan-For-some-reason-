@@ -1,0 +1,26 @@
+import random
+def random_config():
+    tiles=19
+    tileprop=[4,3,4,4,3,1]
+    diceprop=[0,0,1,2,2,2,2,0,2,2,2,2,1]
+    tileconfig=[]
+    while tiles>0:
+        r=random.randint(-1,4)
+        d=random.randint(2,12)
+        while(tileprop[r]<=0):
+            r=random.randint(-1,4)
+        tileprop[r]-=1
+        if(r==-1):
+            d=0
+        else:
+            while(diceprop[d]<=0):
+                d=random.randint(2,12)
+            diceprop[d]-=1
+        tileconfig.append((d,r))
+        tiles-=1
+    return tileconfig
+def dice():
+    return (random.randint(1,6),random.randint(1,6))
+
+def dezvoltare():
+    return random.randint(0,4)

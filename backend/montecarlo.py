@@ -2,7 +2,7 @@ import queue
 import time
 import heapq
 import numpy as np
-import game_state as gs
+import backend.game_state as gs
 player_me=int()
 decision=2
 class node:
