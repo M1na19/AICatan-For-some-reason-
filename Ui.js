@@ -1,4 +1,4 @@
-var tiles = [];
+  var tiles = [];
 var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore","grain","brick","wool","wood","ore","grain"];
 var cardloc = [];
 var specialcardvector = ["vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop"];

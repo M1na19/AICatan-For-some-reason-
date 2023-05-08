@@ -31,21 +31,22 @@
                 <div class="circle3" style="top:250px;left:500px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="core">0</div>
                 <div class="circle3" style="top:125px;left:500px;background-image: url(https://i.imgur.com/KILdl8B.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="cgrain">0</div>
                 <div class="circle3" style="top:10px;left:500px;background-image: url(https://i.imgur.com/CEl8Sij.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="cwool">0</div>
-                <div class="circle3" style="top:500px;left:750px;background-image: url(https://i.imgur.com/amAWx6q.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="twood">0</div>
-                <div class="circle3" style="top:375px;left:750px;background-image: url(https://i.imgur.com/jldnqDd.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tbrick">0</div>
-                <div class="circle3" style="top:250px;left:750px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tore">0</div>
-                <div class="circle3" style="top:125px;left:750px;background-image: url(https://i.imgur.com/KILdl8B.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tgrain">0</div>
-                <div class="circle3" style="top:10px;left:750px;background-image: url(https://i.imgur.com/CEl8Sij.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue" id="twool">0</div>
-                <button style="top: 500px;left: 675px;" class="button1" onclick="closeNav()">+</button>
-                <button style="top: 375px;left: 675px;" class="button1" onclick="closeNav()">+</button>
-                <button style="top: 250px;left: 675px;" class="button1" onclick="closeNav()">+</button>
-                <button style="top: 125px;left: 675px;" class="button1" onclick="closeNav()">+</button>
-                <button style="top: 10px;left: 675px;" class="button1" onclick="closeNav()">+</button>
-                <button style="top: 500px;left: 850px;" class="button1" onclick="closeNav()">-</button>
-                <button style="top: 375px;left: 850px;" class="button1" onclick="closeNav()">-</button>
-                <button style="top: 250px;left: 850px;" class="button1" onclick="closeNav()">-</button>
-                <button style="top: 125px;left: 850px;" class="button1" onclick="closeNav()">-</button>
-                <button style="top: 10px;left: 850px;" class="button1" onclick="closeNav()">-</button>
+                <div class="circle3" style="top:500px;left:950px;background-image: url(https://i.imgur.com/amAWx6q.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="twood">0</div>
+                <div class="circle3" style="top:375px;left:950px;background-image: url(https://i.imgur.com/jldnqDd.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tbrick">0</div>
+                <div class="circle3" style="top:250px;left:950px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tore">0</div>
+                <div class="circle3" style="top:125px;left:950px;background-image: url(https://i.imgur.com/KILdl8B.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="tgrain">0</div>
+                <div class="circle3" style="top:10px;left:950px;background-image: url(https://i.imgur.com/CEl8Sij.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue" id="twool">0</div>
+                <button style="top: 500px;left: 875px;" class="button1" onclick="if(parseInt(document.getElementById('twood').textContent)<99)document.getElementById('twood').textContent=parseInt(document.getElementById('twood').textContent)+1">+</button>
+                <button style="top: 375px;left: 875px;" class="button1" onclick="if(parseInt(document.getElementById('tbrick').textContent)<99)document.getElementById('tbrick').textContent=parseInt(document.getElementById('tbrick').textContent)+1">+</button>
+                <button style="top: 250px;left: 875px;" class="button1" onclick="if(parseInt(document.getElementById('tore').textContent)<99)document.getElementById('tore').textContent=parseInt(document.getElementById('tore').textContent)+1">+</button>
+                <button style="top: 125px;left: 875px;" class="button1" onclick="if(parseInt(document.getElementById('tgrain').textContent)<99)document.getElementById('tgrain').textContent=parseInt(document.getElementById('tgrain').textContent)+1">+</button>
+                <button style="top: 10px;left: 875px;" class="button1" onclick="if(parseInt(document.getElementById('twool').textContent)<99)document.getElementById('twool').textContent=parseInt(document.getElementById('twool').textContent)+1">+</button>
+                <button style="top: 500px;left:1050px;" class="button1" onclick="if(parseInt(document.getElementById('twood').textContent)>0)document.getElementById('twood').textContent=parseInt(document.getElementById('twood').textContent)-1">-</button>
+                <button style="top: 375px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tbrick').textContent)>0)document.getElementById('tbrick').textContent=parseInt(document.getElementById('tbrick').textContent)-1">-</button>
+                <button style="top: 250px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tore').textContent)>0)document.getElementById('tore').textContent=parseInt(document.getElementById('tore').textContent)-1">-</button>
+                <button style="top: 125px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tgrain').textContent)>0)document.getElementById('tgrain').textContent=parseInt(document.getElementById('tgrain').textContent)-1">-</button>
+                <button style="top: 10px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('twool').textContent)>0)document.getElementById('twool').textContent=parseInt(document.getElementById('twool').textContent)-1">-</button>
+                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" onclick="closeNav()">TRADE</button>
             </div>
         </div>
     </div>
