@@ -1,11 +1,8 @@
 # AICatan-For-some-reason-
-Yez
 
-
-# game_state:my hand,players_hands,hexagon poz,asezari drumuri orase pozition, hot pozition, nr_carti dezvoltare
-# prune values that go beyond a point
-# robber on most valuable resource of the best player
-# have to discover balance breadth vs depth
+- prune values that go beyond a point
+- robber on most valuable resource of the best player
+- have to discover balance breadth vs depth
 
 
 
