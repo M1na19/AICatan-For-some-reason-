@@ -1,6 +1,5 @@
 import numpy as np
 import queue
-number_of_players=4
 config= [[(0,0)],
         [(0,1)],
         [(0,2),(1,10)],
@@ -208,18 +207,22 @@ class game_state:
         for i in range(len(tileconfig)):
             self.tiles[i].value=tileconfig[i][0]
             self.tiles[i].resource=tileconfig[i][1]
+            if(tileconfig[i][1]==-1):
+                self.hottile=i
 
-    def __init__(self,tileconfig,playerturn):
+    def __init__(self,tileconfig,playerturn,nrplayers):
         self.player_turn=playerturn
-        self.hand=[[0 for j in range(5)] for i in range(number_of_players)]
+        self.number_of_players=nrplayers;
+        self.hand=[[0 for j in range(5)] for i in range(nrplayers)]
         self.dezvoltari=[0]*5
-        self.other_player_dezvoltari=[0]*(number_of_players-1)
+        self.other_player_dezvoltari=[0]*(nrplayers-1)
         self.tiles=[tile(i) for i in range(19)]
-        self.players = [[None, None] for _ in range(number_of_players)]
+        self.hottile=0
+        self.players = [[None, None] for _ in range(nrplayers)]
         self.__setup(tileconfig)
     def zar(self,zar):
         for i in range(len(self.tiles)):
-            if self.tiles[i].value==zar:
+            if self.tiles[i].value==zar and self.hottile!=i:
                 for j in range(len(self.tiles[i].pieces)):
                     if self.tiles[i].pieces[j].name=="asezare":
                         self.hand[self.tiles[i].pieces[j].player][self.tiles[i].resource]+=1

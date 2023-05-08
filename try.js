@@ -10,18 +10,20 @@ axios.post('http://localhost:5000',{
   .catch(error => {
     console.error(error);
   });
+
+
+
+
+
+
+
+
   axios.get('http://localhost:5000',{
-    params:{'action': 'zar'}
-})
-.then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-  axios.put('http://localhost:5000',{
-    data:{'toput':'life'},
-    params:{'action': 'zar'}
+    params:{
+      'action': 'zar', 
+      'player':'none',
+      'info':'none'
+    }
 })
 .then(response => {
     console.log(response.data);

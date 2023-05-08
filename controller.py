@@ -2,18 +2,30 @@ import flask
 import backend.gameplay as gp
 app=flask.Flask(__name__)
 
+
 @app.route('/',methods=['POST'])
 def start():
     rq=flask.request.get_json()
     return flask.jsonify(gp.start(rq.get('startplayer'),rq.get('numberofplayers')))
+
+
 @app.route('/', methods=['PUT'])
 def put():
-    rq=flask.request.args.get('toput')
-    gp.resolve_put(rq)
-    return flask.jsonify(True)
+    act=flask.request.args.get('action')
+    player=flask.request.args.get('player')
+    info=flask.request.args.get('info')
+    gp.resolve_put(act,player,info)
+
+
 @app.route('/',methods=['GET'])
 def get():
-    rq=flask.request.args.get('action')
-    return flask.jsonify(gp.resolve_get(rq))
+    act=flask.request.args.get('action')
+    player=flask.request.args.get('player')
+    info=flask.request.args.get('info')
+    return flask.jsonify(gp.resolve_get(act,player,info))
+
+
+
+
 if __name__ == '__main__':
     app.run()
