@@ -180,7 +180,8 @@ function MakeSettlement(pozx,pozy,type,player)
 
 function MakeAndMoveThief(pozx,pozy)
 {
-    //document.body.getElementById("theif").remove();
+    if(document.getElementById("theif")!=null)
+      document.getElementById("theif").remove();
     let newthief = {};
     newthief.html= document.createElement("img");
     newthief.html.src="https://i.imgur.com/x0MnP5O.png";
@@ -248,6 +249,18 @@ function UpdateDice(val1,val2)
     document.getElementById("dice2").textContent=val2;
 }
 
+function RemoveCards(index)
+{
+  cardloc.splice(index,1);
+  cardvector.splice(index,1);
+}
+
+function RemoveSpecialCards(index)
+{
+  scardloc.splice(index,1);
+  specialcardvector.splice(index,1);
+}
+
 function NewCards(cardvector)
 {
   for(var i=1;i<=cardvector.length;i++)
@@ -271,7 +284,7 @@ function NewCards(cardvector)
       }
   }
 }
-function UpdateSpecialCards(specialcardvector)
+function NewSpecialCards(specialcardvector)
 {
   for(var i=1;i<=specialcardvector.length;i++)
   {
@@ -297,7 +310,7 @@ function UpdateSpecialCards(specialcardvector)
 }
 
 function openNav() {
-  UpdateSpecialCards(specialcardvector);
+  NewSpecialCards(specialcardvector);
   NewCards(cardvector);
   document.getElementById("myNav").style.width = "100%";
 }
