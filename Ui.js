@@ -1,7 +1,8 @@
   var tiles = [];
 var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore","grain","brick","wool","wood","ore","grain"];
 var cardloc = [];
-var specialcardvector = ["vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop","vp","soldier","2newroads","monopoly","yop"];
+var scardloc = [];
+var specialcardvector = ["LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP"];
 
 function MakeTile(pozy,pozx,numar,material)
 {
@@ -277,24 +278,25 @@ function UpdateSpecialCards(specialcardvector)
     if(document.getElementById("scard"+i)==null)
     {
       let newspecialcard= {};
+      newspecialcard.mat=specialcardvector[i-1];
       newspecialcard.html=document.createElement("div");
       newspecialcard.html.classList.add("card");
       newspecialcard.html.style.top=176+"px";
       newspecialcard.html.style.left=(i-1)*120+10+"px";
       newspecialcard.html.id="scard"+i;
       dragElement(newspecialcard.html); 
+      scardloc.push(newspecialcard);
       document.getElementById("cardpadding2").appendChild(newspecialcard.html);
-      if(specialcardvector[i-1]=="vp") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/cIVhMQv.png)";
-      if(specialcardvector[i-1]=="soldier") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/ikUPxHo.png)";
-      if(specialcardvector[i-1]=="2newroads") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/O23yKZR.png)";
-      if(specialcardvector[i-1]=="monopoly") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/mbxoOLf.png)";
-      if(specialcardvector[i-1]=="yop") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/H9KBWNy.png)";
+      if(specialcardvector[i-1]=="LIB") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/cIVhMQv.png)";
+      if(specialcardvector[i-1]=="KNG") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/ikUPxHo.png)";
+      if(specialcardvector[i-1]=="RBD") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/O23yKZR.png)";
+      if(specialcardvector[i-1]=="MNP") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/mbxoOLf.png)";
+      if(specialcardvector[i-1]=="YOP") newspecialcard.html.style.backgroundImage="url(https://i.imgur.com/H9KBWNy.png)";
     }
   }
 }
 
 function openNav() {
-  UpdateDice(4,6);
   UpdateSpecialCards(specialcardvector);
   NewCards(cardvector);
   document.getElementById("myNav").style.width = "100%";
@@ -309,25 +311,41 @@ MakeMap();
 function updatenumbermat()
 {
   var wood=0,wool=0,ore=0,brick=0,grain=0;
+  var LIB=0,KNG=0,RBD=0,YOP=0,MNP=0;
   if(document.getElementById("myNav").style.width=="100%")
   {
     for(var i=0;i<cardloc.length;i++)
     {
-      if(parseInt(cardloc[i].html.style.top)>500 && parseInt(cardloc[i].html.style.top)<924 && parseInt(cardloc[i].html.style.left)>800 && parseInt(cardloc[i].html.style.left)<1300)
+      if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
       {
         if(cardloc[i].mat=="wood")wood++;
         if(cardloc[i].mat=="wool")wool++;
         if(cardloc[i].mat=="ore")ore++;
         if(cardloc[i].mat=="brick")brick++;
         if(cardloc[i].mat=="grain")grain++;
-        //=parseInt(document.getElementById("c"+cardloc[i].mat).textContent)+1;
       }
-      document.getElementById("cwood").textContent=wood;
-      document.getElementById("cwool").textContent=wool;
-      document.getElementById("core").textContent=ore;
-      document.getElementById("cbrick").textContent=brick;
-      document.getElementById("cgrain").textContent=grain;
     }
+    document.getElementById("cwood").textContent=wood;
+    document.getElementById("cwool").textContent=wool;
+    document.getElementById("core").textContent=ore;
+    document.getElementById("cbrick").textContent=brick;
+    document.getElementById("cgrain").textContent=grain;
+    for(var i=0;i<scardloc.length;i++)
+    {
+      if(parseInt(scardloc[i].html.style.top)>445 && parseInt(scardloc[i].html.style.top)<875 && parseInt(scardloc[i].html.style.left)>700 && parseInt(scardloc[i].html.style.left)<1190)
+      {
+        if(scardloc[i].mat=="LIB")LIB++;
+        if(scardloc[i].mat=="YOP")YOP++;
+        if(scardloc[i].mat=="RBD")RBD++;
+        if(scardloc[i].mat=="KNG")KNG++;
+        if(scardloc[i].mat=="MNP")MNP++;
+      }
+    }
+    document.getElementById("LIB").textContent=LIB;
+    document.getElementById("YOP").textContent=YOP;
+    document.getElementById("RBD").textContent=RBD;
+    document.getElementById("KNG").textContent=KNG;
+    document.getElementById("MNP").textContent=MNP;
   }
 }
 
@@ -335,7 +353,6 @@ var intervalId = window.setInterval(function()
 {
   updatenumbermat();
 }, 1);
-
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
