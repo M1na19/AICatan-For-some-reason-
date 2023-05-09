@@ -5,27 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    
+    <div id="TableParent">
+        <div class="blockotext" style="height: 300px;"id="CurrentPlayer">IT IS NAME'S TURN</div>
+        <div class="blockotext" style="height: 100px;" id="Player1vp">Player1 has n vp points</div>
+        <div class="blockotext" style="height: 100px;" id="Player2vp">Player2 has n vp points</div>
+        <div class="blockotext" style="height: 100px;" id="Player3vp">Player3 has n vp points</div>
+        <div class="blockotext" style="height: 100px;" id="Player4vp">Player4 has n vp points</div>
+        <img style="left:1400px;top:800px;width: 275px;height: 325px;border-radius: 5%;position: absolute;" type="image" src="https://i.imgur.com/Ry82F9J.png"></img>
+        <img style="left:1800px;top:800px;width: 275px;height: 325px;border-radius: 5%;position: absolute;" type="image" src="https://i.imgur.com/DhyH1Xt.png"></img>
+    </div>
+    <script src="Ui.js"></script>
     <div id="myNav" class="overlay">
         <div id="cardpadding1"></div>
         <div id="cardpadding2"></div>
-        <div style="padding-top:400px ;padding-left:50px;">
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/lEuOmXn.png" class="button" onclick="closeNav()"></input>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/FnMNoFx.png" class="button" onclick="closeNav()"></input>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/2yiE5t2.png" class="button" onclick="closeNav()"></input>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/8hebUAE.png" class="button" onclick="closeNav()"></input>
+        <div style="padding-top:380px ;padding-left:50px;">
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/lEuOmXn.png" class="button" onclick=""></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/FnMNoFx.png" class="button" onclick=""></input>
+            <br>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/2yiE5t2.png" class="button" onclick=""></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/8hebUAE.png" class="button" onclick=""></input>
         </div>
-        <div style="padding-top:50px ;padding-left:50px;">
-            <div class="dice" id="dice1"></div>
-            <div style="margin-left:50px;" class="dice" id="dice2"></div>
+        
+        <div style="padding-top:10px ;padding-left:50px;">
+            <button style="top: 675px;left:400px;width: 250px;height: 100px;position: absolute;color: black;" class="button" onclick="">USE DEVELOPMENT</button>
+            <div class="dice" id="dice1">#</div>
+            <div style="margin-left:0px;" class="dice" id="dice2">#</div>
+            <button style="padding-top:-150px;margin-left:0px;left:200px;width: 100px;height: 100px;color: black;" class="button dice" onclick="UpdateDice(2,3);">ROLL</button>
         </div>
-        <div style="padding-top:50px ;padding-left:50px;">
-            <img style="width: 350px;height: 400px;border-radius: 5%;" type="image" src="https://i.imgur.com/KaIgpCc.png"></img>
+        <div style="padding-top:10px ;padding-left:50px;">
+            <img style="width: 275px;height: 275px;border-radius: 5%;position: absolute;" type="image" src="https://i.imgur.com/KaIgpCc.png"></img>
         </div>
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                <div class="overlay-content"></div>
-        <div style="padding-top:400px ;padding-left:50px;">
+        <div style="padding-top:400px ;">
             <div class="tradeplace">
+                <div class="circle3" style="top:500px;left:25px;background-image: url(https://i.imgur.com/cIVhMQv.png);object-fit: fill; background-position: top center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="LIB">0</div>
+                <div class="circle3" style="top:375px;left:25px;background-image: url(https://i.imgur.com/ikUPxHo.png);object-fit: fill; background-position: top center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="KNG">0</div>
+                <div class="circle3" style="top:250px;left:25px;background-image: url(https://i.imgur.com/O23yKZR.png);object-fit: fill; background-position: top center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="RBD">0</div>
+                <div class="circle3" style="top:125px;left:25px;background-image: url(https://i.imgur.com/mbxoOLf.png);object-fit: fill; background-position: top center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="MNP">0</div>
+                <div class="circle3" style="top:10px;left:25px;background-image: url(https://i.imgur.com/H9KBWNy.png);object-fit: fill; background-position: top center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="YOP">0</div>
                 <div class="circle3" style="top:500px;left:500px;background-image: url(https://i.imgur.com/amAWx6q.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="cwood">0</div>
                 <div class="circle3" style="top:375px;left:500px;background-image: url(https://i.imgur.com/jldnqDd.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="cbrick">0</div>
                 <div class="circle3" style="top:250px;left:500px;background-image: url(https://i.imgur.com/l9yIY2E.png); background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color: aliceblue;" id="core">0</div>
@@ -50,7 +68,7 @@
                 <div style="top:0px;width: 250px;left:860px" class="tradeplace"></div>
             </div>
         </div>
-        <div style="padding-left:0px;left:2000px;" class="tradeplace">
+        <div style="padding-left:0px;left:1900px;" class="tradeplace">
             <p style="color:#EADDCA;font-size: 30px;top:325px;left:175px;position: absolute;text-align: center;" id="TradePlayerName">Trade from: Name</p>
             <p style="color:#EADDCA;font-size: 40px;left:120px;position: absolute;"><i class="arrow left"></i>Materials you give</p>
             <p style="color:#EADDCA;font-size: 40px;top:400px;left:120px;position: absolute;">Materials you get<i class="arrow right"></i></p>
