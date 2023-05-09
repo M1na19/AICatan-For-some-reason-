@@ -95,6 +95,7 @@ function giveDrumStyle(piece,x,y,angle)
     piece.style.backgroundColor=color
     piece.style.transform="rotate("+angle+"deg)"
     piece.style.zIndex="10000"
+    flashButton(piece,1000)
 }
 
 
@@ -108,8 +109,15 @@ function giveAsezareStyle(piece,x,y)
     piece.style.left=x+35+'px'
     piece.style.backgroundColor=color
     piece.style.zIndex="10000"
+    flashButton(piece,1000)
 }
 
+async function flashButton(button, duration) {
+    while (document.contains(button)) {
+      button.style.visibility = button.style.visibility === "visible" ? "hidden" : "visible";
+      await new Promise(resolve => setTimeout(resolve, duration));
+    }
+  }
 
 
 function showAvialable(poz)
