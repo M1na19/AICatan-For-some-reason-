@@ -3,8 +3,23 @@
 }
 
 body {
-  user-select:none;
-    background-color: rgb(40, 177, 223);
+    user-select:none;
+    background-image: url("https://www.myfreetextures.com/wp-content/uploads/2014/10/seamless-wood-texture-1.jpg");
+    /*background-color: rgb(40, 177, 223);*/
+  }
+
+  .blockotext {
+    top:100px;
+    left:500px;
+    user-select:none;
+    font-size: 80px;
+    vertical-align: text-top;
+    text-align: center;
+    border-radius: 10%;
+    height: 100px;
+    width: 100px;
+    background-color: bisque;
+    display:none;
   }
 
   .dice {
@@ -15,7 +30,7 @@ body {
     border-radius: 5%;
     height: 100px;
     width: 100px;
-    background-color: #EADDCA;
+    background-color: bisque;
     display:inline-block;
   }
 
@@ -88,7 +103,7 @@ body {
     text-decoration: none;
     outline: none;
     color: #fff;
-    background-color: #EADDCA;
+    background-color: bisque;
     border: none;
     border-radius: 15px;
     box-shadow: 0 9px #999;
@@ -261,7 +276,7 @@ body {
   text-decoration: none;
   outline: none;
   color: black;
-  background-color: #EADDCA;
+  background-color: bisque;
   border: none;
   border-radius: 50%;
   box-shadow: 0 9px #999;
@@ -281,7 +296,7 @@ body {
 }
 
 .arrow {
-  border: solid #EADDCA;
+  border: solid bisque;
   border-width: 0 20px 20px 0;
   display: inline-block;
   padding: 20px;
