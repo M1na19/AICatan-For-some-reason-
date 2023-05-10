@@ -10,12 +10,13 @@ class pozition
 }
 
 const tile_poz=[new pozition(470,180),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0),new pozition(0,0)]
-//trb sa pun pt fiecare sa calculez
+
 const distanceEdge=120
 const distanceMuchie=104
 const horizontalSpacing=3/2*distanceEdge
 const verticalSpacing=distanceMuchie*2
 
+//tot cct asta calculeaza centru la hexagoane pt toate hexagoanele
 for(let i=1;i<=2;i++)
 {
     tile_poz[i].x=tile_poz[i-1].x+verticalSpacing
@@ -50,12 +51,12 @@ for(let i=17;i<=18;i++)
     tile_poz[i].y=tile_poz[i-1].y
 }
 
-const angle_to_piece=[270,300,330,0,30,60,90,120,150,180,210,240]
-const anglePieces=[0,30,0,90,0,-30,0,30,0,90,-30]
+const angle_to_piece=[270,300,330,0,30,60,90,120,150,180,210,240]//unghi din centru la piesa
+const anglePieces=[0,30,0,90,0,-30,0,30,0,90,-30]//unghi al drumurilor
 
 var buttons=[]
 var pozbuttons=[]
-function tile_to_space(tile,piece)
+function tile_to_space(tile,piece)//transforma din format (tile,piece) in (x,y)
 {
     var x,y;
     radAngle=angle_to_piece[piece]*(Math.PI/180)
@@ -71,13 +72,14 @@ function tile_to_space(tile,piece)
     }
     return ({x:x,y:y})
 }
-function edgeClicked(button)
+
+function edgeClicked(button)//colt apasat
 {
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
     destroyPieces()
 }
-function muchieClicked(button)
+function muchieClicked(button)//linie apasata
 {
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
@@ -85,7 +87,7 @@ function muchieClicked(button)
 }
 
 
-function giveDrumStyle(piece,x,y,angle)
+function giveDrumStyle(piece,x,y,angle)//style pt drum
 {
     piece.style.height='20px'
     piece.style.width='60px'
@@ -100,7 +102,7 @@ function giveDrumStyle(piece,x,y,angle)
 
 
 
-function giveAsezareStyle(piece,x,y)
+function giveAsezareStyle(piece,x,y)//style pt asezare
 {
     piece.style.height='30px'
     piece.style.width='30px'
@@ -111,10 +113,23 @@ function giveAsezareStyle(piece,x,y)
     piece.style.zIndex="10000"
     flashButton(piece,50)
 }
-let opacity=100
-let opacityDir=0.5
-let offset=0
+
+
+function giveOrasStyle(piece,x,y)
+{
+    piece.style='border-radius: 50%; width: 80px; height: 80px;'
+    piece.style.position='absolute'
+    piece.style.top=y+20+'px'
+    piece.style.left=x+7+'px'
+    piece.style.backgroundColor="white"
+    piece.style.zIndex="10000"
+    flashButtonOras(piece,50,50)
+}
+//face button sa fie flashy
 async function flashButton(button, duration) {
+    let opacity=100
+    let opacityDir=0.5
+    let offset=0
     while (document.contains(button)) {
         if(opacity<=0 || opacity>=100)
         {
@@ -130,7 +145,26 @@ async function flashButton(button, duration) {
       await new Promise(resolve => setTimeout(resolve, duration));
     }
   }
-
+  //ii dau overload la functie pt oras
+  async function flashButtonOras(button, duration,maxopacity) {
+    let opacity=maxopacity
+    let opacityDir=0.5
+    let offset=0
+    while (document.contains(button)) {
+        if(opacity<=0 || opacity>=maxopacity)
+        {
+            opacityDir*=-1
+            offset*=-1
+        }
+        else if(Math.sign(opacityDir)==-1 && opacity<=maxopacity-5)
+            offset=-10
+        else if(opacity>=maxopacity-5)
+            offset=0
+        opacity+=opacityDir+offset
+        button.style.opacity=opacity+"%"
+      await new Promise(resolve => setTimeout(resolve, duration));
+    }
+  }
 
 function showAvialable(poz)
 {
@@ -140,7 +174,6 @@ function showAvialable(poz)
         var point=tile_to_space(poz[i].tile,poz[i].piece)
         buttons.push(document.createElement("button"))
         pozbuttons.push(poz[i])
-        //aici calculez unde se afla fata de centru hexagonului si creez butoane care asculta
 
         if(poz[i].piece%2==0)//pt asezari
         {
@@ -162,9 +195,19 @@ function showAvialable(poz)
         }
     }
 }
-function showUpgradable()
+function showUpgradable(poz)
 {
-
+    for(let i=0;i<poz.length;i++)
+    {
+        var point=tile_to_space(poz[i].tile,poz[i].piece)
+        buttons.push(document.createElement("button"))
+        document.querySelector('.oras').appendChild(buttons[i])
+        giveOrasStyle(buttons[i],point.x,point.y)
+        buttons[i].addEventListener("click",function(event){
+            updateSettlement(point.x,point.y)
+            destroyPieces()
+        })
+    }
 }
 function destroyPieces()//la final distrug toate piesele
 {

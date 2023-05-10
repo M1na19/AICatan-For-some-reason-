@@ -172,16 +172,22 @@ function MakeSettlement(tile,piece,type,player)
       newsettlement.html.style.transform="rotate(-120deg)"
 
     if(type=="town")
+    { 
       newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
-    else if(type=="city")
-      newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
-    else
-    {
-      newsettlement.html.classList.add("rectangle");
-      newsettlement.html.style.top=pozy+30+"px";
-      newsettlement.html.style.left=pozx+40+"px";
-
+      document.querySelector('.asezare').appendChild(newsettlement.html)
     }
+    else if(type=="city")
+    {
+      newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
+      document.querySelector('.oras').appendChild(newsettlement.html)
+    }
+    else
+      {
+        newsettlement.html.classList.add("rectangle");
+        newsettlement.html.style.top=pozy+30+"px"
+        newsettlement.html.style.left=pozx+40+"px"
+        document.querySelector('.drum').appendChild(newsettlement.html)
+      }
     switch(player)
     {
       case 1:
@@ -197,9 +203,27 @@ function MakeSettlement(tile,piece,type,player)
         newsettlement.html.style.filter = "invert(100%) sepia(0%) saturate(7491%) hue-rotate(339deg) brightness(105%) contrast(103%)";
     }
 
-    document.body.appendChild(newsettlement.html);
 }
-
+function updateSettlement(pozx,pozy)
+{
+  let father=document.getElementsByClassName('asezare')[0]
+  elements=father.children;
+  for(let i=0;i<elements.length;i++)
+  {
+    if(elements[i].style.top==pozy+"px" && elements[i].style.left==pozx+"px")
+    {
+      let newsettlement= document.createElement("img");
+      newsettlement.style.filter=elements[i].style.filter
+      elements[i].remove()
+      newsettlement.style.top = pozy+"px";
+      newsettlement.style.left = pozx+"px";
+      newsettlement.src="https://i.imgur.com/FnMNoFx.png";
+      document.querySelector('.oras').appendChild(newsettlement)
+      return
+    }
+  }
+  
+}
 function MakeAndMoveThief(pozx,pozy)
 {
     if(document.getElementById("theif")!=null)
