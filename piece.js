@@ -150,6 +150,10 @@ function showAvialable(poz)
         }
     }
 }
+function showUpgradable()
+{
+    
+}
 function destroyPieces()//la final distrug toate piesele
 {
     buttons.forEach(element => {
