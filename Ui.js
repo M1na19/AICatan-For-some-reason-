@@ -120,46 +120,34 @@ function MakeHarbour(pos,type)
     document.body.appendChild(harbourtype.html);
 }
 
-function MakeSettlement(pozx,pozy,type,player)
+function MakeSettlement(tile,piece,type,player)
 {
+    point=tile_to_space(tile,piece)
+    pozx=point.x
+    pozy=point.y
     let newsettlement = {};
 
     newsettlement.html= document.createElement("img");
-
-    if(type!="road")
+    if(type!='road')
     {
-      pozx=pozx*2-1+Math.abs(3-Math.floor(pozy/2));
-      pozy=pozy+Math.floor((pozy-1)/2);
-      newsettlement.html.style.top = pozy*60 + "px";
-      newsettlement.html.style.left = pozx*104+60 + "px";
+      newsettlement.html.style.top = pozy+"px";
+      newsettlement.html.style.left = pozx+"px";
     }
-    else
-    {
-      if(pozy%2==0)
-      {
-        pozx += Math.abs(6 - pozy) * 0.25;
-        pozy += Math.floor((pozy-1)/2);
-        newsettlement.html.style.top = pozy*60+90 + "px";
-        newsettlement.html.style.left = pozx*208-10 + "px";
-      }
-      else
-      {
-        if ((pozx%2==0 && pozy < 6) || (pozx%2==1 && pozy > 6))
-          newsettlement.html.style.transform="rotate(120deg)";
-        else
-          newsettlement.html.style.transform="rotate(-120deg)";
-        pozx+=Math.abs(2.5 - (pozy - 1)/2);
-        newsettlement.html.style.left = pozx*104 + 96 + "px";
-        newsettlement.html.style.top = pozy*90 + 30 + "px";
-      }
-    }
-
+    
+    if(piece==1 || piece==7)
+      newsettlement.html.style.transform="rotate(120deg)"
+    if(piece==5 || piece==11)
+      newsettlement.html.style.transform="rotate(-120deg)"
     if(type=="town")
       newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
     else if(type=="city")
       newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
     else
-      newsettlement.html.classList.add("rectangle");
+      {
+        newsettlement.html.classList.add("rectangle");
+        newsettlement.html.style.top=pozy+30+"px"
+        newsettlement.html.style.left=pozx+40+"px"
+      }
     switch(player)
     {
       case 1:
@@ -197,18 +185,17 @@ function MakeAndMoveThief(pozx,pozy)
 function MakeMap()
 {
     var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
-    for (let j = 0; j < temp.length; j++)
-      for (let i = 1; i <= temp[j]; i++)
-        MakeSettlement(i,j + 1, "road", Math.floor(1 + Math.random() * 4))
-
-    MakeSettlement(1,1,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(1,2,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(1,3,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(2,11,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(5,5,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(4,8,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(3,3,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(4,11,"city",Math.floor(1 + Math.random() * 4));
+    for (let j = 0; j < 19; j++)
+      for (let i = 1; i <= 11; i+=2)
+        MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
+    MakeSettlement(0,0,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(1,0,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(5,0,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(16,4,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(11,0,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(14,2,"town",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(1,4,"city",Math.floor(1 + Math.random() * 4));
+    MakeSettlement(18,4,"city",Math.floor(1 + Math.random() * 4));
     for(var i=1;i<=9;i++)
     {
         if(i%2==0)MakeHarbour(i,"all");
