@@ -72,8 +72,6 @@ body {
   .rectangle {
     height: 60px;
     width: 20px;
-    position: absolute;
-    top:auto;
     background-color: black;
   }
 
