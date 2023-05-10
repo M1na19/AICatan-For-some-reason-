@@ -4,6 +4,37 @@ var cardloc = [];
 var scardloc = [];
 var specialcardvector = ["LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP"];
 
+function MakeNewTile(pozy,pozx,numar,material)
+{
+    let newtile = {};
+    let tilenumber = {};
+    pozx += Math.abs(3 - pozy) * 0.5;
+    newtile.html=document.createElement("img");
+    tilenumber.html=document.createElement("div");
+
+    tilenumber.html.textContent=numar;
+    tilenumber.html.style.left = pozx*204+90 + "px";
+    tilenumber.html.style.top = pozy*179+30 + "px";
+    tilenumber.html.classList.add("circle");
+
+    newtile.html.style.left = pozx*208 + "px";
+    newtile.html.style.top = pozy*179-60+ "px";
+    newtile.html.classList.add("tileimage");
+    if(material=="dessert")newtile.html.src="desert.png";
+    if(material=="wool")newtile.html.src="wooltile.png";
+    if(material=="brick")newtile.html.src="bricktile.png";
+    if(material=="ore")newtile.html.src="oretile.png";
+    if(material=="grain")newtile.html.src="graintile.png";
+    if(material=="wood")newtile.html.src="woodtile.png";
+
+    if(material!="dessert")document.body.appendChild(tilenumber.html);
+
+    document.body.appendChild(newtile.html);
+    tiles.push(newtile);
+    tiles.push(tilenumber);
+    return newtile;
+}
+
 function MakeTile(pozy,pozx,numar,material)
 {
     let newtile = {};
@@ -128,33 +159,29 @@ function MakeSettlement(tile,piece,type,player)
     let newsettlement = {};
 
     newsettlement.html= document.createElement("img");
+    newsettlement.html.style.shapeOutside = "url(https://i.imgur.com/lEuOmXn.png)";
     if(type!='road')
     {
       newsettlement.html.style.top = pozy+"px";
       newsettlement.html.style.left = pozx+"px";
     }
-    
+
     if(piece==1 || piece==7)
       newsettlement.html.style.transform="rotate(120deg)"
     if(piece==5 || piece==11)
       newsettlement.html.style.transform="rotate(-120deg)"
+
     if(type=="town")
-    { 
       newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
-      document.querySelector('.asezare').appendChild(newsettlement.html)
-    }
     else if(type=="city")
-    {
       newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
-      document.querySelector('.oras').appendChild(newsettlement.html)
-    }
     else
-      {
-        newsettlement.html.classList.add("rectangle");
-        newsettlement.html.style.top=pozy+30+"px"
-        newsettlement.html.style.left=pozx+40+"px"
-        document.querySelector('.drum').appendChild(newsettlement.html)
-      }
+    {
+      newsettlement.html.classList.add("rectangle");
+      newsettlement.html.style.top=pozy+30+"px";
+      newsettlement.html.style.left=pozx+40+"px";
+
+    }
     switch(player)
     {
       case 1:
@@ -170,27 +197,9 @@ function MakeSettlement(tile,piece,type,player)
         newsettlement.html.style.filter = "invert(100%) sepia(0%) saturate(7491%) hue-rotate(339deg) brightness(105%) contrast(103%)";
     }
 
+    document.body.appendChild(newsettlement.html);
 }
-function updateSettlement(pozx,pozy)
-{
-  let father=document.getElementsByClassName('asezare')[0]
-  elements=father.children;
-  for(let i=0;i<elements.length;i++)
-  {
-    if(elements[i].style.top==pozy+"px" && elements[i].style.left==pozx+"px")
-    {
-      let newsettlement= document.createElement("img");
-      newsettlement.style.filter=elements[i].style.filter
-      elements[i].remove()
-      newsettlement.style.top = pozy+"px";
-      newsettlement.style.left = pozx+"px";
-      newsettlement.src="https://i.imgur.com/FnMNoFx.png";
-      document.querySelector('.oras').appendChild(newsettlement)
-      return
-    }
-  }
-  
-}
+
 function MakeAndMoveThief(pozx,pozy)
 {
     if(document.getElementById("theif")!=null)
@@ -209,18 +218,18 @@ function MakeAndMoveThief(pozx,pozy)
 
 function MakeMap()
 {
-    var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
-    for (let j = 0; j < 19; j++)
-      for (let i = 1; i <= 11; i+=2)
-        MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
-    MakeSettlement(0,0,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(1,0,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(5,0,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(16,4,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(11,0,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(14,2,"town",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(1,4,"city",Math.floor(1 + Math.random() * 4));
-    MakeSettlement(18,4,"city",Math.floor(1 + Math.random() * 4));
+  var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
+  for (let j = 0; j < 19; j++)
+    for (let i = 1; i <= 11; i+=2)
+      MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
+  MakeSettlement(0,0,"town",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(1,0,"town",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(5,0,"city",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(16,4,"city",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(11,0,"town",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(14,2,"town",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(1,4,"city",Math.floor(1 + Math.random() * 4));
+  MakeSettlement(18,4,"city",Math.floor(1 + Math.random() * 4));
     for(var i=1;i<=9;i++)
     {
         if(i%2==0)MakeHarbour(i,"all");
@@ -230,25 +239,25 @@ function MakeMap()
         if(i==7)MakeHarbour(i,"grain");
         if(i==9)MakeHarbour(i,"wood");
     }
-    MakeTile(1,1,2,"wool");
-    MakeTile(1,2,3,"brick");
-    MakeTile(1,3,4,"ore");
-    MakeTile(2,1,5,"grain");
-    MakeTile(2,2,6,"wood");
-    MakeTile(2,3,2,"brick");
-    MakeTile(2,4,8,"brick");
-    MakeTile(3,1,9,"grain");
-    MakeTile(3,2,10,"wood");
-    MakeTile(3,3,"","dessert");
-    MakeTile(3,4,12,"ore");
-    MakeTile(3,5,3,"ore");
-    MakeTile(4,1,4,"grain");
-    MakeTile(4,2,5,"wood");
-    MakeTile(4,3,6,"wool");
-    MakeTile(4,4,7,"brick");
-    MakeTile(5,1,8,"ore");
-    MakeTile(5,2,9,"grain");
-    MakeTile(5,3,12,"wood");
+    MakeNewTile(1,1,2,"wool");
+    MakeNewTile(1,2,3,"brick");
+    MakeNewTile(1,3,4,"ore");
+    MakeNewTile(2,1,5,"grain");
+    MakeNewTile(2,2,6,"wood");
+    MakeNewTile(2,3,2,"brick");
+    MakeNewTile(2,4,8,"brick");
+    MakeNewTile(3,1,9,"grain");
+    MakeNewTile(3,2,10,"wood");
+    MakeNewTile(3,3,"","dessert");
+    MakeNewTile(3,4,12,"ore");
+    MakeNewTile(3,5,3,"ore");
+    MakeNewTile(4,1,4,"grain");
+    MakeNewTile(4,2,5,"wood");
+    MakeNewTile(4,3,6,"wool");
+    MakeNewTile(4,4,7,"brick");
+    MakeNewTile(5,1,8,"ore");
+    MakeNewTile(5,2,9,"grain");
+    MakeNewTile(5,3,12,"wood");
 
     MakeAndMoveThief(3,3);
 }
