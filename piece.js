@@ -95,7 +95,7 @@ function giveDrumStyle(piece,x,y,angle)
     piece.style.backgroundColor=color
     piece.style.transform="rotate("+angle+"deg)"
     piece.style.zIndex="10000"
-    flashButton(piece,1000)
+    flashButton(piece,50)
 }
 
 
@@ -109,12 +109,24 @@ function giveAsezareStyle(piece,x,y)
     piece.style.left=x+35+'px'
     piece.style.backgroundColor=color
     piece.style.zIndex="10000"
-    flashButton(piece,1000)
+    flashButton(piece,50)
 }
-
+let opacity=100
+let opacityDir=0.5
+let offset=0
 async function flashButton(button, duration) {
     while (document.contains(button)) {
-      button.style.visibility = button.style.visibility === "visible" ? "hidden" : "visible";
+        if(opacity<=0 || opacity>=100)
+        {
+            opacityDir*=-1
+            offset*=-1
+        }
+        else if(Math.sign(opacityDir)==-1 && opacity<=95)
+            offset=-10
+        else if(opacity>=95)
+            offset=0
+        opacity+=opacityDir+offset
+        button.style.opacity=opacity+"%"
       await new Promise(resolve => setTimeout(resolve, duration));
     }
   }
@@ -152,7 +164,7 @@ function showAvialable(poz)
 }
 function showUpgradable()
 {
-    
+
 }
 function destroyPieces()//la final distrug toate piesele
 {
