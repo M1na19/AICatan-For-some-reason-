@@ -1,5 +1,8 @@
 import numpy as np
 import queue
+
+#doar eu si miezeu stiam ce inseamna codul asta cand l am scris, acum doar miezeu stie
+
 config= [[(0,0)],
         [(0,1)],
         [(0,2),(1,10)],
@@ -144,6 +147,7 @@ config= [[(0,0)],
         [(18,5)],
         [(18,6)],
         [(18,7)]]
+port_poz=[{3,8},{3,10},{12,8},{12,10},{1,0},{1,2},{6,0},{6,2},{15,4},{15,6}]
 echiv=dict()
 for echi in config:
     for i in range(len(echi)):
@@ -219,6 +223,7 @@ class game_state:
         self.tiles=[tile(i) for i in range(19)]
         self.hottile=0
         self.players = [[None, None] for _ in range(nrplayers)]
+        self.ports=[[0 for j in range(6)] for i in range(nrplayers)]
         self.__setup(tileconfig)
     def zar(self,zar):
         for i in range(len(self.tiles)):
@@ -229,13 +234,22 @@ class game_state:
                     elif self.tiles[i].pieces[j].name=="oras":
                         self.hand[self.tiles[i].pieces[j].player][self.tiles[i].resource]+=2
     def add_piece(self,name,player,tileinfo):
+
         self.tiles[tileinfo[0]].pieces[tileinfo[1]].name=name
         self.tiles[tileinfo[0]].pieces[tileinfo[1]].player=player
-        if name=="asezare":
+
+        if name=="asezare" or name=="oras": #daca e intr-o pozitie de port il aduag
+            while(i<len(port_poz)):
+                if(tileinfo==port_poz[i] or tileinfo in echiv[port_poz[i]] or tileinfo==port_poz[i+1] or tileinfo in echiv[port_poz[i+1]]):
+                    self.ports[player][i]=1
+                i+=2
+
+        if name=="asezare":# la inceput il adaug in player ce tine grafu constructiilor
             if self.players[player][0]==None :
                 self.players[player][0]=self.tiles[tileinfo[0]].pieces[tileinfo[1]]
             elif self.players[player][1]==None:
                 self.players[player][1]=self.tiles[tileinfo[0]].pieces[tileinfo[1]] 
+                
     def add_dezv(self,dezv,player):
         self.dezvoltari[dezv]+=1
 
