@@ -148,6 +148,7 @@ config= [[(0,0)],
         [(18,6)],
         [(18,7)]]
 port_poz=[{3,8},{3,10},{12,8},{12,10},{1,0},{1,2},{6,0},{6,2},{15,4},{15,6}]
+port_3_1poz=[{0,0},{0,10},{11,2},{11,4},{16,6},{16,8},{17,4},{17,6}]
 echiv=dict()
 for echi in config:
     for i in range(len(echi)):
@@ -243,13 +244,16 @@ class game_state:
                 if(tileinfo==port_poz[i] or tileinfo in echiv[port_poz[i]] or tileinfo==port_poz[i+1] or tileinfo in echiv[port_poz[i+1]]):
                     self.ports[player][i]=1
                 i+=2
+            for port in port_3_1poz:
+                if(port==tileinfo or tileinfo in echiv[port]):
+                    self.ports[5]=1
 
         if name=="asezare":# la inceput il adaug in player ce tine grafu constructiilor
             if self.players[player][0]==None :
                 self.players[player][0]=self.tiles[tileinfo[0]].pieces[tileinfo[1]]
             elif self.players[player][1]==None:
                 self.players[player][1]=self.tiles[tileinfo[0]].pieces[tileinfo[1]] 
-                
+
     def add_dezv(self,dezv,player):
         self.dezvoltari[dezv]+=1
 
