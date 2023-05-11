@@ -38,8 +38,8 @@ def getValueArray(gameState):
     return Array
 def cardEvaluator(gameState,Player):
     #town city road card
-    port=getPorts(gameState)
-    priority="town"
+    Port=getPorts(gameState,Player)
+    Priority="town"
     # 0 1 2 3
     # lemn=0 argila=1 fan=2 oaie=3 piatra=4 index
     CardValue=[1,1,1,1,1]
@@ -90,5 +90,3 @@ def cardEvaluator(gameState,Player):
     for i in range(len(CardNumber)):
         print(CardValue[i])
     return CardValue
-    
-Calculate_CardValue(Port,Priority,Player,CardValue,MapValue)
