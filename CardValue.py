@@ -1,7 +1,7 @@
 import pickle
 
 #town city road card
-port=0
+port=2
 priority="town"
 # 0 1 2 3
 Player=0
@@ -10,7 +10,7 @@ CardValue=[1,1,1,1,1]
 CardNumber=[0,0,0,0,0]
 # tileurile cu ce fel sunt, cate orase sunt si case adunate casa=1 oras=2, ce valoare are tileul, combinare pt calcule
 class Myclass:
-    def __init__(self,tile=[0],settlement=[0],value=[0],combined=[0]):
+    def __init__(self,tile,settlement,value,combined):
         self.tile = tile
         self.settlement = settlement
         self.value = value
