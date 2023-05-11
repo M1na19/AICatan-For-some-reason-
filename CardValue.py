@@ -61,5 +61,6 @@ def Calculate_CardValue(Port,Priority,Player,CardValue,MapValue):
         CardValue[Port[i]]/=2
     for i in range(len(CardNumber)):
         print(CardValue[i])
+    return CardValue
     
 Calculate_CardValue(Port,Priority,Player,CardValue,MapValue)
