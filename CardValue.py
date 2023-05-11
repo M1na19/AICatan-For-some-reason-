@@ -68,24 +68,27 @@ def cardEvaluator(gameState,Player):
     for i in range(len(CardValue)):
         CardValue[i]*=MapValue.combined[i]
         CardValue[i]*=CardNumber[i]
-    class x:
-        def __init__(self) -> None:
-            pass
-    if priority=="town" :
+
+    if Priority=="town" :
         CardValue[0]/=1.5
         CardValue[1]/=1.5
         CardValue[2]/=1.5
         CardValue[3]/=1.5
-    if priority=="city" :
+    if Priority=="city" :
         CardValue[2]/=1.75
         CardValue[4]/=2
-    if priority=="road" :
+    if Priority=="road" :
         CardValue[0]/=1.5
         CardValue[1]/=1.5
-    if priority=="card" :
+    if Priority=="card" :
         CardValue[2]/=1.5
         CardValue[3]/=1.5
         CardValue[4]/=1.5
 
-    CardValue[port]/=2
+    for i in range(len(Port)):
+        CardValue[Port[i]]/=2
+    for i in range(len(CardNumber)):
+        print(CardValue[i])
     return CardValue
+    
+Calculate_CardValue(Port,Priority,Player,CardValue,MapValue)
