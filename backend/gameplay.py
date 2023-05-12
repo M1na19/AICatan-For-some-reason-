@@ -23,7 +23,7 @@ def start(sp,nr_p):
     dezvoltari=nr_p*[0,0,0,0,0]
     endState()
     return config
-def resolve_get(rq,player,info):
+def resolve_get(rq,player):
     getState()
     answear=''
     if(rq=='zarResurse'):
@@ -42,12 +42,22 @@ def resolve_get(rq,player,info):
         pass
     elif(rq=="tradeProposal"):
         pass
-    elif(rq=='possiblePiecePlace'):
+    elif(rq=='possibleDrumuri'):
         answear=mc.place_piece(game,player)
-        name=info.get("name")
         for piece in answear:
-            if(piece.name!=name):
+            if(piece.name!='drum'):
                 answear.remove(piece)
+        for i in range(len(answear)):
+            answear[i]=answear[i].tileinfo
+    elif(rq=='possibleAsezari'):
+        answear=mc.place_piece(game,player)
+        for piece in answear:
+            if(piece.name!='asezare'):
+                answear.remove(piece)
+        for i in range(len(answear)):
+            answear[i]=answear[i].tileinfo
+    elif(rq=='possibleOras'):
+        answear=mc.upgradeable(game,player)
         for i in range(len(answear)):
             answear[i]=answear[i].tileinfo
     endState()
