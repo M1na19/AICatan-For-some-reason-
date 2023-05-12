@@ -6,11 +6,15 @@ class Myclass:
             self.settlement = settlement
             self.value = value
             self.combined=[0,0,0,0,0]
+
+
 def getTileArray(gameState):
     Array=[]
     for tile in gameState.tiles:
         Array.append(tile.resource)
     return Array
+
+
 def getPiecesArray(gameState):
     Array=[]
     for i in range(len(gameState.tiles)):
@@ -22,9 +26,11 @@ def getPiecesArray(gameState):
                 tilevalue+=2
         Array.append(tilevalue)
     return Array
+
+
 def getPorts(gameState,p):
     Array=[]
-    for i in range(len(gameState.ports[p])):
+    for i in range(len(gameState.ports[p])-1):
         if(gameState.ports[p][i]==1):
             Array.append(i)
     return Array
@@ -36,6 +42,8 @@ def getValueArray(gameState):
     for tile in gameState.tiles:
         Array.append(tile.values)
     return Array
+
+
 def cardEvaluator(gameState,Player):
     #town city road card
     Port=getPorts(gameState,Player)
