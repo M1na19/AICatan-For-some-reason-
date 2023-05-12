@@ -1,4 +1,3 @@
-
 #import game_state
 class Myclass:
         def __init__(self,tile,settlement,value):
@@ -47,7 +46,6 @@ def getValueArray(gameState):
 def cardEvaluator(gameState,Player):
     #town city road card
     Port=getPorts(gameState,Player)
-    Priority="town"
     # 0 1 2 3
     # lemn=0 argila=1 fan=2 oaie=3 piatra=4 index
     CardValue=[1,1,1,1,1]
@@ -74,24 +72,8 @@ def cardEvaluator(gameState,Player):
         MapValue.combined[MapValue.tile[i]]+=MapValue.settlement[i]*((MapValue.value[i]%7)*2.77777777778/100)
 
     for i in range(len(CardValue)):
-        CardValue[i]*=MapValue.combined[i]
-        CardValue[i]*=CardNumber[i]
-
-    if Priority=="town" :
-        CardValue[0]/=1.5
-        CardValue[1]/=1.5
-        CardValue[2]/=1.5
-        CardValue[3]/=1.5
-    if Priority=="city" :
-        CardValue[2]/=1.75
-        CardValue[4]/=2
-    if Priority=="road" :
-        CardValue[0]/=1.5
-        CardValue[1]/=1.5
-    if Priority=="card" :
-        CardValue[2]/=1.5
-        CardValue[3]/=1.5
-        CardValue[4]/=1.5
+        CardValue[i]+=MapValue.combined[i]
+        CardValue[i]+=CardNumber[i]
 
     for i in range(len(Port)):
         CardValue[Port[i]]/=2
