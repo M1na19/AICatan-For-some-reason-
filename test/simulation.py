@@ -1,4 +1,6 @@
 # import game_state
+import sys
+sys.path.append('/home/mihai/Github/AICatan-For-some-reason-')
 import TradeValue as tv
 import CardValue as cv
 import random as r
@@ -65,8 +67,9 @@ def __makeTrade(trade0,trade1,hand0,hand1):
 #and also put tradeValue in a function
 asezari=2
 nrTurns=10
+gamestate=None
 #edit as u like
-def simulate(prop,gamestate,):
+def simulate(prop):
     gamestate.zar()
     drum=[asezari,asezari]
     asezare=[asezari,asezari]
@@ -75,7 +78,7 @@ def simulate(prop,gamestate,):
         __inhand(gamestate.hand[0],gamestate.ports[0],drum[0],asezare[0],orase[0])
         __inhand(gamestate.hand[1],gamestate.ports[1],drum[1],asezare[1],orase[1])
         tradeProposal=__randomize_trades(gamestate.hand[0],gamestate.hand[1])
-        if(tv.doTrade(tradeProposal[0],tradeProposal[1])==True):
+        if(tv.checkTradeProposal(gamestate,tradeProposal[0],tradeProposal[1],0,1)==True):
             __makeTrade(tradeProposal[0],tradeProposal[1])
         nrTurns-=1
     return orase[0]-orase[1]*2+asezare[0]-asezare[1]+(drum[0]-drum[1])/2
