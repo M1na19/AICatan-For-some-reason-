@@ -147,8 +147,8 @@ config= [[(0,0)],
         [(18,5)],
         [(18,6)],
         [(18,7)]]
-port_poz=[{3,8},{3,10},{12,8},{12,10},{1,0},{1,2},{6,0},{6,2},{15,4},{15,6}]
-port_3_1poz=[{0,0},{0,10},{11,2},{11,4},{16,6},{16,8},{17,4},{17,6}]
+port_poz=[(3,8),(3,10),(12,8),(12,10),(1,0),(1,2),(6,0),(6,2),(15,4),(15,6)]
+port_3_1poz=[(0,0),(0,10),(11,2),(11,4),(16,6),(16,8),(17,4),(17,6)]
 echiv=dict()
 for echi in config:
     for i in range(len(echi)):
@@ -240,6 +240,7 @@ class game_state:
         self.tiles[tileinfo[0]].pieces[tileinfo[1]].player=player
 
         if name=="asezare" or name=="oras": #daca e intr-o pozitie de port il aduag
+            i=0
             while(i<len(port_poz)):
                 if(tileinfo==port_poz[i] or tileinfo in echiv[port_poz[i]] or tileinfo==port_poz[i+1] or tileinfo in echiv[port_poz[i+1]]):
                     self.ports[player][i]=1

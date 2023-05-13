@@ -1,5 +1,5 @@
 import pickle
-import CardValue as cval
+import evaluatoare.CardValue as cval
 
 ##############Things from the game code######################################################################################################################################################
 

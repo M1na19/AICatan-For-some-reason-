@@ -54,7 +54,7 @@ def cardEvaluator(gameState,Player):
     #pt a vedea cat de rar este o carte intre  celelalte vedem ce proportie din cartile totale este
     for i in range(len(Cards)):
         for j in range(len(Cards[i])):
-            CardNumber[Cards[i][j]]+=1
+            CardNumber[j]+=1
             
     for i in range(len(CardNumber)):
         rarenessValue[i]=1-CardNumber[i]/sum(CardNumber) #daca nu fac 1-cu cat e mai mica valaorea cu ata e mai worth

@@ -1,4 +1,4 @@
-import CardValue as cval
+import evaluatoare.CardValue as cval
 import copy
 def checkTradeProposal(gamestate,Trade0,Trade1,player0,player1):
 #town city road card
@@ -12,10 +12,14 @@ def checkTradeProposal(gamestate,Trade0,Trade1,player0,player1):
     for i in range(len(Trade1)):
         while(Trade1[i]>0):
             totalvalue0+=cval.cardEvaluator(simulatedGameState,player0)[Trade1[i]]
+            simulatedGameState.hand[player1][Trade1[i]]-=1
+            simulatedGameState.hand[player0][Trade1[i]]+=1
             Trade1[i]-=1
     for i in range(len(Trade0)):
         while(Trade0[i]>0):
             totalvalue1+=cval.cardEvaluator(simulatedGameState,player0)[Trade0[i]]
+            simulatedGameState.hand[player0][Trade0[i]]-=1
+            simulatedGameState.hand[player1][Trade0[i]]+=1
             Trade0[i]-=1
 
     if totalvalue0>totalvalue1:
