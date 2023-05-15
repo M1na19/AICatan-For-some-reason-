@@ -243,11 +243,11 @@ class game_state:
             i=0
             while(i<len(port_poz)):
                 if(tileinfo==port_poz[i] or tileinfo in echiv[port_poz[i]] or tileinfo==port_poz[i+1] or tileinfo in echiv[port_poz[i+1]]):
-                    self.ports[player][i]=1
+                    self.ports[player][int(i/2)]=1
                 i+=2
             for port in port_3_1poz:
                 if(port==tileinfo or tileinfo in echiv[port]):
-                    self.ports[5]=1
+                    self.ports[player][5]=1
 
         if name=="asezare":# la inceput il adaug in player ce tine grafu constructiilor
             if self.players[player][0]==None :

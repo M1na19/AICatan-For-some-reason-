@@ -6,9 +6,9 @@ import random
 #coeficients
 var=10
 top=10
-varCoefficient=0.3
+varCoefficient=0.1
 genLimit=10
-
+simulationTurns=15
 
 
 prop=open("evaluatoare/test/proportion.txt","r")
@@ -21,7 +21,7 @@ prop.close()
 def mutate(prop):#mutation function
     Array=[]
     for i in range(len(prop)):
-        Array.append(max(prop[i]+random.uniform(-varCoefficient,varCoefficient),0))
+        Array.append(prop[i]+random.uniform(-varCoefficient,varCoefficient))
     total=1
     for i in range(len(Array)):
         if(total>Array[i]):
@@ -37,7 +37,7 @@ def mutate(prop):#mutation function
 def fitness(prop):#fitness function
     return s.simulate(prop,simulationTurns)
 
-simulationTurns=20
+
 def geneticAlgorithm(generation):
     if(generation<=genLimit):
         proportions=[]
@@ -46,7 +46,7 @@ def geneticAlgorithm(generation):
                 proportions.append(mutate(topValue))
         proportions=sorted(proportions,key=lambda x: fitness(x))
         topValues.clear()
-        for proportion in proportions[:10]:
+        for proportion in proportions[-10:]:
             topValues.append(proportion)
         geneticAlgorithm(generation+1)
 
@@ -56,3 +56,6 @@ for topValue in topValues:
     for value in topValue:
         prop.write(str(value)+' ')
     prop.write('\n')
+
+#simulation deosnt work, so random actions 
+#but have to make ai

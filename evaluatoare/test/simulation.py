@@ -12,23 +12,23 @@ def __randomResourceHand(hand):
     while(hand[res]==0):
         res=r.randint(0,4)
     return res
-def __inhand(myHand,ports,nrDrum,nrAsezari,nrOrase):
-    if(myHand[4]>=3 and myHand[2]>=2 and nrAsezari>nrOrase):
+def __inhand(myHand,nrDrum,nrAsezari,nrOrase,player):
+    if(myHand[4]>=3 and myHand[2]>=2 and nrAsezari[player]>nrOrase[player]):
         myHand[4]-=3
         myHand[2]-=2
-        nrOrase+=1
+        nrOrase[player]+=1
         return "oras"
-    if(myHand[0]>0 and myHand[1]>0 and myHand[2]>0 and myHand[3]>0 and nrDrum-nrAsezari>=2):
+    if(myHand[0]>0 and myHand[1]>0 and myHand[2]>0 and myHand[3]>0 and nrDrum[player]-nrAsezari[player]>=2):
         myHand[0]-=1
         myHand[1]-=1
         myHand[2]-=1
         myHand[3]-=1
-        nrAsezari+=1
+        nrAsezari[player]+=1
         return "asezare"
     if(myHand[0]>0 and myHand[1]>0):
         myHand[0]-=1
         myHand[1]-=1
-        nrDrum+=1
+        nrDrum[player]+=1
         return "drum"
     
 def __randomize_trades(myHand,urHand):
@@ -62,21 +62,36 @@ def __makeTrade(trade0,trade1,hand0,hand1):
         hand1[res]+=1
     for res in trade1:
         hand0[res]+=1
+def __checkPortsTrade(gamestate,ports,player):
+    for i in range(len(ports)-1):
+        if(ports[i]==1):
+            for j in range(5):
+                if(gamestate.hand[player][i]>=2 and tv.tradeBank(gamestate,[i,i],j,player) ):
+                    gamestate.hand[player][i]-=2
+                    gamestate.hand[player][j]+=1
+    if(ports[5]==1):
+        for i in range(5):
+            for j in range(5):
+                if(gamestate.hand[player][i]>=3 and tv.tradeBank(gamestate,[i,i,i],j,player)):
+                    gamestate.hand[player][i]-=3
+                    gamestate.hand[player][j]+=1
+    for i in range(5):
+        for j in range(5):
+            if(gamestate.hand[player][i]>=4 and tv.tradeBank(gamestate,[i,i,i,i],j,player)):
+                gamestate.hand[player][i]-=4
+                gamestate.hand[player][j]+=1
 
 #have to edit parameters in cardValue
 #to do this must separate scores
 #and also put tradeValue in a function
 asezari=2
+
 def makeGame(gamestate):
     #random bulshit go
-    gamestate.add_piece('asezare',0,(8,0))
-    gamestate.add_piece('drum',0,(8,1))
-    gamestate.add_piece('asezare',0,(10,6))
-    gamestate.add_piece('drum',0,(10,7))
-    gamestate.add_piece('asezare',1,(3,4))
-    gamestate.add_piece('drum',1,(3,5))
-    gamestate.add_piece('asezare',1,(7,6))
-    gamestate.add_piece('drum',1,(7,5))
+    gamestate.add_piece('asezare',0,(r.randint(0,18),r.randint(0,5)*2))
+    gamestate.add_piece('asezare',0,(r.randint(0,18),r.randint(0,5)*2))
+    gamestate.add_piece('asezare',1,(r.randint(0,18),r.randint(0,5)*2))
+    gamestate.add_piece('asezare',1,(r.randint(0,18),r.randint(0,5)*2))
 #edit as u like
 def simulate(prop,nrTurns):
     gamestate=gs.game_state(ft.random_config(),0,2)
@@ -89,9 +104,11 @@ def simulate(prop,nrTurns):
     orase=[0,0]
     while(nrTurns>0):
         gamestate.zar(sum(ft.dice()))
-        __inhand(gamestate.hand[0],gamestate.ports[0],drum[0],asezare[0],orase[0])
-        __inhand(gamestate.hand[1],gamestate.ports[1],drum[1],asezare[1],orase[1])
+        __inhand(gamestate.hand[0],drum,asezare,orase,0)
+        __inhand(gamestate.hand[1],drum,asezare,orase,1)
         tradeProposal=__randomize_trades(gamestate.hand[0],gamestate.hand[1])
+        __checkPortsTrade(gamestate,gamestate.ports[0],0)
+        __checkPortsTrade(gamestate,gamestate.ports[1],1)
         if(tradeProposal!=None and tv.checkTradeProposal(gamestate,tradeProposal[0],tradeProposal[1],0,1)==True):
             __makeTrade(tradeProposal[0],tradeProposal[1],gamestate.hand[0],gamestate.hand[1])
         nrTurns-=1

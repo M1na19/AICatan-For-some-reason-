@@ -44,7 +44,7 @@ def cardEvaluator(gameState,Player):
     Port3_1=gameState.ports[Player][5]
     # 0 1 2 3
     # lemn=0 argila=1 fan=2 oaie=3 piatra=4 index
-    CardValue=[1,1,1,1,1]
+    CardValue=[0,0,0,0,0]
     CardNumber=[0,0,0,0,0]
     # tileurile cu ce fel sunt, cate orase sunt si case adunate casa=1 oras=2, ce valoare are tileul, combinare pt calcule
 
