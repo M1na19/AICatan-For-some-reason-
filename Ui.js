@@ -164,7 +164,6 @@ function MakeSettlement(tile,piece,type,player)
     {
       newsettlement.html.style.top = pozy+"px";
       newsettlement.html.style.left = pozx+"px";
-      
     }
 
     if(piece==1 || piece==7)
@@ -289,12 +288,6 @@ function MakeMap()
 }
 
 //--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
-
-function UpdateDice(val1,val2)
-{
-    document.getElementById("dice1").textContent=val1;
-    document.getElementById("dice2").textContent=val2;
-}
 
 function RemoveCards(index)
 {

@@ -1,5 +1,7 @@
 var OrdineaJucatorilor=[0,1,2,3];
 
+var p=[2,2,2,2];
+
 function shuffle(array)
 {
     let OrdineaJucatorilor = array.length,randomIndex;
@@ -18,8 +20,8 @@ function OnStartGame()
     {
         if(i==0)
         {
-            showAvailable(get("posibile_asezari"),0);
-            showAvailable(get("posibile_drumuri"),0);
+            showAvialable(get("posibile_asezari"),0);
+            showAvialable(get("posibile_drumuri"),0);
         }
         else
         {
@@ -30,13 +32,37 @@ function OnStartGame()
     {
         if(i==0)
         {
-            showAvailable(get("posibile_asezari"),0);
-            showAvailable(get("posibile_drumuri"),0);
+            showAvialable(get("posibile_asezari"),0);
+            showAvialable(get("posibile_drumuri"),0);
         }
         else
         {
             MakeSettlement(get("Ai_start_asezare"),"town",i);
         }
+    }
+}
+
+function RollDice()
+{
+    var val1,val2;
+    var1=Math.floor(Math.random()*6)+1;
+    var1=Math.floor(Math.random()*6)+1;
+
+    document.getElementById("dice1").textContent=val1;
+    document.getElementById("dice2").textContent=val2;
+
+    return var1+var2;
+}
+
+function TheGame()
+{
+    var i=0,winner=-1;
+    while(winner==-1)
+    {
+        var newdice=RollDice();
+        put("dice",i,newdice);
+
+        i++;i%=4;
     }
 }
 
