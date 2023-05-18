@@ -1,106 +1,77 @@
 import queue
 import time
-import heapq
+import random
+import asyncio
+from features import cost,check_avail,place_piece,upgradeable
 import numpy as np
 import backend.game_state as gs
-player_me=int()
-decision=2
+threadNr=1000
+discountFactor=0.95
+
+def manageNonAction(name):
+    pass
+
 class node:
-    def __init__(self,name,state,parent):
+    def __init__(self,name,state,parent,action:bool):
         self.action=name
         self.value=0
-        self.depth=0
+        if(action==True):
+            self.depth=parent.depth+1
+        else:
+            self.depth=parent.depth
         self.state=state
         self.parent=parent
-        self.kids=list()
-    def __lt__(self,other):
-        return self.depth<other.depth
-    def make_kids(self):
-        if(self.action!=None):
-            node.do_action(self)
-        moves=find_moves(self.state,self.state.player_turn)
-        for i in range(len(moves)):
-            if(type(moves[i])==gs.game_state):
-                self.kids.append(node(None,moves[i],self))
-                self.kids[-1].depth=self.depth+1
-            elif(type(moves[i])==str):
-                self.kids.append(node(moves[i],None,self))
-                self.kids[-1].depth=self.depth
-                
+    async def branch(self,AIplayer,threads):
+        if(self.state!=None):
+            moves=find_moves(self.state,self.state.player_turn,AIplayer)
+        tasks=[]
+        for i in threads:
+            randAction=random.randint(0,moves.count)
+            moves[randAction]=node(moves[randAction][0],moves[randAction][0],self,True)
+            task=asyncio.create_task(moves[randAction].branch(AIplayer,max(1,threads-moves.count)))
+            tasks.append(task)
+        results=await asyncio.gather(*tasks)
+        self.value=(sum(results)/results.count)*discountFactor
+        return self.value                
     
     #aici daca am spre ex oponentul joaca o dezvoltare nu pot sa stiu ce dezvoltare va juca
-    #de acea voi ramifica in toate dezvoltarile si valoare nodului finala va fi media posibilitatilor
-    def do_action(X):
-        pass
+   
             
 
 class MonteCarlo_tree:
-    def __init__(self,startstate):
+    def __init__(self,startstate,AIplayer):
         self.start=node("start",startstate,None)
+        self.nextMoves=find_moves(self.start.state,self.start.state.player_turn,AIplayer)
+    async def findBranch(self,threads):
+        self.nextMoves=[node(move[0],move[1],self.start,True) for move in self.nextMoves]
+        tasks=[]
+        for possibility in self.nextMoves:
+            task=asyncio.create_task(possibility.branch(self.AIplayer,threads-self.nextMoves.count))
+            tasks.append(task)
+        results=await asyncio.gather(*tasks)
+        maxPoz=0
+        for i in range(len(results)):
+            if(results[maxPoz]<results[i]):
+                maxPoz=i
+        return self.nextMoves[maxPoz]
 
-#ma uit unde pot sa pun drum sau asezare
-#am verificat,pare ca functioneaza
-def place_piece(state:gs.game_state,player:int):
-    to_visit=list()
-    visited=dict()
-    q=queue.Queue()
-    q.put(state.players[player][0])
-    q.put(state.players[player][1])
-    while not q.empty():
-        now=q.get()
-        visited[now]=True
-        for ngh in now.neigh:
-            if(ngh.player==-1 and (ngh.tileinfo[1]%2==1 or check_avail(ngh,2))):
-                to_visit.append(ngh)
-            if (not ngh in visited or visited[ngh]==False) and (ngh.player==player or ngh.tileinfo[1]%2==0):
-                q.put(ngh)
-                visited[ngh]=True
-    return to_visit
+            
 
-#vad daca pot sa pun asezare
-def check_avail(piece,depth):
-    condition=True
-    if(depth>0):
-        for i in range(len(piece.neigh)):
-            if(piece.neigh[i].name=="asezare"):
-                condition=False
-            condition=condition and check_avail(piece.neigh[i],depth-1)
-    return condition
 
         
 
         
 
-#ma uit unde pot sa pun oras
-#am verificat,pare ca functioneaza
-def upgradeable(state:gs.game_state,player:int):
-    to_upgrade=list()
-    visited=dict()
-    q=queue.Queue()
-    q.put(state.players[player][0])
-    q.put(state.players[player][1])
-    while not q.empty():
-        now=q.get()
-        visited[now]=True
-        if now.name=="asezare":
-            to_upgrade.append(now)
-        for nod in now.neigh:
-            if (not nod in visited or visited[nod]==False) and (nod.player==player or nod.tileinfo[1]%2==0):
-                q.put(nod)
-                visited[nod]=True
-    return to_upgrade
 
 #toate mutarile posibile, btw fuck u mache trb efectiv sa facem sah
 
-def find_moves(state:gs.game_state,player:int):
+def find_moves(state:gs.game_state,AIplayer,player:int)->list(tuple):
     moves=list()
     piece_options=place_piece(state,player)
-
     #cumpar drum
     if(state.hand[player][0]>0 and state.hand[player][1]>0):
         new_state=state.copy()
-        new_state.hand[player][0]-=1
-        new_state.hand[player][1]-=1
+        cost(new_state,[1,1,0,0,0],player)
         for i in range(len(piece_options)):
             if piece_options[i].tileinfo[1]%2==0:
                 moves.append(new_state.copy().add_piece("drum",player,piece_options[i].tileinfo))
@@ -108,10 +79,7 @@ def find_moves(state:gs.game_state,player:int):
     #cumpar asezare
     if(state.hand[player][0]>0 and state.hand[player][1]>0 and state.hand[player][2]>0 and state.hand[player][3]>0):
         new_state=state.copy()
-        new_state.hand[player][0]-=1
-        new_state.hand[player][1]-=1
-        new_state.hand[player][2]-=1
-        new_state.hand[player][3]-=1
+        cost(new_state,[1,1,1,1,0])
         for i in range(len(piece_options)):
             if(piece_options[i].tileinfo[1]%2==1 and check_avail(piece_options[i])):
                 moves.append(new_state.copy().add_piece("asezare",player,piece_options[i].tileinfo))
@@ -120,56 +88,83 @@ def find_moves(state:gs.game_state,player:int):
     upgrade_options=upgradeable(state,player)
     if state.hand[player][2]>=2 and state.hand[player][4]>=3:
         new_state=state.copy()
-        new_state.hand[player][2]-=2
-        new_state.hand[player][4]-=3
+        cost(new_state,[0,0,2,0,3])
         for i in range(len(upgrade_options)):
             moves.append(new_state.copy().add_piece("oras",player,piece_options[i].tileinfo))
     
     #cumpar dezvoltare
     if state.hand[player][2]>=1 and state.hand[player][3]>=1 and state.hand[player][4]>=1:
         new_state=state.copy()
-        new_state.hand[player][2]-=1
-        new_state.hand[player][3]-=1
-        new_state.hand[player][4]-=1
+        cost(new_state,[0,0,1,1,1],player)
         moves.append("dezvoltare")
     
     #daca sunt eu folosesc hot 
-    if(player==player_me and state.dezvoltari[1]>0):
+    if(player==AIplayer and state.dezvoltari[1]>0):
         new_state=state.copy()
         new_state.dezvoltari[1]-=1
         moves.append("hot")
 
     #daca sunt eu folosesc 2 resurse
-    if(player==player_me and state.dezvoltari[2]>0):
+    if(player==AIplayer and state.dezvoltari[2]>0):
         new_state=state.copy()
         new_state.dezvoltari[2]-=1
         moves.append("2 resurse")
     
     #daca sunt eu folosesc 2 drumuri
-    if(player==player_me and state.dezvoltari[3]>0):
+    if(player==AIplayer and state.dezvoltari[3]>0):
         new_state=state.copy()
         new_state.dezvoltari[3]-=1
         moves.append("2 drumuri")
 
     #daca sunt eu folosesc monopol
-    if(player==player_me and state.dezvoltari[4]>0):
+    if(player==AIplayer and state.dezvoltari[4]>0):
         new_state=state.copy()
         new_state.dezvoltari[4]-=1
         moves.append("monopol")
     
     #ceilalti playeri dezvoltari
-    if(player!=player_me):
+    if(player!=AIplayer):
         moves.append("oponent_dezvoltare")
 
     #go nuts
     moves.append("trading")
     return moves
-        
-def best_move(gamestate):
-    starttime=time.time()
-    mc=MonteCarlo_tree(gamestate)
-    leafs=[mc.start]
-    while(time.time()-starttime<decision):
+def best_move(gamestate,AIplayer):
+    mc=MonteCarlo_tree(gamestate,AIplayer)
+    best=mc.findBranch(threadNr)
+    gamestate=best.state
+    return best.name
+
+class nonActions:
+    def number(nod):
+        pass
+    def steal(node):
+        pass
+    def discard(node):
+        pass
+    def playDezvoltare(node):
+        pass
+    def monopol(node):
+        pass
+    def drumuri2(node):
+        pass
+    def resurse2(node):
+        pass
+    def soldat(node):
+        pass
+    def Build(node):
+        pass
+    def buildAsezare(node):
+        pass
+    def buildOras(node):
+        pass
+    def buildDrum(node):
+        pass
+    def buildDezv(node):
+        pass        
+    def Trade(node):
+        pass
+    def tradeProposal(node):
         pass
 
 

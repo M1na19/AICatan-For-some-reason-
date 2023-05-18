@@ -225,7 +225,12 @@ class game_state:
         self.hottile=0
         self.players = [[None, None] for _ in range(nrplayers)]
         self.ports=[[0 for j in range(6)] for i in range(nrplayers)]
+        self.puncte=[0 for i in range(nrplayers)]
+        self.soldati=[0 for i in range(nrplayers)]
+        self.biggestArmy=[-1,2]#player si nr
+        self.biggestRoad[-1,4]#player si nr
         self.__setup(tileconfig)
+
     def zar(self,zar):
         for i in range(len(self.tiles)):
             if self.tiles[i].value==zar and self.hottile!=i:
@@ -240,6 +245,7 @@ class game_state:
         self.tiles[tileinfo[0]].pieces[tileinfo[1]].player=player
 
         if name=="asezare" or name=="oras": #daca e intr-o pozitie de port il aduag
+            self.puncte[player]+=1#daca e oras sau asezare => punct in plus
             i=0
             while(i<len(port_poz)):
                 if(tileinfo==port_poz[i] or tileinfo in echiv[port_poz[i]] or tileinfo==port_poz[i+1] or tileinfo in echiv[port_poz[i+1]]):
@@ -255,8 +261,16 @@ class game_state:
             elif self.players[player][1]==None:
                 self.players[player][1]=self.tiles[tileinfo[0]].pieces[tileinfo[1]] 
 
-    def add_dezv(self,dezv,player):
+    def add_dezv(self,dezv,eu):
         self.dezvoltari[dezv]+=1
+        if(dezv==0):
+            self.puncte[eu]+=1
+    def otherPlayerDraw(self,player):
+        self.other_player_dezvoltari[player]+=1
+    def soldatJucat(self,player):
+        self.soldati[player]+=1
+        if(self.soldati[player]>self.biggestArmy[1]):
+            self.biggestArmy=[player,self.soldati[player]]
 
 
 def unique_list(fullist):
