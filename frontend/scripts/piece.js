@@ -56,6 +56,7 @@ const anglePieces=[0,30,0,90,0,-30,0,30,0,90,-30]//unghi al drumurilor
 
 var buttons=[]
 var pozbuttons=[]
+var chosedPosition=NaN
 function tile_to_space(tile,piece)//transforma din format (tile,piece) in (x,y)
 {
     var x,y;
@@ -79,6 +80,7 @@ function edgeClicked(button,player_turn)//colt apasat
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
     destroyPieces()
+    chosedPosition=pozbuttons[index]
 }
 function muchieClicked(button,player_turn)//linie apasata
 {
@@ -86,6 +88,7 @@ function muchieClicked(button,player_turn)//linie apasata
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
     destroyPieces()
+    chosedPosition=pozbuttons[index]
 }
 
 
@@ -168,14 +171,15 @@ async function flashButton(button, duration) {
     }
   }
 showing=false;
-async function showAvialable(poz,player_turn)
+async function showAvialable(poz,player_turn,can_abandon)
 {
     showing=true;
-    makeExit()
+    if(can_abandon==true)
+        makeExit()
     //am ca input un sir cu poz[i] de tipul {tile,piece(adica indexu pe tile)}
     for(let i=0;i<poz.length;i++)
     {
-        var point=tile_to_space(poz[i].tile,poz[i].piece)
+        let point=tile_to_space(poz[i].tile,poz[i].piece)
         buttons.push(document.createElement("button"))
         pozbuttons.push(poz[i])
 
@@ -197,8 +201,8 @@ async function showAvialable(poz,player_turn)
                 muchieClicked(event.target,player_turn)
             })
         }
-        await waitForFalse()
     }
+    await waitForFalse()
 }
 async function showUpgradable(poz)
 {
@@ -214,6 +218,7 @@ async function showUpgradable(poz)
             showing=false;
             updateSettlement(point.x,point.y)
             destroyPieces()
+            chosedPosition=pozbuttons[index]
         })
     }
     await waitForFalse()
@@ -234,6 +239,7 @@ function makeExit()
         showing=false;
         destroyPieces()
         exit.remove()
+        chosedPosition=NaN
     })
 }
 function waitForFalse() {
@@ -250,7 +256,7 @@ function waitForFalse() {
   }
 function destroyPieces()//la final distrug toate piesele
 {
-    exit.remove()
+    
     buttons.forEach(element => {
         element.remove()
     });

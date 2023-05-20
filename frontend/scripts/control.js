@@ -1,7 +1,7 @@
 
-function get(request,player_turn)
+async function get(request,player_turn)
 {
-    axios.get('http://localhost:5000',{
+    await axios.get('http://localhost:5000',{
     params:{
       'action': request, 
       'player': player_turn
@@ -14,9 +14,9 @@ function get(request,player_turn)
       })
     })
 }
-function put(request,player_turn,information)
+async function put(request,player_turn,information)
 {
-    axios.put('http://localhost:5000',{
+    await axios.put('http://localhost:5000',{
     params:{
       'action': request, 
       'player': player_turn,
@@ -27,9 +27,9 @@ function put(request,player_turn,information)
       })
     })
 }
-function post(staringPlayer,nrPlayers)
+async function post(staringPlayer,nrPlayers)
 {
-    axios.put('http://localhost:5000',{
+    await axios.put('http://localhost:5000',{
     params:{
       'sp': staringPlayer,
       'nrP': nrPlayers
