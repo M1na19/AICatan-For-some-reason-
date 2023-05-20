@@ -73,14 +73,16 @@ function tile_to_space(tile,piece)//transforma din format (tile,piece) in (x,y)
     return ({x:x,y:y})
 }
 
-function edgeClicked(button)//colt apasat
+function edgeClicked(button,player_turn)//colt apasat
 {
+    showing=false;
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
     destroyPieces()
 }
-function muchieClicked(button)//linie apasata
+function muchieClicked(button,player_turn)//linie apasata
 {
+    showing=false;
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
     destroyPieces()
@@ -165,9 +167,11 @@ async function flashButton(button, duration) {
       await new Promise(resolve => setTimeout(resolve, duration));
     }
   }
-
-function showAvialable(poz)
+showing=false;
+async function showAvialable(poz,player_turn)
 {
+    showing=true;
+    makeExit()
     //am ca input un sir cu poz[i] de tipul {tile,piece(adica indexu pe tile)}
     for(let i=0;i<poz.length;i++)
     {
@@ -181,7 +185,7 @@ function showAvialable(poz)
             giveAsezareStyle(buttons[i],point.x,point.y)
             
             buttons[i].addEventListener("click",function(event){
-                edgeClicked(event.target)
+                edgeClicked(event.target,player_turn)
             })
         }
         else//pt drumuri
@@ -190,13 +194,16 @@ function showAvialable(poz)
             giveDrumStyle(buttons[i],point.x,point.y,anglePieces[poz[i].piece])
 
             buttons[i].addEventListener("click",function(event){
-                muchieClicked(event.target)
+                muchieClicked(event.target,player_turn)
             })
         }
+        await waitForFalse()
     }
 }
-function showUpgradable(poz)
+async function showUpgradable(poz)
 {
+    showing=true;
+    makeExit()
     for(let i=0;i<poz.length;i++)
     {
         var point=tile_to_space(poz[i].tile,poz[i].piece)
@@ -204,13 +211,46 @@ function showUpgradable(poz)
         document.querySelector('.oras').appendChild(buttons[i])
         giveOrasStyle(buttons[i],point.x,point.y)
         buttons[i].addEventListener("click",function(event){
+            showing=false;
             updateSettlement(point.x,point.y)
             destroyPieces()
         })
     }
+    await waitForFalse()
 }
+var exit;
+function makeExit()
+{
+    exit=document.createElement("button");
+    document.body.appendChild(exit);
+    exit.style.position="absolute"
+    exit.style.height="50px"
+    exit.style.width="100px"
+    exit.style.color="gray"
+    exit.textContent="Abandon"
+    exit.style.top="1000px"
+    exit.style.left="1200px"
+    exit.addEventListener("click",function(event){
+        showing=false;
+        destroyPieces()
+        exit.remove()
+    })
+}
+function waitForFalse() {
+    return new Promise(resolve => {
+      const checkCondition = () => {
+        if (!showing) {
+          resolve();
+        } else {
+          setTimeout(checkCondition, 100); // Adjust the timeout value as needed
+        }
+      };
+      checkCondition();
+    });
+  }
 function destroyPieces()//la final distrug toate piesele
 {
+    exit.remove()
     buttons.forEach(element => {
         element.remove()
     });

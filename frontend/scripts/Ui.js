@@ -20,12 +20,12 @@ function MakeNewTile(pozy,pozx,numar,material)
     newtile.html.style.left = pozx*208 + "px";
     newtile.html.style.top = pozy*179-60+ "px";
     newtile.html.classList.add("tileimage");
-    if(material=="dessert")newtile.html.src="desert.png";
-    if(material=="wool")newtile.html.src="wooltile.png";
-    if(material=="brick")newtile.html.src="bricktile.png";
-    if(material=="ore")newtile.html.src="oretile.png";
-    if(material=="grain")newtile.html.src="graintile.png";
-    if(material=="wood")newtile.html.src="woodtile.png";
+    if(material=="dessert")newtile.html.src="images/desert.png";
+    if(material=="wool")newtile.html.src="images/wooltile.png";
+    if(material=="brick")newtile.html.src="images/bricktile.png";
+    if(material=="ore")newtile.html.src="images/oretile.png";
+    if(material=="grain")newtile.html.src="images/graintile.png";
+    if(material=="wood")newtile.html.src="images/woodtile.png";
 
     if(material!="dessert")document.body.appendChild(tilenumber.html);
 
@@ -176,7 +176,7 @@ function MakeSettlement(tile,piece,type,player)
         newsettlement.html.src="https://i.imgur.com/lEuOmXn.png";
         document.querySelector('.asezare').appendChild(newsettlement.html)
       }
-    else if(type=="city")
+      else if(type=="city")
       {
         newsettlement.html.src="https://i.imgur.com/FnMNoFx.png";
         document.querySelector('.oras').appendChild(newsettlement.html)
