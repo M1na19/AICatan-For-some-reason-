@@ -52,13 +52,16 @@ async function TheGame()
             }
             if(i==0)
             {
-                //make functions for player
-                //make an await player action
+                await playerGame()//has to be done
             }
             else
             {
-                manageAction(await get("AIaction"))
-                //make function that repeats this until "pas"
+                let action=""
+                while(action!="pas")
+                {
+                    action=await get("AIaction")
+                    manageAction(action)
+                }
             }
         }
     }
