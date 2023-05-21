@@ -33,9 +33,35 @@ async function OnStartGame()
     }
 }
 
-function TheGame()
+async function TheGame()
 {
-
+    while(await get("gameWon"))
+    {
+        for(let i=0;i<=nrJucatori;i++)
+        {
+            showData(await("playerData"))
+            let dice=await get("zar")//show dice function
+            showData(await("playerData"))//show data dunction
+            if(dice[0]+dice[1]==7)
+            {
+                let playersToDiscard=await get("discard")
+                for(let player in playersToDiscard)
+                {
+                    //solicita playeru sa decarteze
+                }
+            }
+            if(i==0)
+            {
+                //make functions for player
+                //make an await player action
+            }
+            else
+            {
+                manageAction(await get("AIaction"))
+                //make function that repeats this until "pas"
+            }
+        }
+    }
 }
 async function test()
 {
@@ -43,4 +69,5 @@ async function test()
     console.log("jel")
 }
 test()
-//OnStartGame();
+//await OnStartGame();
+//await TheGame()
