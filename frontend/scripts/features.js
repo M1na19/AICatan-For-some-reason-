@@ -7,7 +7,7 @@ const sendTrade=document.querySelector("sendTrade");
 const pass=document.querySelector("passButton");
 async function Trade()
 {
-
+    
 }
 async function development()
 {

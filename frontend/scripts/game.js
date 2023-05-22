@@ -64,6 +64,6 @@ async function test()
     unlockMenu()
     console.log("jel")
 }
-test()
+//test()
 //await OnStartGame();
 //await TheGame()
