@@ -76,21 +76,17 @@ function tile_to_space(tile,piece)//transforma din format (tile,piece) in (x,y)
 
 function edgeClicked(button,player_turn)//colt apasat
 {
-    showing=false;
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
-    exit.remove()
 }
 function muchieClicked(button,player_turn)//linie apasata
 {
-    showing=false;
     let index = Array.prototype.indexOf.call(buttons, button);
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
-    exit.remove()
 }
 
 
@@ -172,12 +168,8 @@ async function flashButton(button, duration) {
       await new Promise(resolve => setTimeout(resolve, duration));
     }
   }
-showing=false;
 async function showAvialable(poz,player_turn,can_abandon)
 {
-    showing=true;
-    if(can_abandon==true)
-        makeExit()
     //am ca input un sir cu poz[i] de tipul {tile,piece(adica indexu pe tile)}
     for(let i=0;i<poz.length;i++)
     {
@@ -189,26 +181,59 @@ async function showAvialable(poz,player_turn,can_abandon)
         {
             document.querySelector('.asezare').appendChild(buttons[i])
             giveAsezareStyle(buttons[i],point.x,point.y)
-            
-            buttons[i].addEventListener("click",function(event){
-                edgeClicked(event.target,player_turn)
-            })
         }
         else//pt drumuri
         {
             document.querySelector('.drum').appendChild(buttons[i])
             giveDrumStyle(buttons[i],point.x,point.y,anglePieces[poz[i].piece])
-
-            buttons[i].addEventListener("click",function(event){
-                muchieClicked(event.target,player_turn)
-            })
         }
     }
+    await new Promise((resolve)=>
+    {
+        let exit=NaN
+        if(can_abandon==true)
+        {
+            exit=makeExit()
+            exit.addEventListener('click',()=>
+            {
+                exit.remove()
+                destroyPieces()
+                resolve()
+            })
+        }        
+        for(let i=0;i<poz.length;i++)
+        {
+            if(pozbuttons[i].piece%2==0)
+            {
+                buttons[i].addEventListener('click',()=>
+                {
+                    edgeClicked(buttons[i],player_turn)
+                    if(exit)
+                    {
+                        exit.remove()
+                    }
+                    resolve()
+                })
+            }
+            else
+            {
+                buttons[i].addEventListener('click',()=>
+                {
+                    muchieClicked(buttons[i],player_turn)
+                    if(exit)
+                    {
+                        exit.remove()
+                    }
+                    resolve()
+                })
+            }
+        }
+        
+
+    })
 }
 async function showUpgradable(poz)
 {
-    showing=true;
-    makeExit()
     for(let i=0;i<poz.length;i++)
     {
         var point=tile_to_space(poz[i].tile,poz[i].piece)
@@ -223,7 +248,6 @@ async function showUpgradable(poz)
         })
     }
 }
-var exit;
 function makeExit()
 {
     exit=document.createElement("button");
@@ -235,16 +259,10 @@ function makeExit()
     exit.textContent="Abandon"
     exit.style.top="1000px"
     exit.style.left="1200px"
-    exit.addEventListener("click",function(event){
-        showing=false;
-        destroyPieces()
-        exit.remove()
-        chosedPosition=NaN
-    })
+    return exit;
 }
 function destroyPieces()//la final distrug toate piesele
 {
-    
     buttons.forEach(element => {
         element.remove()
     });

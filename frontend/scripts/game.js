@@ -3,6 +3,7 @@
 var nrJucatori=4;
 async function OnStartGame()
 {
+    lockMenu()
     for(var i=0;i<nrJucatori;i++)
     {
         if(i==0)
@@ -23,6 +24,7 @@ async function OnStartGame()
             await showAvialable(await get("posibile_asezari"),0,false);
             await showAvialable(await get("posibile_drumuri"),0,false);
             await put("place_piece",0,chosedPosition); 
+            unlockMenu()
         }
         else
         {
@@ -39,20 +41,9 @@ async function TheGame()
     {
         for(let i=0;i<=nrJucatori;i++)
         {
-            showData(await("playerData"))
-            let dice=await get("zar")//show dice function
-            showData(await("playerData"))//show data dunction
-            if(dice[0]+dice[1]==7)
-            {
-                let playersToDiscard=await get("discard")
-                for(let player in playersToDiscard)
-                {
-                    //solicita playeru sa decarteze
-                }
-            }
             if(i==0)
             {
-                await playerGame()//has to be done
+                await playerGame()
             }
             else
             {
@@ -68,7 +59,9 @@ async function TheGame()
 }
 async function test()
 {
-    await showAvialable([{tile:0,piece:2}],0,true);
+    lockMenu()
+    await showAvialable([{tile:0,piece:2},{tile:0,piece:3}],0,true);
+    unlockMenu()
     console.log("jel")
 }
 test()

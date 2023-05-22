@@ -3,7 +3,7 @@ var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore
 var cardloc = [];
 var scardloc = [];
 var specialcardvector = ["LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP"];
-
+var menuIsLocked=false
 function MakeNewTile(pozy,pozx,numar,material)
 {
     let newtile = {};
@@ -244,9 +244,9 @@ function MakeAndMoveThief(pozx,pozy)
 function MakeMap()
 {
   var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
-  for (let j = 0; j < 19; j++)
-    for (let i = 1; i <= 11; i+=2)
-      MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
+  //for (let j = 0; j < 19; j++)
+  //  for (let i = 1; i <= 11; i+=2)
+  //    MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
   MakeSettlement(0,0,"town",Math.floor(1 + Math.random() * 4));
   MakeSettlement(1,0,"town",Math.floor(1 + Math.random() * 4));
   MakeSettlement(5,0,"city",Math.floor(1 + Math.random() * 4));
@@ -350,9 +350,12 @@ function NewSpecialCards(specialcardvector)
 }
 
 function openNav() {
-  NewSpecialCards(specialcardvector);
-  NewCards(cardvector);
-  document.getElementById("myNav").style.width = "100%";
+  if(menuIsLocked==false)
+  {
+    NewSpecialCards(specialcardvector);
+    NewCards(cardvector);
+    document.getElementById("myNav").style.width = "100%";
+  }
 }
 
 function closeNav() {
