@@ -202,7 +202,6 @@ async function showAvialable(poz,player_turn,can_abandon)
             })
         }
     }
-    await waitForFalse()
 }
 async function showUpgradable(poz)
 {
@@ -221,7 +220,6 @@ async function showUpgradable(poz)
             chosedPosition=pozbuttons[index]
         })
     }
-    await waitForFalse()
 }
 var exit;
 function makeExit()
@@ -242,18 +240,6 @@ function makeExit()
         chosedPosition=NaN
     })
 }
-function waitForFalse() {
-    return new Promise(resolve => {
-      const checkCondition = () => {
-        if (!showing) {
-          resolve();
-        } else {
-          setTimeout(checkCondition, 100); // Adjust the timeout value as needed
-        }
-      };
-      checkCondition();
-    });
-  }
 function destroyPieces()//la final distrug toate piesele
 {
     
