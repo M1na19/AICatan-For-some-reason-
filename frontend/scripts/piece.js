@@ -81,6 +81,7 @@ function edgeClicked(button,player_turn)//colt apasat
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
+    exit.remove()
 }
 function muchieClicked(button,player_turn)//linie apasata
 {
@@ -89,6 +90,7 @@ function muchieClicked(button,player_turn)//linie apasata
     MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
+    exit.remove()
 }
 
 
