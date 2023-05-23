@@ -241,7 +241,7 @@ function MakeAndMoveThief(pozx,pozy)
     document.body.appendChild(newthief.html);
 }
 
-function MakeMap()
+function MakeMap(x)
 {
   var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
   //for (let j = 0; j < 19; j++)
@@ -264,6 +264,32 @@ function MakeMap()
         if(i==7)MakeHarbour(i,"grain");
         if(i==9)MakeHarbour(i,"wood");
     }
+
+    for(var i=0;i<x.length;i++)
+    {
+      var a,b;
+      if(x[i]<4)
+        a=1;
+        b=x[i];
+      if(x[i]>3 && x[i]<8)
+        a=2;
+        b=x[i]-3;
+      if(x[i]>7 && x[i]<13)
+        a=3;
+        b=x[i]-7;
+      if(x[i]>12 && x[i]<17)
+        a=4;
+        b=x[i]-12;
+      if(x[i]>16 && x[i]<20)
+        a=5;
+        b=x[i]-16;
+      if(x[i][1]==0)MakeNewTile(a,b,x[i][0],"wood");
+      if(x[i][1]==1)MakeNewTile(a,b,x[i][0],"brick");
+      if(x[i][1]==2)MakeNewTile(a,b,x[i][0],"grain");
+      if(x[i][1]==3)MakeNewTile(a,b,x[i][0],"wool");
+      if(x[i][1]==4)MakeNewTile(a,b,x[i][0],"ore");
+    }
+
     MakeNewTile(1,1,2,"wool");
     MakeNewTile(1,2,3,"brick");
     MakeNewTile(1,3,4,"ore");
