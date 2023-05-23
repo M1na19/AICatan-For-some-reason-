@@ -1,8 +1,8 @@
-  var tiles = [];
-var cardvector = ["brick","wool","wood","ore","grain","brick","wool","wood","ore","grain","brick","wool","wood","ore","grain"];
+var tiles = [];
+var cardvector = [];
 var cardloc = [];
 var scardloc = [];
-var specialcardvector = ["LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP","LIB","KNG","RBD","MNP","YOP"];
+var specialcardvector = [];
 var menuIsLocked=false
 function MakeNewTile(pozy,pozx,numar,material)
 {
@@ -465,7 +465,34 @@ function showDice(x,y)
   rollDice=document.querySelector("#diceButton")
 }
 
-function showData()
+function showData(x,y)
 {
-
+    var j=0;
+    for(var i=0;i<x.length;i++)
+    {
+      while(x[i]!=0)
+      {
+        if(i==0)cardvector[j]="wood";
+        if(i==1)cardvector[j]="brick";
+        if(i==2)cardvector[j]="grain";
+        if(i==3)cardvector[j]="wool";
+        if(i==4)cardvector[j]="ore";
+        j+=1;
+        x[i]-=1;
+      }
+    }
+    j=0;
+    for(var i=0;i<y.length;i++)
+    {
+      while(y[i]!=0)
+      {
+        if(i==0)specialcardvector[j]="LIB";
+        if(i==1)specialcardvector[j]="KNG";
+        if(i==2)specialcardvector[j]="RBD";
+        if(i==3)specialcardvector[j]="MNP";
+        if(i==4)specialcardvector[j]="YOP";
+        j+=1;
+        y[i]-=1;
+      }
+    }
 }
