@@ -59,8 +59,9 @@ async function TheGame()
 }
 async function test()
 {
-    steal(4);
+    showDice(4,5);
+    tradeProposal([1,1,1,1,1],[1,1,1,1,1],4)
 }
-test()
+//test()
 //await OnStartGame();
 //await TheGame()

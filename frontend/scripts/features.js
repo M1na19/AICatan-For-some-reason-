@@ -1,12 +1,13 @@
 const backgroundstyle="position: absolute; top:0%; height:100%; width:100%;color:green"
 
-const dice=document.querySelector('diceButton')
-const develop=document.querySelector('developButton')
-const buildAsezare=document.querySelector("asezareButton");
-const buildOras=document.querySelector("orasButton");
-const buildDrum=document.querySelector("drumButton");
-const sendTrade=document.querySelector("sendTrade");
-const pass=document.querySelector("passButton");
+const dice=document.querySelector('#diceButton')
+const develop=document.querySelector('#developButton')
+const buildAsezare=document.querySelector("#asezareButton");
+const buildOras=document.querySelector("#orasButton");
+const buildDrum=document.querySelector("#drumButton");
+const sendTrade=document.querySelector("#sendTrade");
+const pass=document.querySelector("#passButton");
+var acceptTrade=document.querySelector('#acceptTradeButton')
 
 function sum(list)
 {
@@ -49,7 +50,7 @@ async function moveThief()
 }
 async function steal(tile,player)
 {
-    //optionPlayers=await get("playerInTile")
+    //optionPlayers=await get("playerInTile",player)
     let optionPlayers=[1,0,1,1]
     let buttons=[]
     showDice(4,5)
@@ -115,9 +116,59 @@ async function discard()
 {
     //nu depinde de player
 }
-async function tradeProposal()
+async function tradeProposal(cardsReceived,cardsGiven,player)
 {
-    //doar pe tura altora
+    openNav()
+    const namePlayer=document.querySelector('#TradePlayerName')
+    namePlayer.textContent="Trade from: player "+player
+    const yw=[document.querySelector('#ywwood'),document.querySelector('#ywbrick'),document.querySelector('#ywgrain'),document.querySelector('#ywwool'),document.querySelector('#ywore')]
+    const yl=[document.querySelector('#ylwood'),document.querySelector('#ylbrick'),document.querySelector('#ylgrain'),document.querySelector('#ylwool'),document.querySelector('#ylore')]
+    for(let i=0;i<cardsReceived.length;i++)
+    {
+        yw[i].textContent=cardsReceived[i]
+    }
+    for(let i=0;i<cardsGiven.length;i++)
+    {
+        yl[i].textContent=cardsGiven[i]
+    }
+    await new Promise((resolve) => {
+        setTimeout(()=>
+        {
+            namePlayer.textContent="Trade from: None"
+            for(let i=0;i<cardsReceived.length;i++)
+            {
+                yw[i].textContent=0
+            }
+            for(let i=0;i<cardsGiven.length;i++)
+            {
+                yl[i].textContent=0
+            }
+            removeEventListeners(acceptTrade);
+            acceptTrade=document.querySelector('#acceptTradeButton');
+            acceptTrade.textContent="ACCEPT TRADE"
+            resolve()
+        },20000)
+        acceptTrade.addEventListener('click',async()=>
+        {
+            //await put("playersTrade")
+            namePlayer.textContent="Trade from: None"
+            for(let i=0;i<cardsReceived.length;i++)
+            {
+                yw[i].textContent=0
+            }
+            for(let i=0;i<cardsGiven.length;i++)
+            {
+                yl[i].textContent=0
+            }
+            removeEventListeners(acceptTrade);
+            acceptTrade=document.querySelector('#acceptTradeButton');
+            acceptTrade.textContent="ACCEPT TRADE"
+            resolve()
+        })
+        
+    })
+
+
 }
 function lockMenu()
 {
