@@ -35,7 +35,28 @@ function removeEventListeners(buton)
     let copy=buton.cloneNode()
     buton.replaceWith(copy)
 }
-
+async function flashHexagon(hex)
+{
+    let opacity=50;
+    let increment=-2;
+    let maxopacity=50;
+    while(document.contains(hex))
+    {
+        if(opacity<=0)
+        {
+            increment=2;
+        }
+        else if(opacity>maxopacity)
+        {
+            increment=-2;
+        }
+        opacity+=increment;
+        hex.style.opacity=(opacity+increment)+"%";
+        await new Promise((resolve) => {
+            setTimeout(resolve,50)
+        })
+    }
+}
 async function Trade()
 {
     //Mache
@@ -44,9 +65,59 @@ async function development()
 {
     //Mache
 }
-async function moveThief()
+async function moveThief(can_abandon)
 {
-
+    //const pozThief=await get("pozThief",-1);
+    var exit;
+    if(can_abandon)
+    {
+        exit=makeExit()
+        exit.addEventListener('click',()=>
+        {
+            for(let i=0;i<buttons.length;i++)
+            {
+                buttons[i].remove();
+            }
+            exit.remove()
+            resolve()
+        })
+    }
+    const pozThief=9;
+    let buttons=[]
+    for(let i=0;i<19;i++)
+    {
+        if(i!=pozThief)
+        {
+            const thiefButton=document.createElement('button');
+            const theImage=document.createElement('img');
+            thiefButton.style="position:absolute; top:"+(tile_poz[i].y-20)+"px; left:"+(tile_poz[i].x-20)+"px;height:150px;width:150px;z-index:10";thiefButton.style.backgroundColor="transparent";thiefButton.style.border="none";
+            theImage.src="images/hexagon.png"
+            theImage.style="height:250px; width:250px;top:-50px;left:-50px;z-index:-1;";theImage.style.rotate="30deg";
+            buttons.push(thiefButton);
+            document.body.appendChild(thiefButton);
+            thiefButton.appendChild(theImage);
+            flashHexagon(theImage);
+        }
+    }
+    var tileChosed=-1;
+    await new Promise((resolve) => {
+      for(let i=0;i<18;i++)
+      {
+        buttons[i].addEventListener('click',async ()=>
+        {
+            tileChosed=i;
+            //await put("moveThief",-1,tileChosed)//doesnt matter player
+            for(let i=0;i<18;i++)
+            {
+                buttons[i].remove();
+            }
+            if(can_abandon)
+                exit.remove();
+            resolve()
+        })
+      }  
+    })
+    return tileChosed;
 }
 async function steal(tile,player)
 {
@@ -204,9 +275,12 @@ async function zar()
 {
     showDice(await get('zar',0))//doesnt matter player
 }
-async function playerBuyDevelopment()
+async function playerBuyDevelopment(player)
 {
-    
+    if(typeof(await get("getDezv",player))==="number")
+    {
+        //warning tab
+    }
 }
 
 async function playerGame(player)
