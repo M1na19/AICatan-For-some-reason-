@@ -204,6 +204,10 @@ async function zar()
 {
     showDice(await get('zar',0))//doesnt matter player
 }
+async function playerBuyDevelopment()
+{
+    
+}
 
 async function playerGame(player)
 {
