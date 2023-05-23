@@ -3,6 +3,7 @@ var cardvector = [];
 var cardloc = [];
 var scardloc = [];
 var specialcardvector = [];
+var tradecards=[0,0,0,0,0];
 var menuIsLocked=false
 function MakeNewTile(pozy,pozx,numar,material)
 {
@@ -440,8 +441,18 @@ function updatenumbermat()
   }
 }
 
+function getTradecardsYouwant()
+{
+  tradecards[0]=parseInt(document.getElementById("twood"));
+  tradecards[1]=parseInt(document.getElementById("tbrick"));
+  tradecards[2]=parseInt(document.getElementById("tgrain"));
+  tradecards[3]=parseInt(document.getElementById("twool"));
+  tradecards[4]=parseInt(document.getElementById("tore"));
+}
+
 var intervalId = window.setInterval(function()
 {
+  getTradecardsYouwant()
   updatenumbermat();
 }, 1);
 
