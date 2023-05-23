@@ -243,7 +243,6 @@ function MakeAndMoveThief(pozx,pozy)
 
 function MakeMap(x)
 {
-  var temp = [6, 4, 8, 5, 10, 6, 10, 5, 8, 4, 6];
   //for (let j = 0; j < 19; j++)
   //  for (let i = 1; i <= 11; i+=2)
   //    MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
@@ -268,21 +267,31 @@ function MakeMap(x)
     for(var i=0;i<x.length;i++)
     {
       var a,b;
-      if(x[i]<4)
+      if(i<3)
+      {
         a=1;
-        b=x[i];
-      if(x[i]>3 && x[i]<8)
+        b=i+1;
+      }
+      if(i>=3 && i<7)
+      {
         a=2;
-        b=x[i]-3;
-      if(x[i]>7 && x[i]<13)
+        b=i-2;
+      }
+      if(i>=7 && i<12)
+      {
         a=3;
-        b=x[i]-7;
-      if(x[i]>12 && x[i]<17)
+        b=i-6;
+      }
+      if(i>=12 && i<16)
+      {
         a=4;
-        b=x[i]-12;
-      if(x[i]>16 && x[i]<20)
+        b=i-11;
+      }
+      if(i>=16 && i<19)
+      { 
         a=5;
-        b=x[i]-16;
+        b=i-15;
+      }
       if(x[i][1]==0)MakeNewTile(a,b,x[i][0],"wood");
       if(x[i][1]==1)MakeNewTile(a,b,x[i][0],"brick");
       if(x[i][1]==2)MakeNewTile(a,b,x[i][0],"grain");
@@ -290,25 +299,25 @@ function MakeMap(x)
       if(x[i][1]==4)MakeNewTile(a,b,x[i][0],"ore");
     }
 
-    MakeNewTile(1,1,2,"wool");
-    MakeNewTile(1,2,3,"brick");
-    MakeNewTile(1,3,4,"ore");
-    MakeNewTile(2,1,5,"grain");
-    MakeNewTile(2,2,6,"wood");
-    MakeNewTile(2,3,2,"brick");
-    MakeNewTile(2,4,8,"brick");
-    MakeNewTile(3,1,9,"grain");
-    MakeNewTile(3,2,10,"wood");
-    MakeNewTile(3,3,"","dessert");
-    MakeNewTile(3,4,12,"ore");
-    MakeNewTile(3,5,3,"ore");
-    MakeNewTile(4,1,4,"grain");
-    MakeNewTile(4,2,5,"wood");
-    MakeNewTile(4,3,6,"wool");
-    MakeNewTile(4,4,7,"brick");
-    MakeNewTile(5,1,8,"ore");
-    MakeNewTile(5,2,9,"grain");
-    MakeNewTile(5,3,12,"wood");
+    // MakeNewTile(1,1,2,"wool");
+    // MakeNewTile(1,2,3,"brick");
+    // MakeNewTile(1,3,4,"ore");
+    // MakeNewTile(2,1,5,"grain");
+    // MakeNewTile(2,2,6,"wood");
+    // MakeNewTile(2,3,2,"brick");
+    // MakeNewTile(2,4,8,"brick");
+    // MakeNewTile(3,1,9,"grain");
+    // MakeNewTile(3,2,10,"wood");
+    // MakeNewTile(3,3,"","dessert");
+    // MakeNewTile(3,4,12,"ore");
+    // MakeNewTile(3,5,3,"ore");
+    // MakeNewTile(4,1,4,"grain");
+    // MakeNewTile(4,2,5,"wood");
+    // MakeNewTile(4,3,6,"wool");
+    // MakeNewTile(4,4,7,"brick");
+    // MakeNewTile(5,1,8,"ore");
+    // MakeNewTile(5,2,9,"grain");
+    // MakeNewTile(5,3,12,"wood");
 
     MakeAndMoveThief(3,3);
 }
@@ -388,7 +397,7 @@ function closeNav() {
   document.getElementById("myNav").style.width = "0%";
 }
 
-MakeMap();
+MakeMap([[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2]]);
 
 function updatenumbermat()
 {

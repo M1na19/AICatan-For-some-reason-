@@ -62,6 +62,6 @@ async function test()
     showDice(4,5);
     moveThief(true)
 }
-test()
+//test()
 //await OnStartGame();
 //await TheGame()
