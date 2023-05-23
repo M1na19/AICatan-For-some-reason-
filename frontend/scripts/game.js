@@ -59,11 +59,11 @@ async function TheGame()
 }
 async function test()
 {
+    resetDice()
     lockMenu()
-    await showAvialable([{tile:0,piece:2},{tile:0,piece:3}],0,true);
+    setTimeout(showDice(3,4),10000)
     unlockMenu()
-    console.log("jel")
 }
-//test()
+test()
 //await OnStartGame();
 //await TheGame()

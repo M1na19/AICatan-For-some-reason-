@@ -18,15 +18,15 @@
         <div id="cardpadding1"></div>
         <div id="cardpadding2"></div>
         <div style="padding-top:380px ;padding-left:50px;">
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/lEuOmXn.png" class="button" onclick=""></input>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/FnMNoFx.png" class="button" onclick=""></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/lEuOmXn.png" class="button" id="asezareButton"></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/FnMNoFx.png" class="button" id="orasButton"></input>
             <br>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/2yiE5t2.png" class="button" onclick=""></input>
-            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/8hebUAE.png" class="button" onclick=""></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/2yiE5t2.png" class="button" id="drumButton"></input>
+            <input style="width: 100px;height: 100px;" type="image" src="https://i.imgur.com/8hebUAE.png" class="button" id="developButton"></input>
         </div>
         
         <div style="padding-top:10px ;padding-left:50px;">
-            <button style="top: 675px;left:400px;width: 250px;height: 100px;position: absolute;color: black;" class="button" onclick="">USE DEVELOPMENT</button>
+            <button style="top: 675px;left:400px;width: 250px;height: 100px;position: absolute;color: black;" class="button" id="developButton">USE DEVELOPMENT</button>
             <div class="dice" id="dice1">#</div>
             <div style="margin-left:0px;" class="dice" id="dice2">#</div>
         </div>
@@ -62,7 +62,7 @@
                 <button style="top: 250px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tore').textContent)>0)document.getElementById('tore').textContent=parseInt(document.getElementById('tore').textContent)-1">-</button>
                 <button style="top: 125px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tgrain').textContent)>0)document.getElementById('tgrain').textContent=parseInt(document.getElementById('tgrain').textContent)-1">-</button>
                 <button style="top: 10px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('twool').textContent)>0)document.getElementById('twool').textContent=parseInt(document.getElementById('twool').textContent)-1">-</button>
-                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" onclick="">SEND TRADE</button>
+                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" id="sendTrade">SEND TRADE</button>
                 <div style="top:0px;width: 250px;left:860px" class="tradeplace"></div>
             </div>
         </div>
@@ -91,9 +91,11 @@
         <div class="oras"></div>
     </div>
     <div>
-        <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:-100px; height:300px;width: auto;z-index: 10;">
-        <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:50px; height:300px;width: auto;z-index: 10;">
-        <button style="position: absolute; top: 950px;left:80px; height:50px;width: 200px;z-index: 10;">Roll Dice</button>
+        <div id="dices">
+            <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:-100px; height:300px;width: auto;z-index: 10;">
+            <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:50px; height:300px;width: auto;z-index: 10;">
+        </div>
+        <button id="diceButton" style="position: absolute; top: 950px;left:80px; height:50px;width: 200px;z-index: 10;" id="diceButton">Roll Dice</button>
     </div>
     <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0;color: bisque;" onclick="openNav()">OPEN &#9776;</span>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>

@@ -1,10 +1,18 @@
-const dice=document.querySelector('zarButton')
+const dice=document.querySelector('diceButton')
 const develop=document.querySelector('developButton')
 const buildAsezare=document.querySelector("asezareButton");
 const buildOras=document.querySelector("orasButton");
 const buildDrum=document.querySelector("drumButton");
 const sendTrade=document.querySelector("sendTrade");
 const pass=document.querySelector("passButton");
+
+function removeEventListeners(buton)
+{
+    let copy=buton.cloneNode()
+    buton.replaceWith(copy)
+    buton=copy
+}
+
 async function Trade()
 {
     
@@ -103,12 +111,4 @@ async function playerGame(player)
           resolve();
         });
       });
-}
-function showDice()
-{
-
-}
-function showData()
-{
-
 }
