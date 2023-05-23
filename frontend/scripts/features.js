@@ -1,3 +1,5 @@
+const backgroundstyle="position: absolute; top:0%; height:100%; width:100%;color:green"
+
 const dice=document.querySelector('diceButton')
 const develop=document.querySelector('developButton')
 const buildAsezare=document.querySelector("asezareButton");
@@ -6,28 +8,108 @@ const buildDrum=document.querySelector("drumButton");
 const sendTrade=document.querySelector("sendTrade");
 const pass=document.querySelector("passButton");
 
+function sum(list)
+{
+    let x=0
+    for(let i=0;i<list.length;i++)
+    {
+        x+=list[i];
+    }
+    return x;
+}
+function frecvToIter(list)
+{
+    let modified=[]
+    for(let i=0;i<list.length;i++)
+    {
+        for(let j=0;j<list[i];j++)
+        {
+            modified.push(i);
+        }
+    }
+    return modified;
+}
 function removeEventListeners(buton)
 {
     let copy=buton.cloneNode()
     buton.replaceWith(copy)
-    buton=copy
 }
 
 async function Trade()
 {
-    
+    //Mache
 }
 async function development()
 {
-
+    //Mache
 }
 async function moveThief()
 {
 
 }
-async function steal()
+async function steal(tile,player)
 {
+    //optionPlayers=await get("playerInTile")
+    let optionPlayers=[1,0,1,1]
+    let buttons=[]
+    showDice(4,5)
+    lockMenu()
+    const stealPage=document.createElement('div');stealPage.style.zIndex="10001"
+    document.body.appendChild(stealPage);
+    
 
+    const background=document.createElement('img');
+    background.style=backgroundstyle;
+    background.src="images/background.png"
+    stealPage.appendChild(background);
+
+    const distanceBetweenPlayers=window.screen.width/(sum(optionPlayers)+1)+300;
+    var lastPlaced=-500
+
+    for (let i=0;i<sum(optionPlayers);i++)
+    {
+        lastPlaced+=distanceBetweenPlayers;
+        const spotLight=document.createElement('img');spotLight.src="images/spotlight.png"
+        const buttonPlayer=document.createElement('button');
+        const indx=document.createElement('p');indx.textContent=frecvToIter(optionPlayers)[i]+1;
+
+        spotLight.style="position:absolute; left:"+lastPlaced+"px ; top:400px; height:800px; width: auto;"
+
+        buttonPlayer.style="position:absolute; left:"+(lastPlaced+200)+"px; top:60%; height:200px; width: 200px"
+        buttonPlayer.style.backgroundImage = "url('images/player.png')";
+        buttonPlayer.style.backgroundSize = "cover";
+        buttonPlayer.style.zIndex = "10";
+        buttonPlayer.style.backgroundColor="transparent"
+        buttonPlayer.style.borderBlockColor="transparent"
+
+        indx.style="position: absolute; top:80%;left:"+(lastPlaced+250)+"px;z-index:10;"
+        indx.style.fontSize="100px"
+        indx.style.color="white"
+        
+
+        buttons.push(buttonPlayer)
+
+        stealPage.appendChild(spotLight);
+        stealPage.appendChild(buttonPlayer);
+        stealPage.appendChild(indx)
+
+        
+
+    }
+    await new Promise((resolve)=>
+    {
+        for(let i=0;i<buttons.length;i++)
+        {
+            let otherplayer=frecvToIter(optionPlayers)[i];
+            buttons[i].addEventListener('click',async ()=>
+            {
+                //await put("steal",player,otherplayer)
+                stealPage.remove()
+                resolve()
+            })
+        }
+    })
+    unlockMenu()
 }
 async function discard()
 {

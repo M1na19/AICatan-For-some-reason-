@@ -446,13 +446,12 @@ function dragElement(elmnt) {
 const firstDice=document.querySelector("#dice1")
 const secondDice=document.querySelector("#dice2")
 const diceAnimation=document.querySelector("#dices")
-const rollDice=document.querySelector("#diceButton")
-
+var rollDice=document.querySelector("#diceButton")
 function resetDice()
 {
   firstDice.textContent="#"
   secondDice.textContent="#"
-  diceAnimation.style.opacity="0%"
+  diceAnimation.style.opacity="100%"
   rollDice.style.opacity="100%"
 }
 
@@ -461,8 +460,9 @@ function showDice(x,y)
   firstDice.textContent=x
   secondDice.textContent=y
   diceAnimation.style.opacity="0%"
-  removeEventListeners(rollDice);
   rollDice.style.opacity="0%"
+  removeEventListeners(rollDice);
+  rollDice=document.querySelector("#diceButton")
 }
 
 function showData()

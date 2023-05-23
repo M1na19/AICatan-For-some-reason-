@@ -59,10 +59,7 @@ async function TheGame()
 }
 async function test()
 {
-    resetDice()
-    lockMenu()
-    setTimeout(showDice(3,4),10000)
-    unlockMenu()
+    steal(4);
 }
 test()
 //await OnStartGame();
