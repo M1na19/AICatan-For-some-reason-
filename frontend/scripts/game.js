@@ -62,6 +62,7 @@ async function test()
     showDice(4,5);
     moveThief(true)
 }
+showData([1,1,1,1,1],[1,1,1,1,1])
 //test()
 //await OnStartGame();
 //await TheGame()

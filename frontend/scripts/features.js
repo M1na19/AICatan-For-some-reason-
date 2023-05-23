@@ -5,7 +5,7 @@ const develop=document.querySelector('#developButton')
 const buildAsezare=document.querySelector("#asezareButton");
 const buildOras=document.querySelector("#orasButton");
 const buildDrum=document.querySelector("#drumButton");
-const sendTrade=document.querySelector("#sendTrade");
+var sendTrade=document.querySelector("#sendTrade");
 const pass=document.querySelector("#passButton");
 var acceptTrade=document.querySelector('#acceptTradeButton')
 
@@ -27,6 +27,15 @@ function frecvToIter(list)
         {
             modified.push(i);
         }
+    }
+    return modified;
+}
+function iterToFrecv(list)
+{
+    let modified=[0,0,0,0,0]
+    for(let i=0;i<list.length;i++)
+    {
+        modified[list[i]]++;
     }
     return modified;
 }
@@ -57,13 +66,109 @@ async function flashHexagon(hex)
         })
     }
 }
-async function Trade()
+async function Trade(player)
 {
-    //Mache
+    getTradecardsYouwant()
+    const player2=NaN;
+    await new Promise(async (resolve) => {
+        let resources=[0,0,0,0,0];
+        for(let i=0;i<cardloc.length;i++)
+        {
+            if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
+            {
+                if(cardloc[i].mat=="wood")resources[0]++;
+                if(cardloc[i].mat=="wool")resources[3]++;
+                if(cardloc[i].mat=="ore")resources[4]++;
+                if(cardloc[i].mat=="brick")resources[1]++;
+                if(cardloc[i].mat=="grain")resources[2]++;
+            }
+        }
+        await put("proposalTrade",player,player2,resources,tradecards);
+    })
 }
-async function development()
+async function development(player)
 {
-    //Mache
+    let first=-1
+    for(let i=0;i<scardloc.length;i++)
+    {
+      if(parseInt(scardloc[i].html.style.top)>445 && parseInt(scardloc[i].html.style.top)<875 && parseInt(scardloc[i].html.style.left)>700 && parseInt(scardloc[i].html.style.left)<1190)
+      {
+        if(scardloc[i].mat=="LIB"){first=0;break;}
+        if(scardloc[i].mat=="YOP"){first=1;break;}
+        if(scardloc[i].mat=="RBD"){first=2;break;}
+        if(scardloc[i].mat=="KNG"){first=3;break;}
+        if(scardloc[i].mat=="MNP"){first=4;break;}
+      }
+    }
+
+    switch (first)
+    {
+        case 0:
+        {
+            //anounce u have one victory point
+        }
+        case 1:
+        {
+            await new Promise(async (resolve) => {
+                removeEventListeners(sendTrade);
+                sendTrade=document.querySelector("#sendTrade");
+                sendTrade.textContent="CHOOSE 2 GAINED RESOURCES"
+                sendTrade.addEventListener('click',async ()=>
+                {
+                    getTradecardsYouwant()
+                    if(sum(tradecards)==2)
+                    {
+                        //await put("gain2Resources",tradecards)
+                        resolve();
+                    }
+                    else
+                    {
+                        //warning message
+                    }
+                })
+                setTimeout(resolve,15000);
+            });
+            removeEventListeners(sendTrade);
+            sendTrade=document.querySelector("#sendTrade");
+            sendTrade.textContent="SEND TRADE";
+            sendTrade.addEventListener('click',async()=>
+            {
+                await Trade(player)//modify this if needed
+            })
+            break;
+        }
+        case 2:
+        {
+            await new Promise(async (resolve) => {
+                await showAvialable(await get('possibleDrumuri',player),player,true)
+                if(chosedPosition==NaN)
+                {
+                    resolve()
+                }
+                await showAvialable(await get('possibleDrumuri',player),player,false)
+                resolve()
+            })
+        }
+        case 3:
+        {
+            await new Promise(async (resolve) => {
+                let tile=await moveThief(true);
+                if(tile>=0)
+                {
+                    await steal(tile,player);
+                }
+                resolve()
+            })
+            break;
+        }
+        case 4:
+        {
+            await new Promise((resolve => {
+                await monopol()
+            })
+        }
+    }
+    
 }
 async function moveThief(can_abandon)
 {
@@ -186,6 +291,10 @@ async function steal(tile,player)
 async function discard()
 {
     //nu depinde de player
+}
+async function monopol()
+{
+    
 }
 async function tradeProposal(cardsReceived,cardsGiven,player)
 {

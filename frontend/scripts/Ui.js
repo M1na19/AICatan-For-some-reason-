@@ -325,14 +325,16 @@ function MakeMap(x)
 
 function stringtoint(x)
 {
+  let modified=[]
   for(var i=0;i<x.length;i++)
   {
-    if(x[i]=="wood")x[i]=0;
-    if(x[i]=="brick")x[i]=1;
-    if(x[i]=="grain")x[i]=2;
-    if(x[i]=="wool")x[i]=3;
-    if(x[i]=="ore")x[i]=4;
+    if(x[i]=="wood")modified.push(0)
+    if(x[i]=="brick")modified.push(1)
+    if(x[i]=="grain")modified.push(2)
+    if(x[i]=="wool")modified.push(3)
+    if(x[i]=="ore")modified.push(4)
   }
+  return modified;
 }
 
 //--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
@@ -455,11 +457,11 @@ function updatenumbermat()
 
 function getTradecardsYouwant()
 {
-  tradecards[0]=parseInt(document.getElementById("twood"));
-  tradecards[1]=parseInt(document.getElementById("tbrick"));
-  tradecards[2]=parseInt(document.getElementById("tgrain"));
-  tradecards[3]=parseInt(document.getElementById("twool"));
-  tradecards[4]=parseInt(document.getElementById("tore"));
+  tradecards[0]=parseInt(document.getElementById("twood").textContent);
+  tradecards[1]=parseInt(document.getElementById("tbrick").textContent);
+  tradecards[2]=parseInt(document.getElementById("tgrain").textContent);
+  tradecards[3]=parseInt(document.getElementById("twool").textContent);
+  tradecards[4]=parseInt(document.getElementById("tore").textContent);
 }
 
 var intervalId = window.setInterval(function()
