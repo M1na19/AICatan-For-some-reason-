@@ -323,6 +323,18 @@ function MakeMap(x)
     MakeAndMoveThief(3,3);
 }
 
+function stringtoint(x)
+{
+  for(var i=0;i<x.length;i++)
+  {
+    if(x[i]=="wood")x[i]=0;
+    if(x[i]=="brick")x[i]=1;
+    if(x[i]=="grain")x[i]=2;
+    if(x[i]=="wool")x[i]=3;
+    if(x[i]=="ore")x[i]=4;
+  }
+}
+
 //--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
 
 function RemoveCards(index)
