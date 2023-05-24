@@ -3,8 +3,8 @@ var express = require("express"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
     LocalStrategy = require("passport-local"),
-    passportLocalMongoose = 
-        require("passport-local-mongoose")
+    passportLocalMongoose = require("passport-local-mongoose"),
+    cookieParser = require("cookie-parser");
 const User = require("./model/User");
 var app = express();
   
@@ -20,6 +20,7 @@ app.use(require("express-session")({
   
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
   
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -64,10 +65,12 @@ app.post("/login", async function(req, res){
     try {
         // check if the user exists
         const user = await User.findOne({ username: req.body.username });
+        console.log(req.cookies);
         if (user) {
           //check if password matches
           const result = req.body.password === user.password;
           if (result) {
+            res.cookie("user", req.body.username);
             res.render("secret");
           } else {
             res.status(400).json({ error: "password doesn't match" });

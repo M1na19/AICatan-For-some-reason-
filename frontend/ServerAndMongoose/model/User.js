@@ -7,6 +7,15 @@ var User = new Schema({
     },
     password: {
         type: String
+    },
+    wins: {
+        type: String
+    },
+    games: {
+        type: String
+    },
+    vps: {
+        type: String
     }
 })
   
