@@ -339,6 +339,11 @@ function stringtoint(x)
 
 //--UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI----UI--UI--
 
+function PopUpShow() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+}
+
 function RemoveCards(index)
 {
   cardloc.splice(index,1);

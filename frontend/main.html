@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="styles/popup.css">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -15,6 +16,9 @@
         <img style="left:1800px;top:800px;width: 275px;height: 325px;border-radius: 5%;position: absolute;" type="image" src="https://i.imgur.com/DhyH1Xt.png"></img>
     </div>
     <div id="myNav" class="overlay">
+        <div class="popup" onclick="PopUpShow()">Click me to toggle the popup!
+            <span class="popuptext" id="myPopup">A Simple Popup!</span>
+        </div>
         <div id="cardpadding1"></div>
         <div id="cardpadding2"></div>
         <div style="padding-top:380px ;padding-left:50px;">
@@ -62,8 +66,11 @@
                 <button style="top: 250px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tore').textContent)>0)document.getElementById('tore').textContent=parseInt(document.getElementById('tore').textContent)-1">-</button>
                 <button style="top: 125px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('tgrain').textContent)>0)document.getElementById('tgrain').textContent=parseInt(document.getElementById('tgrain').textContent)-1">-</button>
                 <button style="top: 10px;left: 1050px;" class="button1" onclick="if(parseInt(document.getElementById('twool').textContent)>0)document.getElementById('twool').textContent=parseInt(document.getElementById('twool').textContent)-1">-</button>
-                <button style="top: 225px;left:625px;width: 200px;height: 100px;position: absolute;color: black;" class="button" id="sendTrade">SEND TRADE</button>
+                <button style="top: 225px;left:635px;width: 200px;height: 100px;position: absolute;color: black;" class="button" id="sendTrade">SEND TRADE</button>
                 <div style="top:0px;width: 250px;left:860px" class="tradeplace"></div>
+                <button style="top: 125px;left: 620px;" class="button1" onclick="if(parseInt(document.getElementById('ChoosePlayer').textContent)<4)document.getElementById('ChoosePlayer').textContent=parseInt(document.getElementById('ChoosePlayer').textContent)+1">+</button>
+                <div  class="circle3" style="top:125px;left:695px;background-color:bisque; background-position: center center;font-size: 50px;vertical-align: text-top;text-align: center;color:black;" id="ChoosePlayer">2</div>
+                <button style="top: 125px;left: 795px;" class="button1" onclick="if(parseInt(document.getElementById('ChoosePlayer').textContent)>2)document.getElementById('ChoosePlayer').textContent=parseInt(document.getElementById('ChoosePlayer').textContent)-1">-</button>
             </div>
         </div>
         <div style="padding-left:0px;left:1900px;" class="tradeplace">
