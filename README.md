@@ -14,3 +14,5 @@ node app.js
 Step 3: Open your web browser and type the following address in the URL bar
 
 http://localhost:3000/
+
+https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_social&stacked=h STEAL
