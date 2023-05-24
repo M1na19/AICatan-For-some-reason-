@@ -290,6 +290,7 @@ async function discard(nrCards,player)
     freezeMenu()
     //warn discard
     await new Promise(async (resolve) => {
+        let notClicked=true;
         useDevelop.addEventListener('click',async ()=>
         {
             let resources=[0,0,0,0,0];
@@ -307,29 +308,27 @@ async function discard(nrCards,player)
             if(sum(resources)==nrCards)
             {
                 //await put('discard',player,)
+                notClicked=false;
                 resolve()
             }
         })
-        while(true)
+        while(notClicked)
         {
-            await new Promise((innerresolve) => {
-                let resources=[0,0,0,0,0];
-                for(let i=0;i<cardloc.length;i++)
+            let resources=[0,0,0,0,0];
+            for(let i=0;i<cardloc.length;i++)
+            {
+                if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
                 {
-                    if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
-                    {
-                        if(cardloc[i].mat=="wood")resources[0]++;
-                        if(cardloc[i].mat=="wool")resources[3]++;
-                        if(cardloc[i].mat=="ore")resources[4]++;
-                        if(cardloc[i].mat=="brick")resources[1]++;
-                        if(cardloc[i].mat=="grain")resources[2]++;
-                    }
+                    if(cardloc[i].mat=="wood")resources[0]++;
+                    if(cardloc[i].mat=="wool")resources[3]++;
+                    if(cardloc[i].mat=="ore")resources[4]++;
+                    if(cardloc[i].mat=="brick")resources[1]++;
+                    if(cardloc[i].mat=="grain")resources[2]++;
                 }
-                useDevelop.textContent="DISCARD ("+(nrCards-sum(resources))+")"
-                setTimeout(innerresolve,100);
-            })
+            }
+            useDevelop.textContent="DISCARD ("+(nrCards-sum(resources))+")"
+            await new Promise((innerresolve)=>{setTimeout(innerresolve,100)});
         }
-        
     })
     freezeMenu()
     unfreezeMenu()
@@ -403,10 +402,11 @@ function unlockMenu()
 }
 function freezeMenu()
 {
-    const textDevelop="USE DEVELOPMENT";const textTrade="SEND TRADE";
+    const textDevelop="USE DEVELOPMENT";
+    const textTrade="SEND TRADE";
     openNav()
     removeEventListeners(useDevelop);
-    develop=document.querySelector('#useDevelopButton')
+    useDevelop=document.querySelector('#useDevelopButton')
     useDevelop.textContent=textDevelop;
 
     removeEventListeners(develop);
