@@ -193,7 +193,7 @@ async function showAvialable(poz,player_turn,can_abandon)
         let exit=NaN
         if(can_abandon==true)
         {
-            exit=makeExit()
+            exit=makeExit("ABANDON")
             exit.addEventListener('click',()=>
             {
                 exit.remove()
@@ -248,17 +248,20 @@ async function showUpgradable(poz)
         })
     }
 }
-function makeExit()
+function makeExit(text)
 {
-    exit=document.createElement("button");
+    let exit=document.createElement("button");
+    exit.classList.add('button')
     document.body.appendChild(exit);
+
     exit.style.position="absolute"
-    exit.style.height="50px"
-    exit.style.width="100px"
-    exit.style.color="gray"
-    exit.textContent="Abandon"
+    exit.style.height="100px"
+    exit.style.width="200px"
+    exit.textContent=text;
+    exit.style.color="black"
+    exit.style.fontFamily = 'Arial, sans-serif';
     exit.style.top="1000px"
-    exit.style.left="1200px"
+    exit.style.left="2400px"
     return exit;
 }
 function destroyPieces()//la final distrug toate piesele

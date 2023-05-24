@@ -40,6 +40,17 @@ function iterToFrecv(list)
     }
     return modified;
 }
+function hoverIluminate(button)
+{
+    button.addEventListener('mouseover',()=>
+    {
+        button.style.border="2px solid white"
+    })
+    button.addEventListener('mouseout',()=>
+    {
+        button.style.border="None"
+    })
+}
 function removeEventListeners(buton)
 {
     let copy=buton.cloneNode()
@@ -173,7 +184,7 @@ async function moveThief(can_abandon)
     var exit;
     if(can_abandon)
     {
-        exit=makeExit()
+        exit=makeExit("ABANDON")
         exit.addEventListener('click',()=>
         {
             for(let i=0;i<buttons.length;i++)
@@ -333,9 +344,61 @@ async function discard(nrCards,player)
     freezeMenu()
     unfreezeMenu()
 }
-async function monopol()
+async function monopol(player)
 {
-    
+    const monopolScreen=document.createElement('div');
+    monopolScreen.style="position:absolute;z-index:100; height:800px; width:1375px;top:300px;left:600px"
+    monopolScreen.style.backgroundImage="url(https://i.imgur.com/PXGHWnl.png)";monopolScreen.style.backgroundSize="cover"
+    document.body.appendChild(monopolScreen);
+    const lemn=document.createElement('button');
+    const argila=document.createElement('button');  
+    const oaie=document.createElement('button');
+    const fan=document.createElement('button');
+    const piatra=document.createElement('button');
+    const buttonStyle="border:none;background-color:transparent; position:absolute;z-index:10; height:344px; width:225px;top:250px; background-size:cover;"
+    lemn.style=argila.style=oaie.style=fan.style=piatra.style=buttonStyle;
+    lemn.style.backgroundImage="url(https://i.imgur.com/amAWx6q.png)";argila.style.backgroundImage="url(https://i.imgur.com/jldnqDd.png)";fan.style.backgroundImage="url(https://i.imgur.com/KILdl8B.png)";oaie.style.backgroundImage="url(https://i.imgur.com/CEl8Sij.png)";piatra.style.backgroundImage="url(https://i.imgur.com/l9yIY2E.png)"; 
+    lemn.style.left="75px";
+    argila.style.left="325px";
+    fan.style.left="575px";
+    oaie.style.left="825px";
+    piatra.style.left="1075px";
+    hoverIluminate(lemn);hoverIluminate(argila);hoverIluminate(oaie);hoverIluminate(fan);hoverIluminate(piatra);
+    monopolScreen.appendChild(lemn);monopolScreen.appendChild(argila);monopolScreen.appendChild(fan);monopolScreen.appendChild(oaie);monopolScreen.appendChild(piatra);
+    let exit=makeExit("ABANDON");
+    await new Promise((resolve) => {
+        lemn.addEventListener('click',async ()=>
+        {
+            await put('monopol',player,0)
+            resolve()
+        })
+        argila.addEventListener('click',async ()=>
+        {
+            await put('monopol',player,1)
+            resolve()
+        })
+        oaie.addEventListener('click',async ()=>
+        {
+            await put('monopol',player,3)
+            resolve()
+        })
+        fan.addEventListener('click',async ()=>
+        {
+            await put('monopol',player,2)
+            resolve()
+        })
+        piatra.addEventListener('click',async ()=>
+        {
+            await put('monopol',player,4)
+            resolve()
+        })
+        exit.addEventListener('click',async ()=>
+        {
+            exit.remove()
+            resolve()
+        })
+    })
+    monopolScreen.remove()
 }
 async function tradeProposal(cardsReceived,cardsGiven,player)
 {
@@ -472,6 +535,7 @@ async function playerBuyDevelopment(player)
 
 async function playerGame(player)
 {
+    const pass=makeExit('PASS')
     showData(await(get('playerData',player)))
 
     await new Promise((resolve)=>{
