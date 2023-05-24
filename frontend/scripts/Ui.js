@@ -4,7 +4,7 @@ var cardloc = [];
 var scardloc = [];
 var specialcardvector = [];
 var tradecards=[0,0,0,0,0];
-var menuIsLocked=false
+var menuIsLocked=false;var menuIsFrezzed=false;
 function MakeNewTile(pozy,pozx,numar,material)
 {
     let newtile = {};
@@ -409,7 +409,10 @@ function openNav() {
 }
 
 function closeNav() {
-  document.getElementById("myNav").style.width = "0%";
+  if(menuIsFrezzed==false)
+  {
+    document.getElementById("myNav").style.width = "0%";
+  }
 }
 
 MakeMap([[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2]]);

@@ -1,12 +1,12 @@
 const backgroundstyle="position: absolute; top:0%; height:100%; width:100%;color:green"
 
-const dice=document.querySelector('#diceButton')
-const develop=document.querySelector('#developButton')
-const buildAsezare=document.querySelector("#asezareButton");
-const buildOras=document.querySelector("#orasButton");
-const buildDrum=document.querySelector("#drumButton");
+var dice=document.querySelector('#diceButton')
+var develop=document.querySelector('#developButton')
+var buildAsezare=document.querySelector("#asezareButton");
+var buildOras=document.querySelector("#orasButton");
+var buildDrum=document.querySelector("#drumButton");
 var sendTrade=document.querySelector("#sendTrade");
-const pass=document.querySelector("#passButton");
+var pass=document.querySelector("#passButton");
 var acceptTrade=document.querySelector('#acceptTradeButton')
 
 function sum(list)
@@ -110,7 +110,7 @@ async function development(player)
         case 1:
         {
             await new Promise(async (resolve) => {
-                removeEventListeners(sendTrade);
+                freezeMenu()
                 sendTrade=document.querySelector("#sendTrade");
                 sendTrade.textContent="CHOOSE 2 GAINED RESOURCES"
                 sendTrade.addEventListener('click',async ()=>
@@ -128,13 +128,9 @@ async function development(player)
                 })
                 setTimeout(resolve,15000);
             });
-            removeEventListeners(sendTrade);
-            sendTrade=document.querySelector("#sendTrade");
-            sendTrade.textContent="SEND TRADE";
-            sendTrade.addEventListener('click',async()=>
-            {
-                await Trade(player)//modify this if needed
-            })
+            freezeMenu();
+            unfreezeMenu();
+            buttonSendTrade();
             break;
         }
         case 2:
@@ -163,7 +159,7 @@ async function development(player)
         }
         case 4:
         {
-            await new Promise((resolve => {
+            await new Promise(async (resolve) => {
                 await monopol()
             })
         }
@@ -237,7 +233,7 @@ async function steal(tile,player)
 
     const background=document.createElement('img');
     background.style=backgroundstyle;
-    background.src="images/background.png"
+    background.src="https://i.imgur.com/PXGHWnl.png"
     stealPage.appendChild(background);
 
     const distanceBetweenPlayers=window.screen.width/(sum(optionPlayers)+1)+300;
@@ -288,9 +284,52 @@ async function steal(tile,player)
     })
     unlockMenu()
 }
-async function discard()
+async function discard(nrCards,player)
 {
-    //nu depinde de player
+    freezeMenu()
+    //warn discard
+    await new Promise(async (resolve) => {
+        develop.addEventListener('click',async ()=>
+        {
+            let resources=[0,0,0,0,0];
+            for(let i=0;i<cardloc.length;i++)
+            {
+                if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
+                {
+                    if(cardloc[i].mat=="wood")resources[0]++;
+                    if(cardloc[i].mat=="wool")resources[3]++;
+                    if(cardloc[i].mat=="ore")resources[4]++;
+                    if(cardloc[i].mat=="brick")resources[1]++;
+                    if(cardloc[i].mat=="grain")resources[2]++;
+                }
+            }
+            if(sum(resources)==nrCards)
+            {
+                await put('discard',player,)
+                resolve()
+            }
+        })
+        while(true)
+        {
+            await new Promise((innerresolve) => {
+                let resources=[0,0,0,0,0];
+                for(let i=0;i<cardloc.length;i++)
+                {
+                    if(parseInt(cardloc[i].html.style.top)>445 && parseInt(cardloc[i].html.style.top)<875 && parseInt(cardloc[i].html.style.left)>700 && parseInt(cardloc[i].html.style.left)<1190)
+                    {
+                        if(cardloc[i].mat=="wood")resources[0]++;
+                        if(cardloc[i].mat=="wool")resources[3]++;
+                        if(cardloc[i].mat=="ore")resources[4]++;
+                        if(cardloc[i].mat=="brick")resources[1]++;
+                        if(cardloc[i].mat=="grain")resources[2]++;
+                    }
+                }
+                develop.textContent="DISCARD ("+nrCards-sum(resources)+")"
+                setTimeout(innerresolve,100);
+            })
+        }
+        
+    })
 }
 async function monopol()
 {
@@ -359,6 +398,33 @@ function unlockMenu()
 {
     menuIsLocked=false;
 }
+function freezeMenu()
+{
+    const textDevelop="USE DEVELOPMENT";const textTrade="SEND TRADE";
+    openNav()
+    removeEventListeners(develop);
+    develop=document.querySelector('#developButton')
+    develop.textContent=textDevelop;
+    removeEventListeners(buildAsezare);
+    buildAsezare=document.querySelector("#asezareButton");
+    removeEventListeners(buildOras)
+    buildOras=document.querySelector("#orasButton");
+    removeEventListeners(buildDrum)
+    buildDrum=document.querySelector("#drumButton");
+    removeEventListeners(sendTrade);
+    sendTrade=document.querySelector("#sendTrade");
+    sendTrade.textContent=textTrade;
+    menuIsFrezzed=true
+}
+function unfreezeMenu()
+{
+    buttonBuildAsezare()
+    buttonBuildDrum()
+    buttonDevelop()
+    buttonBuildOras()
+    buttonSendTrade()
+    menuIsFrezzed=false;
+}
 async function playerPlaceDrum()
 {
     lockMenu();
@@ -407,26 +473,12 @@ async function playerGame(player)
     showData(await(get('playerData',player)))
 
     return new Promise((resolve) => {
-        develop.sendTrade('click',async ()=>
-        {
-            await sendTrade()
-        })
-        develop.addEventListener('click',async ()=>
-        {
-            await develop()
-        })
-        buildAsezare.addEventListener('click',async ()=>
-        {
-            await playerPlaceAsezare()
-        })
-        buildDrum.addEventListener('click',async ()=>
-        {
-            await playerPlaceDrum()
-        })
-        buildAsezare.addEventListener('click',async ()=>
-        {
-            await playerPlaceOras()
-        })
+        buttonSendTrade();
+        buttonDevelop()
+        buttonBuildAsezare()
+        buttonBuildDrum()
+        buttonBuildOras()
+        
         pass.addEventListener('click', () => {
           resolve();
         });
