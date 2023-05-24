@@ -1,5 +1,4 @@
-import queue
-import time
+from copy import deepcopy
 import random
 import asyncio
 from features import cost,check_avail,place_piece,upgradeable
@@ -135,33 +134,160 @@ def best_move(gamestate,AIplayer):
     gamestate=best.state
     return best.name
 
-class nonActions:
-    def number(nod):
-        pass
-    def steal(node):
-        pass
+class treeFunctions:
+    def default(nod):
+        moves=list()
+        state=deepcopy(nod.state)
+        moves.append(node("Build",state,nod,False))
+        moves.append(node("Dezvoltare",state,nod,False))
+        moves.append(node("pass",state,nod,True))
+        return moves
+    
+
+    def zar(nod):
+        moves:list[node]=list()
+        for i in range(2,13):
+            state:gs.game_state=deepcopy(nod.state)
+            if i!=7:
+                moves.append(node("default",state.zar(i),nod,False))
+            else:
+                moves.append(node("moveThief",state,nod,False))
+        return moves
+    
+    def pas(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        state.player_turn=(state.player_turn+1)%state.number_of_players
+        moves.append(node('zar',state,nod,True))
+        return moves
+    
+    def moveThief(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        for i in range(19):
+            if(i!=state.hottile):
+                state:gs.game_state=deepcopy(nod.state)
+                state.hottile=i
+                moves.append(node('steal',state,nod,True))
+        return moves
+    
+    def steal(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        for pieces in state.tiles[state.hottile].pieces:
+            if pieces.player==state.player_turn:
+                for res in range(5):
+                    if(state.hand[pieces.player][res]>0):
+                        state:gs.game_state=deepcopy(nod.state)
+                        state.hand[pieces.player][res]-=1
+                        state.hand[state.player_turn][res]+=1
+                        moves.append(node("default",state,nod,True))
+        return moves
+
     def discard(node):
         pass
-    def playDezvoltare(node):
-        pass
-    def monopol(node):
-        pass
-    def drumuri2(node):
-        pass
-    def resurse2(node):
-        pass
-    def soldat(node):
-        pass
-    def Build(node):
-        pass
-    def buildAsezare(node):
-        pass
-    def buildOras(node):
-        pass
-    def buildDrum(node):
-        pass
-    def buildDezv(node):
-        pass        
+
+
+    def playDezvoltare(nod):
+        moves=list()
+        state=deepcopy(nod.state)
+        moves.append(node("monopol",state,nod,False))
+        moves.append(node("2resurse",state,nod,False))
+        moves.append(node("2drumuri",state,nod,False))
+        moves.append(node("soldat",state,nod,False))
+        return moves
+
+
+    def monopol(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        for i in range(5):
+            state:gs.game_state=deepcopy(nod.state)
+            for player in range(state.number_of_players):
+                if player!=state.player_turn:
+                    state.hand[state.player_turn][i]+=state.hand[player][i]
+                    state.hand[player][i]=0
+            moves.append(node("default",state,nod,True))
+        return moves
+    
+    def drumuri2(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        pieces:list[gs.piece]=place_piece(state,state.player_turn)
+        for piece in pieces:
+            if(piece.tileinfo[1]%2==1):
+                state:gs.game_state=deepcopy(nod.state)
+                state.add_piece("drum",state.player_turn,piece.tileinfo)
+                pieces2:list[gs.piece]=place_piece(state,state.player_turn)
+                for piece2 in pieces2:
+                    if(piece2.tileinfo[1]%2==1):
+                        state.add_piece("drum",state.player_turn,piece2.tileinfo)
+                        moves.append(node("default",state,nod,True))
+        return moves
+        
+    def resurse2(nod):
+        moves:list[node]=list()
+        for res1 in range(5):
+            for res2 in range(5):
+                state:gs.game_state=deepcopy(nod.state)
+                state.hand[state.player_turn][res1]+=1
+                state.hand[state.player_turn][res2]+=1
+                moves.append(node("default",state,nod,True))
+        return moves
+    
+    def soldat(nod):
+        moves=[node("moveThief",nod.state,nod,False)]
+        return moves
+
+
+    def Build(nod):
+        moves=list()
+        state=deepcopy(nod.state)
+        moves.append(node("drum",state,nod,False))
+        moves.append(node("asezare",state,nod,False))
+        moves.append(node("oras",state,nod,False))
+        moves.append(node("dezvoltare",state,nod,False))
+        return moves
+    
+    def buildAsezare(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        pieces:list[gs.piece]=place_piece(state,state.player_turn)
+        for piece in pieces:
+            if(piece.tileinfo[1]%2==0):
+                state:gs.game_state=deepcopy(nod.state)
+                moves.append(node("default",state.add_piece("asezare",state.player_turn,piece.tileinfo),nod,True))
+        return moves
+
+    def buildOras(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        upgrades:list[gs.piece]=upgradeable(state,state.player_turn)
+        for oras in upgrades:
+            state:gs.game_state=deepcopy(nod.state)
+            moves.append(node("default",state.add_piece("oras",state.player_turn,oras.tileinfo),nod,True))
+        return moves
+    
+    def buildDrum(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        pieces:list[gs.piece]=place_piece(state,state.player_turn)
+        for piece in pieces:
+            if(piece.tileinfo[1]%2==1):
+                state:gs.game_state=deepcopy(nod.state)
+                moves.append(node("default",state.add_piece("drum",state.player_turn,piece.tileinfo),nod,True))
+        return moves
+    
+    def buildDezv(nod):
+        moves:list[node]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        for i in range(5):
+            state:gs.game_state=deepcopy(nod.state)
+            moves.append(node("default",state.add_dezv(i,state.player_turn),nod,True))
+        return moves
+
+
+
     def Trade(node):
         pass
     def tradeProposal(node):

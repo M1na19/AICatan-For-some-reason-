@@ -31,7 +31,10 @@ BiggestArmy=[3,4,2,1]
 BiggestRoad=[5,6,7,8]
 
 ##############Things from the game code######################################################################################################################################################
-
+weightProduction=0
+weightExpansion=0
+weightDevlopmentValue=0
+weightLRLA=0
 def Calculate_PositionValue(Port,Player,MapValue,DevelopmentCards,city,town,roads,BiggestArmy,BiggestRoad):
     ############### The variables
     resourceProduction=0

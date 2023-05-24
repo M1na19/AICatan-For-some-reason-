@@ -32,9 +32,9 @@ def closenessToConstruction(myCards):
     closeToDezv/=sum(dezvResources)
     return (closeToTown+closeToDezv+closeToRoad+closeToCity)/(valueCity+valueDezv+valueRoad+valueTown)
 
-weightPort=0.1
+weightPort=-0.1
 weightRareness=0.3
-weightUsefull=0.6
+weightUsefull=0.8
 def cardEvaluator(gameState,Player):
     portValue=[0,0,0,0,0]
     rarenessValue=[0,0,0,0,0]
