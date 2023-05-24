@@ -9,6 +9,13 @@ async function buttonDevelop()
 {
     develop.addEventListener('click',async ()=>
     {
+        await playerBuyDevelopment()
+    })
+}
+async function buttonUseDevelop()
+{
+    useDevelop.addEventListener('click',async ()=>
+    {
         await develop()
     })
 }

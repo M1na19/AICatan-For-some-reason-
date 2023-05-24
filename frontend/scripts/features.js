@@ -2,6 +2,7 @@ const backgroundstyle="position: absolute; top:0%; height:100%; width:100%;color
 
 var dice=document.querySelector('#diceButton')
 var develop=document.querySelector('#developButton')
+var useDevelop=document.querySelector('#useDevelopButton');
 var buildAsezare=document.querySelector("#asezareButton");
 var buildOras=document.querySelector("#orasButton");
 var buildDrum=document.querySelector("#drumButton");
@@ -289,7 +290,7 @@ async function discard(nrCards,player)
     freezeMenu()
     //warn discard
     await new Promise(async (resolve) => {
-        develop.addEventListener('click',async ()=>
+        useDevelop.addEventListener('click',async ()=>
         {
             let resources=[0,0,0,0,0];
             for(let i=0;i<cardloc.length;i++)
@@ -305,7 +306,7 @@ async function discard(nrCards,player)
             }
             if(sum(resources)==nrCards)
             {
-                await put('discard',player,)
+                //await put('discard',player,)
                 resolve()
             }
         })
@@ -324,12 +325,14 @@ async function discard(nrCards,player)
                         if(cardloc[i].mat=="grain")resources[2]++;
                     }
                 }
-                develop.textContent="DISCARD ("+nrCards-sum(resources)+")"
+                useDevelop.textContent="DISCARD ("+(nrCards-sum(resources))+")"
                 setTimeout(innerresolve,100);
             })
         }
         
     })
+    freezeMenu()
+    unfreezeMenu()
 }
 async function monopol()
 {
@@ -402,22 +405,31 @@ function freezeMenu()
 {
     const textDevelop="USE DEVELOPMENT";const textTrade="SEND TRADE";
     openNav()
+    removeEventListeners(useDevelop);
+    develop=document.querySelector('#useDevelopButton')
+    useDevelop.textContent=textDevelop;
+
     removeEventListeners(develop);
     develop=document.querySelector('#developButton')
-    develop.textContent=textDevelop;
+    
     removeEventListeners(buildAsezare);
     buildAsezare=document.querySelector("#asezareButton");
+
     removeEventListeners(buildOras)
     buildOras=document.querySelector("#orasButton");
+
     removeEventListeners(buildDrum)
     buildDrum=document.querySelector("#drumButton");
+
     removeEventListeners(sendTrade);
     sendTrade=document.querySelector("#sendTrade");
     sendTrade.textContent=textTrade;
+    
     menuIsFrezzed=true
 }
 function unfreezeMenu()
 {
+    buttonUseDevelop()
     buttonBuildAsezare()
     buttonBuildDrum()
     buttonDevelop()
