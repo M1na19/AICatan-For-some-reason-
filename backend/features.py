@@ -1,6 +1,7 @@
 import random
 import queue
 import game_state as gs
+dezvoltari=[[]]
 def random_config():
     tiles=19
     tileprop=[4,3,4,4,3,1]
@@ -30,6 +31,11 @@ def dezvoltare():
 def cost(gamestate,arr,player):
     for i in range(len(arr)):
         gamestate.hand[player][i]-=arr[i]
+def can_buy(gamestate,player,arr):
+    for i in range(len(arr)):
+        if(gamestate.hand[player][i]<arr[i]):
+            return False
+    return True
 #ma uit unde pot sa pun drum sau asezare
 #am verificat,pare ca functioneaza
 def place_piece(state:gs.game_state,player:int):
@@ -75,14 +81,76 @@ def upgradeable(state:gs.game_state,player:int):
                 q.put(nod)
                 visited[nod]=True
     return to_upgrade
-def winned(puncteCastig,gamestate,player):#pot sa il calculez ca 20% din carti de dezv pt alti
-    if(gamestate.puncte[player]+puncteCastig>=10):
+def winned(gamestate:gs.game_state,player):
+    LAorLR=0
+    if(gamestate.biggestArmy[0]==player):LAorLR+=2
+    if(gamestate.biggestRoad[0]==player):LAorLR+=2
+    if(gamestate.puncte[player]+dezvoltari[player][0]+LAorLR>=10):
         return True
     else:
         return False
-def ceaMaiMareArmata(gamestate,player):
+def ceaMaiMareArmata(gamestate:gs.game_state,player):
     if(gamestate.biggestArmy[0]==player):
         return True
     else: return False
-def checkRoadSize():
-    pass
+
+def celMaiMareDrum(gamestate:gs.game_state,player):
+    roadSize=checkRoadSize(gamestate,player)
+    if(roadSize>gamestate.biggestRoad[1]):
+        gamestate.biggestRoad=[player,roadSize]
+        return True
+    if(gamestate.biggestRoad[0]==player):
+        return True
+    else: 
+        return False
+
+def checkRoadSize(gamestate:gs.game_state,player):
+    adiacenta=[[]]
+    count=0
+    frecv=dict()
+    q=queue.Queue()
+
+    for road in gamestate.players[player][0].neigh:
+        if(road.player==player):
+            q.put(road)
+    for road in gamestate.players[player][1].neigh:
+        if(road.player==player):
+            q.put(road)
+
+    while(q.empty()==False):
+        now=q.get()
+        if(now in frecv):
+            continue
+        else:
+            adiacenta.append([])
+            frecv[now]=count
+            count+=1
+            for neigh in now.neigh:
+                for road in neigh.neigh:
+                    if road in frecv and road.player==player:
+                        adiacenta[frecv[now]].extend([0 for i in range(len(adiacenta[frecv[now]])-1,frecv[road])])
+                        adiacenta[frecv[now]][frecv[road]]=1
+                        adiacenta[frecv[road]].extend([0 for i in range(len(adiacenta[frecv[road]])-1,frecv[now])])
+                        adiacenta[frecv[road]][frecv[now]]=1
+                    else:
+                        q.put(road)
+    maxim=0
+    for i in range(count):
+        for j in range(count):
+            if(i!=j):
+                for k in range(count):
+                    if(i!=k and j!=k and len(adiacenta[i])>k and len(adiacenta[k])>j):
+                        adiacenta[i].extend([0 for i in range(len(adiacenta[i])-1,j)])
+                        adiacenta[j].extend([0 for i in range(len(adiacenta[j])-1,i)])
+                        if(adiacenta[i][j]<adiacenta[i][k]+adiacenta[k][j]):
+                            adiacenta[i][j]=adiacenta[j][i]=adiacenta[i][k]+adiacenta[k][j]
+
+                        if(maxim<adiacenta[i][j]):
+                            maxim=adiacenta[i][j]
+                    else:
+                        adiacenta[i].extend([0 for i in range(len(adiacenta[i])-1,k)])
+                        adiacenta[j].extend([0 for i in range(len(adiacenta[j])-1,k)])
+                    
+    return maxim
+
+

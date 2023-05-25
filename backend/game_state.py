@@ -1,6 +1,6 @@
 import numpy as np
 import queue
-
+import features as f
 #doar eu si miezeu stiam ce inseamna codul asta cand l am scris, acum doar miezeu stie
 
 config= [[(0,0)],
@@ -220,15 +220,15 @@ class game_state:
         self.number_of_players=nrplayers;
         self.hand=[[0 for j in range(5)] for i in range(nrplayers)]
         self.dezvoltari=[0]*5
-        self.other_player_dezvoltari=[0]*(nrplayers-1)
         self.tiles=[tile(i) for i in range(19)]
         self.hottile=0
         self.players = [[None, None] for _ in range(nrplayers)]
         self.ports=[[0 for j in range(6)] for i in range(nrplayers)]
         self.puncte=[0 for i in range(nrplayers)]
         self.soldati=[0 for i in range(nrplayers)]
+        self.constructi=[[0,0,0] for i in range(nrplayers)]
         self.biggestArmy=[-1,2]#player si nr
-        self.biggestRoad[-1,4]#player si nr
+        self.biggestRoad=[-1,4]#player si nr
         self.__setup(tileconfig)
 
     def zar(self,zar):
@@ -256,17 +256,20 @@ class game_state:
                     self.ports[player][5]=1
 
         if name=="asezare":# la inceput il adaug in player ce tine grafu constructiilor
+            self.constructi[player][1]+=1
             if self.players[player][0]==None :
                 self.players[player][0]=self.tiles[tileinfo[0]].pieces[tileinfo[1]]
             elif self.players[player][1]==None:
                 self.players[player][1]=self.tiles[tileinfo[0]].pieces[tileinfo[1]] 
-
+        if name=="drum":
+            self.constructi[player][2]+=1
+            #f.celMaiMareDrum(self,self.player_turn)
+        if name=="oras":
+            self.constructi[player][0]+=1
     def add_dezv(self,dezv,eu):
         self.dezvoltari[dezv]+=1
         if(dezv==0):
             self.puncte[eu]+=1
-    def otherPlayerDraw(self,player):
-        self.other_player_dezvoltari[player]+=1
     def soldatJucat(self,player):
         self.soldati[player]+=1
         if(self.soldati[player]>self.biggestArmy[1]):

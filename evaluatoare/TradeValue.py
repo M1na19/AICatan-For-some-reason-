@@ -32,7 +32,7 @@ def checkTradeProposal(gamestate,Trade0,Trade1,player0,player1):
     totalvalue0=gainOfCards(simulatedGameState,Trade1,player0)-gainOfCards(simulatedGameState,Trade0,player0)
     totalvalue1=gainOfCards(simulatedGameState,Trade0,player1)-gainOfCards(simulatedGameState,Trade1,player1)
 
-    if totalvalue0>0 and totalvalue0>totalvalue1:
+    if totalvalue0>0 and totalvalue0-totalvalue1>-0.1:
         return True
     else:
         return False

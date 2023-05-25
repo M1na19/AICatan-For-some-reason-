@@ -1,94 +1,43 @@
-import pickle
+
 import evaluatoare.CardValue as cval
+from queue import Queue
+import os,sys
+sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from backend.game_state import game_state as gs,piece
+##############Things from the game code######################################################################################################################################################
+
 
 ##############Things from the game code######################################################################################################################################################
 
-Port=[2,1]
-# 0 1 2 3
-Player=0
-#dezvoltari:@0 victory pct,@1 hot,@2 2resurse,@3 2 drumuri,@4 monopol
-
-DevelopmentCards=[2,1,1,2,3]
-
-# lemn=0 argila=1 fan=2 oaie=3 piatra=4 index
-CardValue=[1,1,1,1,1]
-
-# tileurile cu ce fel sunt, cate orase sunt si case adunate casa=1 oras=2, ce valoare are tileul, combinare pt calcule
-class Myclass:
-    def __init__(self,tile,settlement,value,combined):
-        self.tile = tile
-        self.settlement = settlement
-        self.value = value
-        self.combined= combined
-
-MapValue= Myclass([0,1,2,3,4,0,1,2,3],[1,1,1,1,1,1,2,2,2],[4,3,12,5,6,8,2,9,10],[0,0,0,0,0])
-
-city=2
-town=3
-roads=4
-
-BiggestArmy=[3,4,2,1]
-BiggestRoad=[5,6,7,8]
-
-##############Things from the game code######################################################################################################################################################
-weightProduction=0
-weightExpansion=0
-weightDevlopmentValue=0
-weightLRLA=0
-def Calculate_PositionValue(Port,Player,MapValue,DevelopmentCards,city,town,roads,BiggestArmy,BiggestRoad):
+def Calculate_PositionValue(gamestate:gs,player,dezvoltari):
     ############### The variables
     resourceProduction=0
-    expansion=0
     developmentvalue=0
     LRaLA=0
     VP=0
     #1 Resource Production
-    for i in range(len(MapValue.tile)):
-        MapValue.combined[MapValue.tile[i]]+=MapValue.settlement[i]*(MapValue.value[i]%7)
-        resourceProduction+=MapValue.combined[MapValue.tile[i]]
-    #2 Expansion
-    expansion+=city*3+town*2+roads+len(Port)
-    #3 Development Cards
-    for i in range(len(DevelopmentCards)):
-        if i==0:
-            developmentvalue+=1.5*DevelopmentCards[i]
-        if i==1:
-            developmentvalue+=1.75*DevelopmentCards[i]
-        if i==2:
-            developmentvalue+=1*DevelopmentCards[i]
-        if i==3:
-            developmentvalue+=2*DevelopmentCards[i]
-        if i==4:
-            developmentvalue+=3*DevelopmentCards[i]
-    #4. Longest Road and Largest Army
-    soldati=0
-    mare=0
-    mare2=0
-    for i in range(len(BiggestArmy)):
-        if BiggestArmy[i]>mare2:
-            mare2=BiggestArmy[i]
-    if BiggestArmy[Player]==mare2:
-        LRaLA+=2
-    else:
-        LRaLA+=2-(mare2-(mare2-BiggestArmy[Player]))/BiggestArmy[Player]
-    for i in range(len(BiggestRoad)):
-        if BiggestRoad[i]>mare:
-            mare=BiggestRoad[i]
+    for tile in gamestate.tiles:
+        if(tile.index!=gamestate.hottile):
+            for piece in tile.pieces:
+                if(piece.name=="asezare" and piece.player==player):
+                    resourceProduction+=(7-abs(tile.value-7))/7*0.5
+                if(piece.name=="oras" and piece.player==player):
+                    resourceProduction+=(7-abs(tile.value-7))/7
+                if(piece.name=="drum" and piece.player==player):
+                    resourceProduction+=(7-abs(tile.value-7))/7*0.1
 
-    if BiggestRoad[Player]==mare:
-        LRaLA+=2
-    else:
-        LRaLA+=2-(mare-(mare-BiggestRoad[Player]))/BiggestRoad[Player]
+        
+    #2 Expansion
+    expansion=gamestate.constructi[player][0]*2+gamestate.constructi[player][1]+gamestate.constructi[player][0]/2
+    #3 Development Cards
+    developmentvalue=dezvoltari[player][1]*0.5+dezvoltari[player][2]*0.6+dezvoltari[player][3]*0.8+dezvoltari[player][4]
+    #4. Longest Road and Largest Army
+    if(gamestate.biggestArmy[0]==player):LRaLA+=2
+    if(gamestate.biggestRoad[0]==player):LRaLA+=2
     #5. Victory Points
-    rezvp=0
-    if BiggestArmy[Player]==mare2:
-        rezvp+=2
-    if BiggestRoad[Player]==mare:
-        rezvp+=2
-    rezvp=rezvp+town+city*2+DevelopmentCards[0]
+    VP=dezvoltari[player][0]
     #6. COMBINAREA VARIABILELOR
     rez=0
     rez=resourceProduction+expansion+developmentvalue+LRaLA+VP
     return rez
 
-Calculate_PositionValue(Port,Player,MapValue,DevelopmentCards,city,town,roads,BiggestArmy,BiggestRoad)

@@ -8,6 +8,7 @@ def getState():
     with open("./storage/state.pickle","rb") as read_state:
         game=pickle.load(read_state)
         dezvoltari=pickle.load(read_state)
+        f.dezvoltari=dezvoltari
         read_state.close()
 def endState():
      with open("./storage/state.pickle","wb") as state:

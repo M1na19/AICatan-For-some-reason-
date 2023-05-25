@@ -1,36 +1,53 @@
+import sys,os
+import features
+sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import evaluatoare.CardValue as cv
 from copy import deepcopy
 import random
 import asyncio
-from features import cost,check_avail,place_piece,upgradeable
-import numpy as np
+from features import cost,check_avail,place_piece,upgradeable,winned,random_config
 import backend.game_state as gs
-threadNr=1000
-discountFactor=0.95
+import evaluatoare.TradeValue as tv
+import evaluatoare.PositionValue as pv
+import time
 
-def manageNonAction(name):
-    pass
+threadNr=1000
+discountFactor=0.8
+
+
 
 class node:
-    def __init__(self,name,state,parent,action:bool):
-        self.action=name
+    def __init__(self,name,state,parent):
+        self.name=name
         self.value=0
-        if(action==True):
+        if(parent!=None):
             self.depth=parent.depth+1
-        else:
-            self.depth=parent.depth
+        else:self.depth=0
         self.state=state
         self.parent=parent
-    async def branch(self,AIplayer,threads):
-        if(self.state!=None):
-            moves=find_moves(self.state,self.state.player_turn,AIplayer)
-        tasks=[]
-        for i in threads:
-            randAction=random.randint(0,moves.count)
-            moves[randAction]=node(moves[randAction][0],moves[randAction][0],self,True)
-            task=asyncio.create_task(moves[randAction].branch(AIplayer,max(1,threads-moves.count)))
-            tasks.append(task)
-        results=await asyncio.gather(*tasks)
-        self.value=(sum(results)/results.count)*discountFactor
+        self.children:list[node]=[]
+        if(parent!=None):
+            self.usedDezv=parent.usedDezv
+            parent.children.append(self)
+        else:
+            self.usedDezv=False
+    
+    async def branch(self,AIplayer,threads:int,deadline):
+        print(self.state.player_turn,self.name,self.depth)
+        if(winned(self.state,self.state.player_turn)==True ):
+            self.value=10
+        elif(time.time()>deadline):
+            self.value=pv.Calculate_PositionValue(self.state,AIplayer,features.dezvoltari)
+        else:
+            moves=treeFunctions.zar(self,AIplayer)
+            tasks=[]
+            for i in range(min(round(threads),len(moves))):
+                randAction=random.randint(0,len(moves)-1)
+                task=asyncio.create_task(moves[randAction].branch(AIplayer,max(1,threads-len(moves)),deadline))
+                moves.remove(moves[randAction])
+                tasks.append(task)
+            results=await asyncio.gather(*tasks)
+            self.value=(sum(results)/len(results))*discountFactor
         return self.value                
     
     #aici daca am spre ex oponentul joaca o dezvoltare nu pot sa stiu ce dezvoltare va juca
@@ -39,20 +56,15 @@ class node:
 
 class MonteCarlo_tree:
     def __init__(self,startstate,AIplayer):
-        self.start=node("start",startstate,None)
-        self.nextMoves=find_moves(self.start.state,self.start.state.player_turn,AIplayer)
-    async def findBranch(self,threads):
-        self.nextMoves=[node(move[0],move[1],self.start,True) for move in self.nextMoves]
+        self.start=node("default",startstate,None)
+        self.AIplayer=AIplayer
+        self.nextMoves:list[node]=treeFunctions.default(self.start,self.AIplayer)
+    async def makeBranch(self):
         tasks=[]
         for possibility in self.nextMoves:
-            task=asyncio.create_task(possibility.branch(self.AIplayer,threads-self.nextMoves.count))
+            task=asyncio.create_task(possibility.branch(self.AIplayer,threadNr/len(self.nextMoves),time.time()+10))
             tasks.append(task)
-        results=await asyncio.gather(*tasks)
-        maxPoz=0
-        for i in range(len(results)):
-            if(results[maxPoz]<results[i]):
-                maxPoz=i
-        return self.nextMoves[maxPoz]
+        await asyncio.gather(*tasks)
 
             
 
@@ -64,101 +76,48 @@ class MonteCarlo_tree:
 
 #toate mutarile posibile, btw fuck u mache trb efectiv sa facem sah
 
-def find_moves(state:gs.game_state,AIplayer,player:int)->list(tuple):
-    moves=list()
-    piece_options=place_piece(state,player)
-    #cumpar drum
-    if(state.hand[player][0]>0 and state.hand[player][1]>0):
-        new_state=state.copy()
-        cost(new_state,[1,1,0,0,0],player)
-        for i in range(len(piece_options)):
-            if piece_options[i].tileinfo[1]%2==0:
-                moves.append(new_state.copy().add_piece("drum",player,piece_options[i].tileinfo))
-    
-    #cumpar asezare
-    if(state.hand[player][0]>0 and state.hand[player][1]>0 and state.hand[player][2]>0 and state.hand[player][3]>0):
-        new_state=state.copy()
-        cost(new_state,[1,1,1,1,0])
-        for i in range(len(piece_options)):
-            if(piece_options[i].tileinfo[1]%2==1 and check_avail(piece_options[i])):
-                moves.append(new_state.copy().add_piece("asezare",player,piece_options[i].tileinfo))
-    
-    #cumpar oras
-    upgrade_options=upgradeable(state,player)
-    if state.hand[player][2]>=2 and state.hand[player][4]>=3:
-        new_state=state.copy()
-        cost(new_state,[0,0,2,0,3])
-        for i in range(len(upgrade_options)):
-            moves.append(new_state.copy().add_piece("oras",player,piece_options[i].tileinfo))
-    
-    #cumpar dezvoltare
-    if state.hand[player][2]>=1 and state.hand[player][3]>=1 and state.hand[player][4]>=1:
-        new_state=state.copy()
-        cost(new_state,[0,0,1,1,1],player)
-        moves.append("dezvoltare")
-    
-    #daca sunt eu folosesc hot 
-    if(player==AIplayer and state.dezvoltari[1]>0):
-        new_state=state.copy()
-        new_state.dezvoltari[1]-=1
-        moves.append("hot")
-
-    #daca sunt eu folosesc 2 resurse
-    if(player==AIplayer and state.dezvoltari[2]>0):
-        new_state=state.copy()
-        new_state.dezvoltari[2]-=1
-        moves.append("2 resurse")
-    
-    #daca sunt eu folosesc 2 drumuri
-    if(player==AIplayer and state.dezvoltari[3]>0):
-        new_state=state.copy()
-        new_state.dezvoltari[3]-=1
-        moves.append("2 drumuri")
-
-    #daca sunt eu folosesc monopol
-    if(player==AIplayer and state.dezvoltari[4]>0):
-        new_state=state.copy()
-        new_state.dezvoltari[4]-=1
-        moves.append("monopol")
-    
-    #ceilalti playeri dezvoltari
-    if(player!=AIplayer):
-        moves.append("oponent_dezvoltare")
-
-    #go nuts
-    moves.append("trading")
-    return moves
-def best_move(gamestate,AIplayer):
+async def best_move(gamestate,AIplayer):
     mc=MonteCarlo_tree(gamestate,AIplayer)
-    best=mc.findBranch(threadNr)
-    gamestate=best.state
-    return best.name
+    await mc.makeBranch()
+    k=mc.start
+    bestAction=k.children[0]
+    for action in k.children:
+        if(bestAction.value<action.value):
+            bestAction=action
+    print(bestAction.name)
+    return bestAction.state
 
 class treeFunctions:
-    def default(nod):
+    def default(nod:node,AIplayer):
         moves=list()
-        state=deepcopy(nod.state)
-        moves.append(node("Build",state,nod,False))
-        moves.append(node("Dezvoltare",state,nod,False))
-        moves.append(node("pass",state,nod,True))
+        if(features.can_buy(nod.state,nod.state.player_turn,[1,1,0,0,0]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,1,1,1]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,3,0,2])):
+            moves+=treeFunctions.Build(nod)
+        if(((AIplayer==nod.state.player_turn and sum(nod.state.dezvoltari)>0) or AIplayer!=nod.state.player_turn) and nod.usedDezv==False):
+            moves+=treeFunctions.playDezvoltare(nod)
+        if(sum(nod.state.hand[nod.state.player_turn])>0):
+            moves+=treeFunctions.Trade(nod)
+        moves+=treeFunctions.pas(nod)
         return moves
     
 
-    def zar(nod):
+    def zar(nod,AIplayer):
         moves:list[node]=list()
+        nod.state.player_turn=(nod.state.player_turn+1)%nod.state.number_of_players
         for i in range(2,13):
             state:gs.game_state=deepcopy(nod.state)
             if i!=7:
-                moves.append(node("default",state.zar(i),nod,False))
+                state.zar(i)
+                sendNode=deepcopy(nod)
+                sendNode.state=state
+                moves+=treeFunctions.default(sendNode,AIplayer)
             else:
-                moves.append(node("moveThief",state,nod,False))
+                moves+=treeFunctions.discard(nod)
         return moves
     
     def pas(nod):
         moves:list[node]=list()
         state:gs.game_state=deepcopy(nod.state)
-        state.player_turn=(state.player_turn+1)%state.number_of_players
-        moves.append(node('zar',state,nod,True))
+        moves.append(node('pass',state,nod))
         return moves
     
     def moveThief(nod):
@@ -166,9 +125,9 @@ class treeFunctions:
         state:gs.game_state=deepcopy(nod.state)
         for i in range(19):
             if(i!=state.hottile):
-                state:gs.game_state=deepcopy(nod.state)
-                state.hottile=i
-                moves.append(node('steal',state,nod,True))
+                nodState:node=deepcopy(nod)
+                nodState.state.hottile=i
+                moves+=treeFunctions.steal(nodState)
         return moves
     
     def steal(nod):
@@ -181,20 +140,44 @@ class treeFunctions:
                         state:gs.game_state=deepcopy(nod.state)
                         state.hand[pieces.player][res]-=1
                         state.hand[state.player_turn][res]+=1
-                        moves.append(node("default",state,nod,True))
+                        newNode=node("steal",state,nod)
+                        newNode.usedDezv=True
+                        moves.append(newNode)
         return moves
 
-    def discard(node):
-        pass
+    def discard(nod):
+        valueofCards:list[int]=[0,0,0,0,0]
+        worstCard=0
+        state:gs.game_state=deepcopy(nod.state)
+        for player in range(state.number_of_players):
+            if sum(state.hand[player])>7:
+                for _ in range(round(sum(state.hand[player])/2)):
+                    for i in range(5):
+                        tryState:gs.game_state=deepcopy(state)
+                        tryState.hand[player][i]-=1
+                        valueofCards[i]=cv.cardEvaluator(tryState,player)[i]
+                        if(valueofCards[i]<valueofCards[worstCard]):
+                            worstCard=i
+                    state.hand[player][worstCard]-=1
+        sendNode=deepcopy(nod)
+        sendNode.state=state
+        return treeFunctions.moveThief(sendNode)
+                
+                
+
 
 
     def playDezvoltare(nod):
         moves=list()
-        state=deepcopy(nod.state)
-        moves.append(node("monopol",state,nod,False))
-        moves.append(node("2resurse",state,nod,False))
-        moves.append(node("2drumuri",state,nod,False))
-        moves.append(node("soldat",state,nod,False))
+        state:gs.game_state=deepcopy(nod.state)
+        if(state.dezvoltari[4]>0):
+            moves+=treeFunctions.monopol(nod)
+        if(state.dezvoltari[2]>0):
+            moves+=treeFunctions.resurse2(nod)
+        if(state.dezvoltari[3]>0):
+            moves+=treeFunctions.drumuri2(nod)
+        if(state.dezvoltari[1]>0):
+            moves+=treeFunctions.soldat(nod)
         return moves
 
 
@@ -207,7 +190,9 @@ class treeFunctions:
                 if player!=state.player_turn:
                     state.hand[state.player_turn][i]+=state.hand[player][i]
                     state.hand[player][i]=0
-            moves.append(node("default",state,nod,True))
+            newNode=node("monopol",state,nod)
+            newNode.usedDezv=True
+            moves.append(newNode)
         return moves
     
     def drumuri2(nod):
@@ -222,7 +207,9 @@ class treeFunctions:
                 for piece2 in pieces2:
                     if(piece2.tileinfo[1]%2==1):
                         state.add_piece("drum",state.player_turn,piece2.tileinfo)
-                        moves.append(node("default",state,nod,True))
+                        newNode=node("drum",state,nod,False)
+                        newNode.usedDezv=True
+                        moves.append(newNode)
         return moves
         
     def resurse2(nod):
@@ -232,21 +219,28 @@ class treeFunctions:
                 state:gs.game_state=deepcopy(nod.state)
                 state.hand[state.player_turn][res1]+=1
                 state.hand[state.player_turn][res2]+=1
-                moves.append(node("default",state,nod,True))
+                newNode=node("2resurse",state,nod)
+                newNode.usedDezv=True
+                moves.append(newNode)
         return moves
     
     def soldat(nod):
-        moves=[node("moveThief",nod.state,nod,False)]
+        moves=treeFunctions.moveThief(nod)
         return moves
 
 
     def Build(nod):
         moves=list()
-        state=deepcopy(nod.state)
-        moves.append(node("drum",state,nod,False))
-        moves.append(node("asezare",state,nod,False))
-        moves.append(node("oras",state,nod,False))
-        moves.append(node("dezvoltare",state,nod,False))
+        state:gs.game_state=deepcopy(nod.state)
+        if(features.can_buy(state,state.player_turn,[1,1,1,1,0])):
+            moves+=treeFunctions.buildAsezare(nod)
+        if(features.can_buy(state,state.player_turn,[1,1,0,0,0])):
+            moves+=treeFunctions.buildDrum(nod)
+            pass
+        if(features.can_buy(state,state.player_turn,[0,0,3,0,2])):
+            moves+=treeFunctions.buildOras(nod)
+        if(features.can_buy(state,state.player_turn,[0,0,1,1,1])):
+            moves+=treeFunctions.buildDezv(nod)
         return moves
     
     def buildAsezare(nod):
@@ -254,9 +248,10 @@ class treeFunctions:
         state:gs.game_state=deepcopy(nod.state)
         pieces:list[gs.piece]=place_piece(state,state.player_turn)
         for piece in pieces:
-            if(piece.tileinfo[1]%2==0):
+            if(piece.tileinfo[1]%2==0 and check_avail(piece,2)):
                 state:gs.game_state=deepcopy(nod.state)
-                moves.append(node("default",state.add_piece("asezare",state.player_turn,piece.tileinfo),nod,True))
+                state.add_piece("asezare",state.player_turn,piece.tileinfo)
+                moves.append(node("asezare",state,nod))
         return moves
 
     def buildOras(nod):
@@ -265,7 +260,8 @@ class treeFunctions:
         upgrades:list[gs.piece]=upgradeable(state,state.player_turn)
         for oras in upgrades:
             state:gs.game_state=deepcopy(nod.state)
-            moves.append(node("default",state.add_piece("oras",state.player_turn,oras.tileinfo),nod,True))
+            state.add_piece("oras",state.player_turn,oras.tileinfo)
+            moves.append(node("oras",state,nod))
         return moves
     
     def buildDrum(nod):
@@ -275,7 +271,8 @@ class treeFunctions:
         for piece in pieces:
             if(piece.tileinfo[1]%2==1):
                 state:gs.game_state=deepcopy(nod.state)
-                moves.append(node("default",state.add_piece("drum",state.player_turn,piece.tileinfo),nod,True))
+                state.add_piece("drum",state.player_turn,piece.tileinfo)
+                moves.append(node("drum",state,nod))
         return moves
     
     def buildDezv(nod):
@@ -283,18 +280,47 @@ class treeFunctions:
         state:gs.game_state=deepcopy(nod.state)
         for i in range(5):
             state:gs.game_state=deepcopy(nod.state)
-            moves.append(node("default",state.add_dezv(i,state.player_turn),nod,True))
+            state.add_dezv(i,state.player_turn)
+            moves.append(node("dezvoltare",state,nod))
         return moves
 
 
 
-    def Trade(node):
-        pass
-    def tradeProposal(node):
-        pass
+    def Trade(nod):#for this version trade 1 for 1
+        moves:list[int]=list()
+        state:gs.game_state=deepcopy(nod.state)
+        cardsValue:list[int]=cv.cardEvaluator(state,state.player_turn)
+        bestCard=0
+        for i in range(len(cardsValue)):
+            if(cardsValue[i]>cardsValue[bestCard]):
+                bestCard=i
+        for i in range(5):
+            if(state.hand[state.player_turn][i]>0):
+                for player in range(state.number_of_players):
+                    if(player!=state.player_turn and state.hand[player][bestCard]>0):
+                        if(tv.checkTradeProposal(state,[i],[bestCard],state.player_turn,player)==True):
+                            state:gs.game_state=deepcopy(nod.state)
+                            state.hand[player][bestCard]-=1
+                            state.hand[state.player_turn][i]-=1
+                            state.hand[player][i]+=1
+                            state.hand[state.player_turn][bestCard]+=1
+                            moves.append(node("Trade",state,nod))
+        return moves
+        
 
 
-
+features.dezvoltari=[[0 for j in range(5)] for i in range(4)]
+gamestate=gs.game_state(random_config(),1,4)
+gamestate.add_piece("asezare",0,[0,6])
+gamestate.add_piece("asezare",1,[1,6])
+gamestate.add_piece("asezare",2,[2,6])
+gamestate.add_piece("asezare",3,[3,6])
+gamestate.add_piece("asezare",0,[4,6])
+gamestate.add_piece("asezare",1,[5,6])
+gamestate.add_piece("asezare",2,[6,6])
+gamestate.add_piece("asezare",3,[7,6])
+gamestate.hand[1]=[0,0,1,1,1]
+asyncio.run(best_move(gamestate,1))
 
 
 
