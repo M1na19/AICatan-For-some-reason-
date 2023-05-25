@@ -123,11 +123,12 @@ class treeFunctions:
     def moveThief(nod):
         moves:list[node]=list()
         state:gs.game_state=deepcopy(nod.state)
+        originalTile=state.hottile
         for i in range(19):
             if(i!=state.hottile):
-                nodState:node=deepcopy(nod)
-                nodState.state.hottile=i
-                moves+=treeFunctions.steal(nodState)
+                nod.state.hottile=i
+                moves+=treeFunctions.steal(nod)
+        nod.state.hottile=originalTile
         return moves
     
     def steal(nod):
@@ -207,7 +208,7 @@ class treeFunctions:
                 for piece2 in pieces2:
                     if(piece2.tileinfo[1]%2==1):
                         state.add_piece("drum",state.player_turn,piece2.tileinfo)
-                        newNode=node("drum",state,nod,False)
+                        newNode=node("2drum",state,nod)
                         newNode.usedDezv=True
                         moves.append(newNode)
         return moves
@@ -309,18 +310,19 @@ class treeFunctions:
         
 
 
-features.dezvoltari=[[0 for j in range(5)] for i in range(4)]
-gamestate=gs.game_state(random_config(),1,4)
-gamestate.add_piece("asezare",0,[0,6])
-gamestate.add_piece("asezare",1,[1,6])
-gamestate.add_piece("asezare",2,[2,6])
-gamestate.add_piece("asezare",3,[3,6])
-gamestate.add_piece("asezare",0,[4,6])
-gamestate.add_piece("asezare",1,[5,6])
-gamestate.add_piece("asezare",2,[6,6])
-gamestate.add_piece("asezare",3,[7,6])
-gamestate.hand[1]=[0,0,1,1,1]
-asyncio.run(best_move(gamestate,1))
+# features.dezvoltari=[[0 for j in range(5)] for i in range(4)]
+# gamestate=gs.game_state(random_config(),1,4)
+# gamestate.add_piece("asezare",0,[0,6])
+# gamestate.add_piece("asezare",1,[1,6])
+# gamestate.add_piece("asezare",2,[2,6])
+# gamestate.add_piece("asezare",3,[3,6])
+# gamestate.add_piece("asezare",0,[4,6])
+# gamestate.add_piece("asezare",1,[5,6])
+# gamestate.add_piece("asezare",2,[6,6])
+# gamestate.add_piece("asezare",3,[7,6])
+# gamestate.hand[1]=[0,0,1,1,0]
+# gamestate.dezvoltari=[1,1,0,0,0]
+# asyncio.run(best_move(gamestate,1))
 
 
 
