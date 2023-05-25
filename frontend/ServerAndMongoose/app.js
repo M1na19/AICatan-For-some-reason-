@@ -46,6 +46,11 @@ app.get("/secret", isLoggedIn, function (req, res) {
 app.get("/register", function (req, res) {
     res.render("register");
 });
+
+app.get("/main", function (req, res) {
+  //COAIEE CEEEEEEEEEEEEEEEEEE
+  res.sendFile(path.join(frontend, '../../main.html'));
+});
   
 // Handling user signup
 app.post("/register", async (req, res) => {
