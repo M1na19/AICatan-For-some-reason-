@@ -31,7 +31,9 @@ passport.deserializeUser(User.deserializeUser());
 //=====================
   
 // Showing home page
-app.get("/", function (req, res) {
+app.get("/",async function (req, res) {
+    let lb_users = (await User.aggregate([{$sort: {wins: -1}}])).slice(0, 10).map((x) => {return {username: x.username, wins: x.wins}});
+    res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
     res.render("home");
 });
   
@@ -49,7 +51,10 @@ app.get("/register", function (req, res) {
 app.post("/register", async (req, res) => {
     const user = await User.create({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      wins: 0,
+      games: 0,
+      vps: 0
     });
     
     return res.status(200).json(user);
@@ -65,12 +70,16 @@ app.post("/login", async function(req, res){
     try {
         // check if the user exists
         const user = await User.findOne({ username: req.body.username });
-        console.log(req.cookies);
         if (user) {
           //check if password matches
           const result = req.body.password === user.password;
           if (result) {
-            res.cookie("user", req.body.username);
+            res.cookie("wins", req.body.wins, {sameSite: "none", secure: true});
+            res.cookie("user", req.body.username, {sameSite: "none", secure: true});
+            res.cookie("games", req.body.games, {sameSite: "none", secure: true});
+            res.cookie("vps", req.body.vps, {sameSite: "none", secure: true});
+            let lb_users = (await User.aggregate([{$sort: {wins: -1}}])).slice(0, 10).map((x) => {return {username: x.username, wins: x.wins}});
+            res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
             res.render("secret");
           } else {
             res.status(400).json({ error: "password doesn't match" });
@@ -86,6 +95,10 @@ app.post("/login", async function(req, res){
 //Handling user logout 
 app.get("/logout", function (req, res) {
     req.logout(function(err) {
+        res.clearCookie("user");
+        res.clearCookie("wins");
+        res.clearCookie("games");
+        res.clearCookie("vps");
         if (err) { return next(err); }
         res.redirect('/');
       });

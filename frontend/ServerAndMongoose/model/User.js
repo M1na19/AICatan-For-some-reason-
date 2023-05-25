@@ -9,13 +9,13 @@ var User = new Schema({
         type: String
     },
     wins: {
-        type: String
+        type: Number
     },
     games: {
-        type: String
+        type: Number
     },
     vps: {
-        type: String
+        type: Number
     }
 })
   
