@@ -3,7 +3,8 @@ async function buttonSendTrade()
     sendTrade.addEventListener('click',async ()=>
     {
         await Trade()
-        showData(await(get('playerData',player)))
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }
@@ -11,8 +12,9 @@ async function buttonDevelop()
 {
     develop.addEventListener('click',async ()=>
     {
-        await playerBuyDevelopment()
-        showData(await(get('playerData',player)))
+        await playerBuyDevelopment(0)
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }
@@ -20,8 +22,9 @@ async function buttonUseDevelop()
 {
     useDevelop.addEventListener('click',async ()=>
     {
-        await development()
-        showData(await(get('playerData',player)))
+        await development(0)
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }
@@ -29,8 +32,9 @@ async function buttonBuildAsezare()
 {
     buildAsezare.addEventListener('click',async ()=>
     {
-        await playerPlaceAsezare()
-        showData(await(get('playerData',player)))
+        await playerPlaceAsezare(0)
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }
@@ -38,17 +42,19 @@ async function buttonBuildDrum()
 {
     buildDrum.addEventListener('click',async ()=>
     {
-        await playerPlaceDrum()
-        showData(await(get('playerData',player)))
+        await playerPlaceDrum(0)
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }
 async function buttonBuildOras()
 {
-    buildAsezare.addEventListener('click',async ()=>
+    buildOras.addEventListener('click',async ()=>
     {
-        await playerPlaceOras()
-        showData(await(get('playerData',player)))
+        await playerPlaceOras(0)
+        data=await get('playerData',0)
+        showData(data[0],data[1])
 
     })
 }

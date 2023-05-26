@@ -37,13 +37,13 @@ async function OnStartGame()
 
 async function TheGame()
 {
-    while(await get("gameWon",0))
+    while(!await get("gameWon",0))
     {
         for(let i=0;i<=nrJucatori;i++)
         {
             if(i==0)
             {
-                await playerGame()
+                await playerGame(i)
             }
             else
             {
@@ -60,6 +60,7 @@ async function TheGame()
 async function test()
 {
     await post(0,4)
+    await put('putData',0,[[2,2,2,2,2],[1,1,1,1,1]])
     await TheGame()
 }
 

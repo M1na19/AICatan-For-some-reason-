@@ -118,6 +118,7 @@ async function development(player)
         case 0:
         {
             //anounce u have one victory point
+            break
         }
         case 1:
         {
@@ -130,7 +131,7 @@ async function development(player)
                     getTradecardsYouwant()
                     if(sum(tradecards)==2)
                     {
-                        await put("gain2Resources",[tradecards])
+                        await put("gain2Resources",player,[tradecards])
                         resolve();
                     }
                     else
@@ -233,8 +234,9 @@ async function moveThief(can_abandon)
 }
 async function steal(tile,player)
 {
-    //optionPlayers=await get("playerInTile",player)
-    let optionPlayers=[1,0,1,1]
+    optionPlayers=await get("playerInTile",player,[tile])
+    if(optionPlayers.length==0)
+        return
     let buttons=[]
     showDice(4,5)
     lockMenu()
@@ -499,30 +501,34 @@ function unfreezeMenu()
     buttonSendTrade()
     menuIsFrezzed=false;
 }
-async function playerPlaceDrum()
+async function playerPlaceDrum(player)
 {
     lockMenu();
-    await showAvialable(await get("possibleDrum",player));
-    await put('placePiece',player,['drum',chosedPosition.tile,chosedPosition.piece]);
+    await showAvialable(await get("possibleDrumuri",player),player,true);
+    if(chosedPosition)
+        await put('placePiece',player,['drum',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
-async function playerPlaceAsezare()
+async function playerPlaceAsezare(player)
 {
     lockMenu();
-    await showAvialable(await get("possibleAsezare",player));
-    await put('placePiece',player,['asezare',chosedPosition.tile,chosedPosition.piece]);
+    await showAvialable(await get("possibleAsezari",player),player,true);
+    if(chosedPosition)
+        await put('placePiece',player,['asezare',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
-async function playerPlaceOras()
+async function playerPlaceOras(player)
 {
     lockMenu();
-    await showUpgradable(await get("possibleOras",player));
-    await put('placePiece',player,['oras',chosedPosition.tile,chosedPosition.piece]);
+    await showUpgradable(await get("possibleOrase",player));
+    if(chosedPosition)
+        await put('placePiece',player,['oras',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
 async function zar()
 {
-    showDice(await get('zar',0))//doesnt matter player
+    dice=await get('zar',0)
+    showDice(dice[0],dice[1])//doesnt matter player
 }
 async function playerBuyDevelopment(player)
 {
@@ -535,18 +541,22 @@ async function playerBuyDevelopment(player)
 async function playerGame(player)
 {
     const pass=makeExit('PASS')
-    showData(await(get('playerData',player)))
-
+    data=await get('playerData',player)
+    showData(data[0],data[1])
+    lockMenu()
     await new Promise((resolve)=>{
         dice.addEventListener('click',async ()=>
         {
             await zar()
-            showData(await(get('playerData',player)))
+            data=await get('playerData',player)
+            showData(data[0],data[1])
+            unlockMenu()
             resolve()
         })
     })
 
-    showData(await(get('playerData',player)))
+    data=await get('playerData',player)
+    showData(data[0],data[1])
 
     return new Promise((resolve) => {
         buttonSendTrade();

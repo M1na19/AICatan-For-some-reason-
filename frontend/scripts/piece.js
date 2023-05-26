@@ -171,6 +171,11 @@ async function flashButton(button, duration) {
 async function showAvialable(poz,player_turn,can_abandon)
 {
     //am ca input un sir cu poz[i] de tipul {tile,piece(adica indexu pe tile)}
+    if(poz.length==0)
+    {    
+        chosedPosition=NaN
+        return
+    }
     for(let i=0;i<poz.length;i++)
     {
         let point=tile_to_space(poz[i][0],poz[i][1])
@@ -234,6 +239,11 @@ async function showAvialable(poz,player_turn,can_abandon)
 }
 async function showUpgradable(poz)
 {
+    if(poz.length==0)
+    {    
+        chosedPosition=NaN
+        return
+    }
     for(let i=0;i<poz.length;i++)
     {
         var point=tile_to_space(poz[i][0],poz[i][1])

@@ -535,6 +535,20 @@ function showDice(x,y)
 
 function showData(x,y)
 {
+  for(var i=1;i<=cardvector.length;i++)
+  {
+      if(document.getElementById("card"+i)!=null)
+      {
+        document.getElementById("card"+i).remove()
+      }
+  }
+  for(var i=1;i<=specialcardvector.length;i++)
+  {
+      if(document.getElementById("scard"+i)!=null)
+      {
+        document.getElementById("scard"+i).remove()
+      }
+  }
     var j=0;
     for(var i=0;i<x.length;i++)
     {
@@ -549,6 +563,7 @@ function showData(x,y)
         x[i]-=1;
       }
     }
+    cardvector.splice(j)
     j=0;
     for(var i=0;i<y.length;i++)
     {
@@ -556,11 +571,15 @@ function showData(x,y)
       {
         if(i==0)specialcardvector[j]="LIB";
         if(i==1)specialcardvector[j]="KNG";
-        if(i==2)specialcardvector[j]="RBD";
-        if(i==3)specialcardvector[j]="MNP";
-        if(i==4)specialcardvector[j]="YOP";
+        if(i==2)specialcardvector[j]="YOP";
+        if(i==3)specialcardvector[j]="RBD";
+        if(i==4)specialcardvector[j]="MNP";
         j+=1;
         y[i]-=1;
       }
     }
+    specialcardvector.splice(j)
+    console.log(cardvector,specialcardvector)
+    NewCards(cardvector)
+    NewSpecialCards(specialcardvector)
 }

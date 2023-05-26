@@ -1,11 +1,12 @@
 
-async function get(request,player_turn)
+async function get(request,player_turn,info)
 {
   let data;
     await axios.get('http://localhost:8080',{
     params:{
       'action': request, 
-      'player': player_turn
+      'player': player_turn,
+      'info':info
     }
   })
     .then(response => {

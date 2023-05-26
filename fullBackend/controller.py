@@ -1,14 +1,16 @@
 import flask
+from flask_cors import CORS
 import backend.gameplay as gp
 app=flask.Flask(__name__)
-
+CORS(app)
 
 @app.route('/',methods=['POST'])
 def post():
     startplayer=flask.request.json.get('params').get('startplayer')
     nrPlayers=flask.request.json.get('params').get('numberofplayers')
     if(startplayer!=None and nrPlayers!=None):
-        return flask.jsonify(gp.start(startplayer,nrPlayers))
+        response=flask.jsonify(gp.start(startplayer,nrPlayers))
+        return response
     return flask.jsonify("Wrong input")
 
 
@@ -18,17 +20,23 @@ def put():
     player=flask.request.json.get('params').get('player')
     info=flask.request.json.get('params').get('info')
     gp.resolve_put(act,player,info)
-    return "yey"
+    return "succes"
 
 
 @app.route('/',methods=['GET'])
 def get():
     act=flask.request.args.get('action')
     player=flask.request.args.get('player')
+    info=flask.request.args.get('info')
     player=int(player)
-    if(act!=None and player!=None):
+    if(act!=None and player!=None and info==None):
         response=gp.resolve_get(act,player)
-        return flask.jsonify(response)
+        response=flask.jsonify(response)
+        return response
+    elif(info!=None):
+        response=gp.resolve_getInfo(act,player,info)
+        response=flask.jsonify(response)
+        return response
     return flask.jsonify("wrong input")
 
 

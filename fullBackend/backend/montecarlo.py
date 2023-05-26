@@ -91,7 +91,7 @@ async def best_move(gamestate,AIplayer):
 class treeFunctions:
     def default(nod:node,AIplayer):
         moves=list()
-        if(features.can_buy(nod.state,nod.state.player_turn,[1,1,0,0,0]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,1,1,1]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,3,0,2])):
+        if(features.can_buy(nod.state,nod.state.player_turn,[1,1,0,0,0]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,1,1,1]) or features.can_buy(nod.state,nod.state.player_turn,[0,0,2,0,3])):
             moves+=treeFunctions.Build(nod)
         if(((AIplayer==nod.state.player_turn and sum(nod.state.dezvoltari)>0) or AIplayer!=nod.state.player_turn) and nod.usedDezv==False):
             moves+=treeFunctions.playDezvoltare(nod)
@@ -239,7 +239,7 @@ class treeFunctions:
         if(features.can_buy(state,state.player_turn,[1,1,0,0,0])):
             moves+=treeFunctions.buildDrum(nod)
             pass
-        if(features.can_buy(state,state.player_turn,[0,0,3,0,2])):
+        if(features.can_buy(state,state.player_turn,[0,0,2,0,3])):
             moves+=treeFunctions.buildOras(nod)
         if(features.can_buy(state,state.player_turn,[0,0,1,1,1])):
             moves+=treeFunctions.buildDezv(nod)

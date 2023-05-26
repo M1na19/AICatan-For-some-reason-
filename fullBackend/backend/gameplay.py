@@ -39,6 +39,10 @@ def resolve_get(rq,player):
     elif(rq=='playerData'):
         answear=(game.hand[player],dezvoltari[player])
     elif(rq=='getDevCard'):
+        if(f.can_buy(game,player,[0,0,1,1,1])):
+            f.cost(game,[0,0,1,1,1],player)
+        else:
+            return []
         answear=f.dezvoltare()
         game.add_dezv(answear,player)
     elif(rq=="AIaction"):
@@ -49,6 +53,10 @@ def resolve_get(rq,player):
     elif(rq=="tradeProposal"):
         pass
     elif(rq=='possibleDrumuri'):
+        if(f.can_buy(game,player,[1,1,0,0,0])):
+            f.cost(game,[1,1,0,0,0],player)
+        else:
+            return []
         answear=mc.place_piece(game,player)
         for piece in answear:
             if(piece.name!='drum'):
@@ -56,14 +64,22 @@ def resolve_get(rq,player):
         for i in range(len(answear)):
             answear[i]=answear[i].tileinfo
     elif(rq=='possibleAsezari'):
+        if(f.can_buy(game,player,[1,1,1,1,0])):
+            f.cost(game,[1,1,1,1,0],player)
+        else:
+            return []
         answear=mc.place_piece(game,player)
         for piece in answear:
             if(piece.name!='asezare'):
                 answear.remove(piece)
         for i in range(len(answear)):
             answear[i]=answear[i].tileinfo
-    elif(rq=='possibleOras'):
-        answear=mc.upgradeable(game,player)
+    elif(rq=='possibleOrase'):
+        if(f.can_buy(game,player,[0,0,2,0,3])):
+            f.cost(game,[0,0,2,0,3],player)
+        else:
+            return []
+        answear=f.upgradeable(game,player)
         for i in range(len(answear)):
             answear[i]=answear[i].tileinfo
     elif(rq=='longestRoad'):
@@ -71,8 +87,6 @@ def resolve_get(rq,player):
     elif(rq=='longestArmy'):
         f.celMaiMareDrum(game,player)
         answear=game.biggestArmy
-    elif(rq=='playerInTile'):
-        pass
     elif(rq=='visiblePoints'):
         answear=game.constructi[0]*2+game.constructi[1]
         if(f.ceaMaiMareArmata(game,player)):
@@ -98,6 +112,11 @@ def resolve_put(rq,player,info):
         tile=info[1]
         poz=info[2]
         game.add_piece(name,player,(tile,poz))
+    elif(rq=="putData"):
+        carti=info[0]
+        dezv=info[1]
+        game.hand[player]=carti
+        dezvoltari[player]=dezv
     elif(rq=="pas"):
           game.playerturn+=1
           game.playerturn%=(game.number_of_players)
@@ -114,10 +133,12 @@ def resolve_put(rq,player,info):
         newtile=info[0]
         game.hotile=newtile
     elif(rq=="gain2Resources"):
+        dezvoltari[player][2]-=1
         resources=info[0]
         for i in range(5):
             game.hand[player][i]+=resources[i]
     elif(rq=="monopol"):
+        dezvoltari[4]-=1
         res=info[0]
         for i in range(game.number_of_players):
             if(i!=player):
@@ -136,5 +157,18 @@ def resolve_put(rq,player,info):
             game.hand[player][i]-=resources[i]
 
     endState(game,dezvoltari)
+def resolve_getInfo(rq,player,info):
+    state=getState()
+    game=state[0]
+    dezvoltari=state[1]
+    answear=[]
+    if(rq=='playerInTile'):
+        tile=info[0]
+        answear=[0 for i in range(game.number_of_players)]
+        for piece in game.tiles[tile]:
+            if(piece.player>=0 and player!=piece.player):
+                answear[piece.player]=1
 
+    endState(game,dezvoltari)
+    return answear
 #discard cards on 7 and steal a card(practic trade dar cu 0 resurse de o parte)
