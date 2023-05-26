@@ -1,7 +1,9 @@
 https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
+
 DOCUMENTATION AND EXPLANATION
 
 # STEPS TO FOLLOW TO SETUP THE PROJECT
+# HOW TO RUN THE PYTHON SERVER
 Step 1: Install Flask
 Make sure you have Flask installed on your machine. You can use pip, the package installer for Python, to install Flask. Open a command prompt or terminal and run the following command:
 
@@ -43,7 +45,7 @@ The Flask development server will start running, and you should see output indic
 Step 6: Access Your Flask Application
 Open a web browser and enter the address http://127.0.0.1:5000/ or http://localhost:5000/. You should see the response from your Flask application, which in the example above would be "Hello, World!".
 
-# AICatan-For-some-reason-
+# HOW TO RUN THE HTTP SERVER WITH THE DATABASE
 Steps to run the application
 
 Step 1:To run the above code you should first have the mongoose server running
