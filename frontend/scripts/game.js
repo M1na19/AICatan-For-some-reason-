@@ -8,27 +8,27 @@ async function OnStartGame()
     {
         if(i==0)
         {
-            await showAvialable(await get("posibile_asezari"),0,false);
-            await showAvialable(await get("posibile_drumuri"),0,false);
+            await showAvialable(await get("posibile_asezari",i),0,false);
+            await showAvialable(await get("posibile_drumuri",i),0,false);
             await put("place_piece",0,chosedPosition);
         }
         else
         {
-            MakeSettlement(await get("Ai_start_asezare"),"town",i);
+            MakeSettlement(await get("Ai_start_asezare",i),"town",i);
         }
     }
     for(var i=nrJucatori-1;i>=1;i++)
     {
         if(i==0)
         {
-            await showAvialable(await get("posibile_asezari"),0,false);
-            await showAvialable(await get("posibile_drumuri"),0,false);
+            await showAvialable(await get("posibile_asezari",i),0,false);
+            await showAvialable(await get("posibile_drumuri",i),0,false);
             await put("place_piece",0,chosedPosition); 
             unlockMenu()
         }
         else
         {
-            let AIChosed=await get("Ai_start_asezare");
+            let AIChosed=await get("Ai_start_asezare",i);
             MakeSettlement(AIChosed,"town",i);
         }
 
@@ -37,7 +37,7 @@ async function OnStartGame()
 
 async function TheGame()
 {
-    while(await get("gameWon"))
+    while(await get("gameWon",0))
     {
         for(let i=0;i<=nrJucatori;i++)
         {
@@ -59,10 +59,8 @@ async function TheGame()
 }
 async function test()
 {
-    showDice(4,5);
-    moveThief(true)
+    await post(0,4)
+    await TheGame()
 }
-showData([1,1,1,1,1],[1,1,1,1,1])
-//test()
-//await OnStartGame();
-//await TheGame()
+
+test()

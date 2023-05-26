@@ -1,6 +1,6 @@
 import random
 import queue
-import game_state as gs
+import backend.game_state as gs
 dezvoltari=[[]]
 def random_config():
     tiles=19
@@ -38,7 +38,7 @@ def can_buy(gamestate,player,arr):
     return True
 #ma uit unde pot sa pun drum sau asezare
 #am verificat,pare ca functioneaza
-def place_piece(state:gs.game_state,player:int):
+def place_piece(state,player:int):
     to_visit=list()
     visited=dict()
     q=queue.Queue()
@@ -65,7 +65,7 @@ def check_avail(piece,depth):
             condition=condition and check_avail(piece.neigh[i],depth-1)
     return condition
 
-def upgradeable(state:gs.game_state,player:int):
+def upgradeable(state,player:int):
     to_upgrade=list()
     visited=dict()
     q=queue.Queue()
@@ -81,20 +81,21 @@ def upgradeable(state:gs.game_state,player:int):
                 q.put(nod)
                 visited[nod]=True
     return to_upgrade
-def winned(gamestate:gs.game_state,player):
+def winned(gamestate,player):
     LAorLR=0
+    constrPoints=gamestate.constructi[player][0]*2+gamestate.constructi[player][1]
     if(gamestate.biggestArmy[0]==player):LAorLR+=2
     if(gamestate.biggestRoad[0]==player):LAorLR+=2
-    if(gamestate.puncte[player]+dezvoltari[player][0]+LAorLR>=10):
+    if(dezvoltari[player][0]+LAorLR+constrPoints>=10):
         return True
     else:
         return False
-def ceaMaiMareArmata(gamestate:gs.game_state,player):
+def ceaMaiMareArmata(gamestate,player):
     if(gamestate.biggestArmy[0]==player):
         return True
     else: return False
 
-def celMaiMareDrum(gamestate:gs.game_state,player):
+def celMaiMareDrum(gamestate,player):
     roadSize=checkRoadSize(gamestate,player)
     if(roadSize>gamestate.biggestRoad[1]):
         gamestate.biggestRoad=[player,roadSize]
@@ -104,7 +105,7 @@ def celMaiMareDrum(gamestate:gs.game_state,player):
     else: 
         return False
 
-def checkRoadSize(gamestate:gs.game_state,player):
+def checkRoadSize(gamestate,player):
     adiacenta=[[]]
     count=0
     frecv=dict()

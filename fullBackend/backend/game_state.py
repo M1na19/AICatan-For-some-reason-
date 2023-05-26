@@ -1,6 +1,6 @@
 import numpy as np
 import queue
-import features as f
+import backend.features as f
 #doar eu si miezeu stiam ce inseamna codul asta cand l am scris, acum doar miezeu stie
 
 config= [[(0,0)],

@@ -95,7 +95,7 @@ async function Trade(player)
                 if(cardloc[i].mat=="grain")resources[2]++;
             }
         }
-        await put("proposalTrade",player,player2,resources,tradecards);
+        await put("proposalTrade",player,[player2,resources,tradecards]);
     })
 }
 async function development(player)
@@ -130,7 +130,7 @@ async function development(player)
                     getTradecardsYouwant()
                     if(sum(tradecards)==2)
                     {
-                        //await put("gain2Resources",tradecards)
+                        await put("gain2Resources",[tradecards])
                         resolve();
                     }
                     else
@@ -180,7 +180,7 @@ async function development(player)
 }
 async function moveThief(can_abandon)
 {
-    //const pozThief=await get("pozThief",-1);
+    const pozThief=await get("pozThief",-1);
     var exit;
     if(can_abandon)
     {
@@ -195,7 +195,6 @@ async function moveThief(can_abandon)
             resolve()
         })
     }
-    const pozThief=9;
     let buttons=[]
     for(let i=0;i<19;i++)
     {
@@ -219,7 +218,7 @@ async function moveThief(can_abandon)
         buttons[i].addEventListener('click',async ()=>
         {
             tileChosed=i;
-            //await put("moveThief",-1,tileChosed)//doesnt matter player
+            await put("moveThief",-1,[tileChosed])//doesnt matter player
             for(let i=0;i<18;i++)
             {
                 buttons[i].remove();
@@ -288,7 +287,7 @@ async function steal(tile,player)
             let otherplayer=frecvToIter(optionPlayers)[i];
             buttons[i].addEventListener('click',async ()=>
             {
-                //await put("steal",player,otherplayer)
+                await put("steal",player,[otherplayer])
                 stealPage.remove()
                 resolve()
             })
@@ -318,7 +317,7 @@ async function discard(nrCards,player)
             }
             if(sum(resources)==nrCards)
             {
-                //await put('discard',player,)
+                await put('discard',player,resources)
                 notClicked=false;
                 resolve()
             }
@@ -369,27 +368,27 @@ async function monopol(player)
     await new Promise((resolve) => {
         lemn.addEventListener('click',async ()=>
         {
-            await put('monopol',player,0)
+            await put('monopol',player,[0])
             resolve()
         })
         argila.addEventListener('click',async ()=>
         {
-            await put('monopol',player,1)
+            await put('monopol',player,[1])
             resolve()
         })
         oaie.addEventListener('click',async ()=>
         {
-            await put('monopol',player,3)
+            await put('monopol',player,[3])
             resolve()
         })
         fan.addEventListener('click',async ()=>
         {
-            await put('monopol',player,2)
+            await put('monopol',player,[2])
             resolve()
         })
         piatra.addEventListener('click',async ()=>
         {
-            await put('monopol',player,4)
+            await put('monopol',player,[4])
             resolve()
         })
         exit.addEventListener('click',async ()=>
@@ -400,7 +399,7 @@ async function monopol(player)
     })
     monopolScreen.remove()
 }
-async function tradeProposal(cardsReceived,cardsGiven,player)
+async function tradeProposal(cardsReceived,cardsGiven,me,player)
 {
     openNav()
     const namePlayer=document.querySelector('#TradePlayerName')
@@ -434,7 +433,7 @@ async function tradeProposal(cardsReceived,cardsGiven,player)
         },20000)
         acceptTrade.addEventListener('click',async()=>
         {
-            //await put("playersTrade")
+            await put("playersTrade",me,[player,cardsGiven,cardsReceived])
             namePlayer.textContent="Trade from: None"
             for(let i=0;i<cardsReceived.length;i++)
             {
@@ -504,21 +503,21 @@ async function playerPlaceDrum()
 {
     lockMenu();
     await showAvialable(await get("possibleDrum",player));
-    await put('placePiece',player,chosedPosition);
+    await put('placePiece',player,['drum',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
 async function playerPlaceAsezare()
 {
     lockMenu();
     await showAvialable(await get("possibleAsezare",player));
-    await put('placePiece',player,chosedPosition);
+    await put('placePiece',player,['asezare',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
 async function playerPlaceOras()
 {
     lockMenu();
     await showUpgradable(await get("possibleOras",player));
-    await put('placePiece',player,chosedPosition);
+    await put('placePiece',player,['oras',chosedPosition.tile,chosedPosition.piece]);
     unlockMenu()
 }
 async function zar()
@@ -542,6 +541,7 @@ async function playerGame(player)
         dice.addEventListener('click',async ()=>
         {
             await zar()
+            showData(await(get('playerData',player)))
             resolve()
         })
     })
@@ -554,7 +554,7 @@ async function playerGame(player)
         buttonBuildAsezare()
         buttonBuildDrum()
         buttonBuildOras()
-        
+        buttonUseDevelop()
         pass.addEventListener('click', () => {
           resolve();
         });

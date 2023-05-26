@@ -1,15 +1,16 @@
 import sys,os
-import features
+
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import evaluatoare.CardValue as cv
 from copy import deepcopy
 import random
 import asyncio
-from features import cost,check_avail,place_piece,upgradeable,winned,random_config
+from backend.features import cost,check_avail,place_piece,upgradeable,winned,random_config
 import backend.game_state as gs
 import evaluatoare.TradeValue as tv
 import evaluatoare.PositionValue as pv
 import time
+import backend.features as features
 
 threadNr=1000
 discountFactor=0.8
@@ -85,7 +86,7 @@ async def best_move(gamestate,AIplayer):
         if(bestAction.value<action.value):
             bestAction=action
     print(bestAction.name)
-    return bestAction.state
+    return bestAction
 
 class treeFunctions:
     def default(nod:node,AIplayer):

@@ -173,11 +173,11 @@ async function showAvialable(poz,player_turn,can_abandon)
     //am ca input un sir cu poz[i] de tipul {tile,piece(adica indexu pe tile)}
     for(let i=0;i<poz.length;i++)
     {
-        let point=tile_to_space(poz[i].tile,poz[i].piece)
+        let point=tile_to_space(poz[i][0],poz[i][1])
         buttons.push(document.createElement("button"))
         pozbuttons.push(poz[i])
 
-        if(poz[i].piece%2==0)//pt asezari
+        if(poz[i][1]%2==0)//pt asezari
         {
             document.querySelector('.asezare').appendChild(buttons[i])
             giveAsezareStyle(buttons[i],point.x,point.y)
@@ -203,7 +203,7 @@ async function showAvialable(poz,player_turn,can_abandon)
         }        
         for(let i=0;i<poz.length;i++)
         {
-            if(pozbuttons[i].piece%2==0)
+            if(pozbuttons[i][1]%2==0)
             {
                 buttons[i].addEventListener('click',()=>
                 {
@@ -236,7 +236,7 @@ async function showUpgradable(poz)
 {
     for(let i=0;i<poz.length;i++)
     {
-        var point=tile_to_space(poz[i].tile,poz[i].piece)
+        var point=tile_to_space(poz[i][0],poz[i][1])
         buttons.push(document.createElement("button"))
         document.querySelector('.oras').appendChild(buttons[i])
         giveOrasStyle(buttons[i],point.x,point.y)
