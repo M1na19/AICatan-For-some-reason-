@@ -77,14 +77,14 @@ function tile_to_space(tile,piece)//transforma din format (tile,piece) in (x,y)
 function edgeClicked(button,player_turn)//colt apasat
 {
     let index = Array.prototype.indexOf.call(buttons, button);
-    MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"town",player_turn)
+    MakeSettlement(pozbuttons[index][0],pozbuttons[index][1],"town",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
 }
 function muchieClicked(button,player_turn)//linie apasata
 {
     let index = Array.prototype.indexOf.call(buttons, button);
-    MakeSettlement(pozbuttons[index].tile,pozbuttons[index].piece,"road",player_turn)
+    MakeSettlement(pozbuttons[index][0],pozbuttons[index][1],"road",player_turn)
     destroyPieces()
     chosedPosition=pozbuttons[index]
 }
@@ -176,6 +176,9 @@ async function showAvialable(poz,player_turn,can_abandon)
         chosedPosition=NaN
         return
     }
+    console.log(poz)
+    buttons.length=0
+    pozbuttons.length=0
     for(let i=0;i<poz.length;i++)
     {
         let point=tile_to_space(poz[i][0],poz[i][1])
@@ -190,7 +193,7 @@ async function showAvialable(poz,player_turn,can_abandon)
         else//pt drumuri
         {
             document.querySelector('.drum').appendChild(buttons[i])
-            giveDrumStyle(buttons[i],point.x,point.y,anglePieces[poz[i].piece])
+            giveDrumStyle(buttons[i],point.x,point.y,anglePieces[poz[i][1]])
         }
     }
     await new Promise((resolve)=>
@@ -244,6 +247,8 @@ async function showUpgradable(poz)
         chosedPosition=NaN
         return
     }
+    buttons.length=0
+    pozbuttons.length=0
     for(let i=0;i<poz.length;i++)
     {
         var point=tile_to_space(poz[i][0],poz[i][1])
@@ -279,4 +284,6 @@ function destroyPieces()//la final distrug toate piesele
     buttons.forEach(element => {
         element.remove()
     });
+    buttons.slice(0)
+    pozbuttons.slice(0)
 }

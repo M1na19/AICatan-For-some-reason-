@@ -39,13 +39,14 @@ def resolve_get(rq,player):
         game.zar(sum(answear))
     elif(rq=='playerData'):
         answear=(game.hand[player],dezvoltari[player])
-    elif(rq=='getDevCard'):
+    elif(rq=='getDezv'):
         if(f.can_buy(game,player,[0,0,1,1,1])):
             f.cost(game,[0,0,1,1,1],player)
         else:
             return []
         answear=f.dezvoltare()
         game.add_dezv(answear,player)
+        dezvoltari[player][answear]+=1
     elif(rq=="AIaction"):
         loop=asyncio.get_event_loop()
         answear=loop.run_until_complete(mc.best_move(game).name)
@@ -58,23 +59,21 @@ def resolve_get(rq,player):
             f.cost(game,[1,1,0,0,0],player)
         else:
             return []
-        answear=mc.place_piece(game,player)
-        for piece in answear:
-            if(piece.name!='drum'):
-                answear.remove(piece)
-        for i in range(len(answear)):
-            answear[i]=answear[i].tileinfo
+        answear=[]
+        pieces=f.place_piece(game,player)
+        for piece in pieces:
+            if(piece.tileinfo[1]%2==1):
+                answear.append(piece.tileinfo)
     elif(rq=='possibleAsezari'):
         if(f.can_buy(game,player,[1,1,1,1,0])):
             f.cost(game,[1,1,1,1,0],player)
         else:
             return []
-        answear=mc.place_piece(game,player)
-        for piece in answear:
-            if(piece.name!='asezare'):
-                answear.remove(piece)
-        for i in range(len(answear)):
-            answear[i]=answear[i].tileinfo
+        answear=[]
+        pieces=f.place_piece(game,player)
+        for piece in pieces:
+            if(piece.tileinfo[1]%2==0):
+                answear.append(piece.tileinfo)
     elif(rq=='possibleOrase'):
         if(f.can_buy(game,player,[0,0,2,0,3])):
             f.cost(game,[0,0,2,0,3],player)
@@ -101,6 +100,8 @@ def resolve_get(rq,player):
         for i in range(game.number_of_players):
             if(f.winned(game,player)):
                 answear=True
+    elif(rq=='discard'):
+        answear=round(sum(game.hand[player])/2)
     endState(game,dezvoltari)
     return answear
 
@@ -145,6 +146,8 @@ def resolve_put(rq,player,info):
             if(i!=player):
                 game.hand[player][res]+=game.hand[i][res]
                 game.hand[i][res]=0
+    elif(rq=="2drumuri"):
+        dezvoltari[player][3]-=1
     elif(rq=='steal'):
         player2=info[0]
         if(sum(game.hand[player2])>0):
@@ -152,6 +155,7 @@ def resolve_put(rq,player,info):
             while(game.hand[player2][card]==0):
                 card=random.randint(0,4)
             game.hand[player2][card]-=1
+            game.hand[player][card]+=1
     elif(rq=="discard"):
         resources=info[0]
         for i in range(len(resources)):
@@ -169,6 +173,7 @@ def resolve_getInfo(rq,player,info):
         for piece in game.tiles[tile].pieces:
             if(piece.name in ('asezare','oras') and player!=piece.player):
                 answear[piece.player]=1
+
 
     endState(game,dezvoltari)
     return answear

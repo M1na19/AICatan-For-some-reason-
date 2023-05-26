@@ -148,18 +148,29 @@ async function development(player)
         }
         case 2:
         {
+            lockMenu()
             await new Promise(async (resolve) => {
+                let drum1,drum2
                 await showAvialable(await get('possibleDrumuri',player),player,true)
                 if(chosedPosition==NaN)
                 {
                     resolve()
                 }
+                else
+                {
+                    await put('placePiece',player,['drum',chosedPosition[0],chosedPosition[1]])
+                }
                 await showAvialable(await get('possibleDrumuri',player),player,false)
+                await put('placePiece',player,['drum',chosedPosition[0],chosedPosition[1]])
+                await put('2drumuri',player,[])
                 resolve()
             })
+            unlockMenu
+            break;
         }
         case 3:
         {
+            lockMenu()
             await new Promise(async (resolve) => {
                 let tile=await moveThief(true);
                 if(tile>=0)
@@ -168,14 +179,18 @@ async function development(player)
                 }
                 resolve()
             })
+            unlockMenu()
             break;
+            
         }
         case 4:
         {
+            lockMenu()
             await new Promise(async (resolve) => {
                 await monopol(0)
                 resolve()
             })
+            unlockMenu()
         }
     }
     
@@ -219,7 +234,10 @@ async function moveThief(can_abandon)
       {
         buttons[i].addEventListener('click',async ()=>
         {
-            tileChosed=i;
+            if(i>=pozThief)
+                tileChosed=i+1;
+            else
+                tileChosed=i
             await put("moveThief",-1,[tileChosed])//doesnt matter player
             for(let i=0;i<18;i++)
             {
@@ -287,9 +305,9 @@ async function steal(tile,player)
     {
         for(let i=0;i<buttons.length;i++)
         {
-            let otherplayer=frecvToIter(optionPlayers)[i];
             buttons[i].addEventListener('click',async ()=>
             {
+                let otherplayer=frecvToIter(optionPlayers)[i];
                 await put("steal",player,[otherplayer])
                 stealPage.remove()
                 resolve()
@@ -320,7 +338,9 @@ async function discard(nrCards,player)
             }
             if(sum(resources)==nrCards)
             {
-                await put('discard',player,resources)
+                await put('discard',player,[resources])
+                data=await get('playerData',player)
+                showData(data[0],data[1])
                 notClicked=false;
                 resolve()
             }
@@ -507,7 +527,7 @@ async function playerPlaceDrum(player)
     lockMenu();
     await showAvialable(await get("possibleDrumuri",player),player,true);
     if(chosedPosition)
-        await put('placePiece',player,['drum',chosedPosition.tile,chosedPosition.piece]);
+        await put('placePiece',player,['drum',chosedPosition[0],chosedPosition[1]]);
     unlockMenu()
 }
 async function playerPlaceAsezare(player)
@@ -515,7 +535,7 @@ async function playerPlaceAsezare(player)
     lockMenu();
     await showAvialable(await get("possibleAsezari",player),player,true);
     if(chosedPosition)
-        await put('placePiece',player,['asezare',chosedPosition.tile,chosedPosition.piece]);
+        await put('placePiece',player,['asezare',chosedPosition[0],chosedPosition[1]]);
     unlockMenu()
 }
 async function playerPlaceOras(player)
@@ -523,13 +543,22 @@ async function playerPlaceOras(player)
     lockMenu();
     await showUpgradable(await get("possibleOrase",player));
     if(chosedPosition)
-        await put('placePiece',player,['oras',chosedPosition.tile,chosedPosition.piece]);
+        await put('placePiece',player,['oras',chosedPosition[0],chosedPosition[1]]);
     unlockMenu()
 }
 async function zar()
 {
     dice=await get('zar',0)
     showDice(dice[0],dice[1])//doesnt matter player
+    if(sum(dice)==7)
+    {
+        await steal(await moveThief(false),0)
+        discard(await get('discard',0),0)
+        for(let i=0;i<nrJucatori;i++)
+        {
+            //make AI discard
+        }
+    }
 }
 async function playerBuyDevelopment(player)
 {
@@ -566,8 +595,9 @@ async function playerGame(player)
         buttonBuildDrum()
         buttonBuildOras()
         buttonUseDevelop()
-        pass.addEventListener('click', () => {
-          resolve();
+        pass.addEventListener('click', async () => {
+            await get('pas',0)
+            resolve();
         });
       });
 }
