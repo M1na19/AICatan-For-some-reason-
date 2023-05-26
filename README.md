@@ -1,4 +1,7 @@
+https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
+DOCUMENTATION AND EXPLANATION
 
+# STEPS TO FOLLOW TO SETUP THE PROJECT
 Step 1: Install Flask
 Make sure you have Flask installed on your machine. You can use pip, the package installer for Python, to install Flask. Open a command prompt or terminal and run the following command:
 
