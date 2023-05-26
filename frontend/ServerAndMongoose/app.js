@@ -4,6 +4,9 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
+    lpath = require('path'),
+    proc = require('process'),
+    fork = require('child_process'),
     cookieParser = require("cookie-parser");
 const User = require("./model/User");
 var app = express();
@@ -25,7 +28,10 @@ app.use(cookieParser());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-  
+
+// hopefully server python
+//fork("python ../../backend/app.py", (in, out, err) => {})
+
 //=====================
 // ROUTES
 //=====================
@@ -47,9 +53,36 @@ app.get("/register", function (req, res) {
     res.render("register");
 });
 
+const mainfiles = [
+  'style.css',
+  // 'main.html',
+  'scripts/action.js',
+  'scripts/buttonsListeners.js',
+  'scripts/control.js',
+  'scripts/features.js',
+  'scripts/game.js',
+  'scripts/piece.js',
+  'scripts/UI.js',
+  'images/background.png',
+  'images/bricktile.png',
+  'images/desert.png',
+  'images/graintile.png',
+  'images/hexagon.png',
+  'images/oretile.png',
+  'images/player.png',
+  'images/rolling_dice.gif',
+  'images/spotlight.png',
+  'images/woodtile.png',
+  'images/wooltile.png',
+]
+
+for (let path of mainfiles)
+  app.get("/" + path, (_, res) => { res.sendFile(lpath.join(__dirname, '../' + path)); });
+
+
 app.get("/main", function (req, res) {
-  //COAIEE CEEEEEEEEEEEEEEEEEE
-  res.sendFile(path.join(frontend, '../../main.html'));
+  // RULEAZA PYTHON
+  res.sendFile(lpath.join(__dirname, '../main.html'));
 });
   
 // Handling user signup
@@ -79,10 +112,7 @@ app.post("/login", async function(req, res){
           //check if password matches
           const result = req.body.password === user.password;
           if (result) {
-            res.cookie("wins", req.body.wins, {sameSite: "none", secure: true});
-            res.cookie("user", req.body.username, {sameSite: "none", secure: true});
-            res.cookie("games", req.body.games, {sameSite: "none", secure: true});
-            res.cookie("vps", req.body.vps, {sameSite: "none", secure: true});
+            res.cookie("user", JSON.stringify(user), {sameSite: "none", secure: true});
             let lb_users = (await User.aggregate([{$sort: {wins: -1}}])).slice(0, 10).map((x) => {return {username: x.username, wins: x.wins}});
             res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
             res.render("secret");
@@ -101,9 +131,6 @@ app.post("/login", async function(req, res){
 app.get("/logout", function (req, res) {
     req.logout(function(err) {
         res.clearCookie("user");
-        res.clearCookie("wins");
-        res.clearCookie("games");
-        res.clearCookie("vps");
         if (err) { return next(err); }
         res.redirect('/');
       });
