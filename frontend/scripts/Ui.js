@@ -420,6 +420,23 @@ function closeNav() {
   }
 }
 
+function openNav1() {
+  if(menuIsLocked==false)
+  {
+    NewSpecialCards(specialcardvector);
+    NewCards(cardvector);
+    document.getElementById("myNav1").style.width = "100%";
+  }
+}
+
+function closeNav1() {
+  if(menuIsFrezzed==false)
+  {
+    document.getElementById("myNav1").style.width = "0%";
+  }
+}
+
+
 MakeMap([[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2]]);
 
 function updatenumbermat()
