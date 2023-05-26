@@ -1,6 +1,7 @@
 #SHORT EXPLANATION
 
-Informatii generale
+
+ Informatii generale
 
     Categorie: Web
     Judetul: București
@@ -43,7 +44,12 @@ Realizatori
 
     Boanta Mihai 
     Sirghe Matei
- 
+
+Impartirea Lucrului
+    
+    Matei Sirghe a lucrat la UI, Serverul node.js, database, evaluator si logica jocului
+    Mihai Boanta a lucrat la API, AI si logica jocului
+
 #DOCUMENTATION AND EXPLANATION
 
     https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
