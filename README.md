@@ -1,3 +1,45 @@
+#SHORT EXPLANATION
+
+Informatii generale
+
+    Categorie: Web
+    Judetul: București
+    Surse: GITHUB
+    Homepage: http://ramami.go.ro
+
+Descriere
+
+Play Catan Against Carlos este un joc distractiv si complex in care inteligenta umana este pusa cap la cap cu inteligenta artificiala.
+
+Tehnologii
+
+Frontend
+
+    Bootstrap si w3.css libraries
+    Axius is the API that is making the connection with the python server
+
+How it works?
+We have a node.js server with a mongoose database, a game that is connected with an api to the ai that is run on another python server, plus the algorithms that are used to train the ai.
+
+Backend
+
+    Ejs files and Js files
+    Node.js Express server 
+    Mongoose database
+    Flask for the Python Server
+    (full list of libraries in the documentation)
+
+Serverless
+
+    Node.js Server
+    Flask Server
+
+Cerinte sistem
+
+Internet, browser modern
+Realizatori
+    Boanta MIhai 
+    Sirghe Matei
 #DOCUMENTATION AND EXPLANATION
 https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
 
