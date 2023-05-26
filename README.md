@@ -2,6 +2,7 @@
 https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
 
 #MATERIALE CU DREPTURI DE AUTOR CARE NU NE APARTIN
+
 IMAGINI{'images/background.png',
   'images/bricktile.png',
   'images/desert.png',
@@ -13,6 +14,9 @@ IMAGINI{'images/background.png',
   'images/spotlight.png',
   'images/woodtile.png',
   'images/wooltile.png',}
+  
+LINKURI{https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js,https://i.imgur.com/Ry82F9J.png,https://i.imgur.com/DhyH1Xt.png,https://i.imgur.com/KaIgpCc.png,
+https://i.imgur.com/cIVhMQv.png,https://i.imgur.com/ikUPxHo.png,https://i.imgur.com/O23yKZR.png,https://i.imgur.com/mbxoOLf.png,https://i.imgur.com/H9KBWNy.png,https://i.imgur.com/amAWx6q.png,https://i.imgur.com/jldnqDd.png,https://i.imgur.com/l9yIY2E.png,https://i.imgur.com/KILdl8B.png,https://i.imgur.com/CEl8Sij.png,https://i.imgur.com/amAWx6q.png,https://i.imgur.com/jldnqDd.png,https://i.imgur.com/l9yIY2E.png,https://i.imgur.com/KILdl8B.png,https://i.imgur.com/CEl8Sij.png}
 
 # STEPS TO FOLLOW TO SETUP THE PROJECT
 # HOW TO RUN THE PYTHON SERVER
