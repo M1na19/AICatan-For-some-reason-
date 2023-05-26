@@ -1,6 +1,18 @@
+#DOCUMENTATION AND EXPLANATION
 https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
 
-DOCUMENTATION AND EXPLANATION
+#MATERIALE CU DREPTURI DE AUTOR CARE NU NE APARTIN
+IMAGINI{'images/background.png',
+  'images/bricktile.png',
+  'images/desert.png',
+  'images/graintile.png',
+  'images/hexagon.png',
+  'images/oretile.png',
+  'images/player.png',
+  'images/rolling_dice.gif',
+  'images/spotlight.png',
+  'images/woodtile.png',
+  'images/wooltile.png',}
 
 # STEPS TO FOLLOW TO SETUP THE PROJECT
 # HOW TO RUN THE PYTHON SERVER
@@ -61,6 +73,3 @@ node app.js
 Step 3: Open your web browser and type the following address in the URL bar
 
 http://localhost:3000/
-
-https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_social&stacked=h STEAL
-
