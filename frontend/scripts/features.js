@@ -173,7 +173,8 @@ async function development(player)
         case 4:
         {
             await new Promise(async (resolve) => {
-                await monopol()
+                await monopol(0)
+                resolve()
             })
         }
     }
@@ -235,10 +236,10 @@ async function moveThief(can_abandon)
 async function steal(tile,player)
 {
     optionPlayers=await get("playerInTile",player,[tile])
-    if(optionPlayers.length==0)
+    console.log(optionPlayers)
+    if(sum(optionPlayers)==0)
         return
     let buttons=[]
-    showDice(4,5)
     lockMenu()
     const stealPage=document.createElement('div');stealPage.style.zIndex="10001"
     document.body.appendChild(stealPage);
@@ -249,7 +250,7 @@ async function steal(tile,player)
     background.src="https://i.imgur.com/PXGHWnl.png"
     stealPage.appendChild(background);
 
-    const distanceBetweenPlayers=window.screen.width/(sum(optionPlayers)+1)+300;
+    const distanceBetweenPlayers=window.screen.width/(sum(optionPlayers)+1)+100;
     var lastPlaced=-500
 
     for (let i=0;i<sum(optionPlayers);i++)

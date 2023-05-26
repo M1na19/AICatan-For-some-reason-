@@ -226,7 +226,7 @@ function updateSettlement(pozx,pozy)
   }
 
 }
-function MakeAndMoveThief(pozx,pozy)
+function MakeAndMoveThief(tile)
 {
     if(document.getElementById("theif")!=null)
       document.getElementById("theif").remove();
@@ -235,26 +235,14 @@ function MakeAndMoveThief(pozx,pozy)
     newthief.html.src="https://i.imgur.com/x0MnP5O.png";
     newthief.html.classList.add("thief");
     newthief.id="thief";
-    pozx += Math.abs(3 - pozy) * 0.5;
-    newthief.html.style.left = pozx*204-10+"px";
-    newthief.html.style.top = pozy*179-40 + "px";
+    newthief.html.style.left =(tile_poz[tile].x-80)+"px";
+    newthief.html.style.top = (tile_poz[tile].y-40)+"px";
 
     document.body.appendChild(newthief.html);
 }
 
-function MakeMap(x)
+async function MakeMap(x)
 {
-  //for (let j = 0; j < 19; j++)
-  //  for (let i = 1; i <= 11; i+=2)
-  //    MakeSettlement(j,i, "road", Math.floor(1 + Math.random() * 4))
-  MakeSettlement(0,0,"town",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(1,0,"town",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(5,0,"city",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(16,4,"city",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(11,0,"town",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(14,2,"town",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(1,4,"city",Math.floor(1 + Math.random() * 4));
-  MakeSettlement(18,4,"city",Math.floor(1 + Math.random() * 4));
     for(var i=1;i<=9;i++)
     {
         if(i%2==0)MakeHarbour(i,"all");
@@ -293,6 +281,7 @@ function MakeMap(x)
         a=5;
         b=i-15;
       }
+      if(x[i][1]==-1)MakeNewTile(a,b,x[i][0],"dessert")
       if(x[i][1]==0)MakeNewTile(a,b,x[i][0],"wood");
       if(x[i][1]==1)MakeNewTile(a,b,x[i][0],"brick");
       if(x[i][1]==2)MakeNewTile(a,b,x[i][0],"grain");
@@ -320,7 +309,7 @@ function MakeMap(x)
     // MakeNewTile(5,2,9,"grain");
     // MakeNewTile(5,3,12,"wood");
 
-    MakeAndMoveThief(3,3);
+    MakeAndMoveThief(await get('pozThief',0));
 }
 
 function stringtoint(x)
@@ -420,7 +409,7 @@ function closeNav() {
   }
 }
 
-MakeMap([[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2],[2,2]]);
+
 
 function updatenumbermat()
 {
@@ -542,6 +531,8 @@ function showData(x,y)
         document.getElementById("card"+i).remove()
       }
   }
+  cardloc.splice(0)
+  scardloc.splice(0)
   for(var i=1;i<=specialcardvector.length;i++)
   {
       if(document.getElementById("scard"+i)!=null)
@@ -579,7 +570,6 @@ function showData(x,y)
       }
     }
     specialcardvector.splice(j)
-    console.log(cardvector,specialcardvector)
     NewCards(cardvector)
     NewSpecialCards(specialcardvector)
 }

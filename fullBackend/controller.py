@@ -27,13 +27,13 @@ def put():
 def get():
     act=flask.request.args.get('action')
     player=flask.request.args.get('player')
-    info=flask.request.args.get('info')
+    info=flask.request.args.getlist('info[]')
     player=int(player)
-    if(act!=None and player!=None and info==None):
+    if(act!=None and player!=None and info==[]):
         response=gp.resolve_get(act,player)
         response=flask.jsonify(response)
         return response
-    elif(info!=None):
+    elif(info!=[]):
         response=gp.resolve_getInfo(act,player,info)
         response=flask.jsonify(response)
         return response

@@ -36,6 +36,7 @@ def resolve_get(rq,player):
     answear=''
     if(rq=='zar'):
         answear=f.dice()
+        game.zar(sum(answear))
     elif(rq=='playerData'):
         answear=(game.hand[player],dezvoltari[player])
     elif(rq=='getDevCard'):
@@ -138,7 +139,7 @@ def resolve_put(rq,player,info):
         for i in range(5):
             game.hand[player][i]+=resources[i]
     elif(rq=="monopol"):
-        dezvoltari[4]-=1
+        dezvoltari[player][4]-=1
         res=info[0]
         for i in range(game.number_of_players):
             if(i!=player):
@@ -163,10 +164,10 @@ def resolve_getInfo(rq,player,info):
     dezvoltari=state[1]
     answear=[]
     if(rq=='playerInTile'):
-        tile=info[0]
+        tile=int(info[0])
         answear=[0 for i in range(game.number_of_players)]
-        for piece in game.tiles[tile]:
-            if(piece.player>=0 and player!=piece.player):
+        for piece in game.tiles[tile].pieces:
+            if(piece.name in ('asezare','oras') and player!=piece.player):
                 answear[piece.player]=1
 
     endState(game,dezvoltari)
