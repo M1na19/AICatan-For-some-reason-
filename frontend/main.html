@@ -104,7 +104,19 @@
         </div>
         <button id="diceButton" style="position: absolute; top: 950px;left:80px; height:50px;width: 200px;z-index: 10;" id="diceButton">Roll Dice</button>
     </div>
-    <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0;color: bisque;" onclick="openNav()">OPEN &#9776;</span>
+    <div id="myNav1" class="overlay1">
+        <a href="javascript:void(0)" class="closebtn1" onclick="closeNav1()">&times;</a>
+        <div style="position: relative;">
+            <form action="/endgame" method="POST">
+                <button style="position: absolute;transform: translate(100%,100%);width: 30%;height: 10%px;position: absolute;color: black;" class="button" id="ExitButton">EXIT</button>
+                <input type="number" style="width:0%; height: 0%;" id="vp-dest" name="vps" value="1"></input>
+                <input type="number" style="width:0%; height: 0%;" id="wins-dest" name="wins" value="1"></input>
+                <input type="number" style="width:0%; height: 0%;" id="games-dest" name="games" value="1"></input>
+            </form>
+        </div>
+    </div>
+    <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0;color: bisque;" onclick="openNav()">ACTION &#9776;</span>
+    <span  style="position:absolute;font-size:30px;cursor:pointer;left:0;top:0;color: bisque;" onclick="openNav1()">MENU &#9776;</span>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script src="scripts/buttonsListeners.js"></script>
     <script src="scripts/piece.js"></script>

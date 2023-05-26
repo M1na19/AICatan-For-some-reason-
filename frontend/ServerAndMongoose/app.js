@@ -42,6 +42,15 @@ app.get("/",async function (req, res) {
     res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
     res.render("home");
 });
+
+app.post("/endgame",async function (req, res) {
+  console.log(req.body);
+  User.findOneAndUpdate({user: req.cookies.user.username},
+      {$inc: {wins: req.body.wins, games: req.body.games, vps: req.body.vps}});
+  let lb_users = (await User.aggregate([{$sort: {wins: -1}}])).slice(0, 10).map((x) => {return {username: x.username, wins: x.wins}});
+  res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
+  res.render("home");
+});
   
 // Showing secret page
 app.get("/secret", isLoggedIn, function (req, res) {
@@ -54,6 +63,7 @@ app.get("/register", function (req, res) {
 });
 
 const mainfiles = [
+  'styles/popup.css',
   'style.css',
   // 'main.html',
   'scripts/action.js',
