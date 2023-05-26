@@ -228,13 +228,13 @@ function updateSettlement(pozx,pozy)
 }
 function MakeAndMoveThief(tile)
 {
-    if(document.getElementById("theif")!=null)
-      document.getElementById("theif").remove();
+    if(document.getElementById("thief")!=null)
+      document.getElementById("thief").remove();
     let newthief = {};
     newthief.html= document.createElement("img");
     newthief.html.src="https://i.imgur.com/x0MnP5O.png";
     newthief.html.classList.add("thief");
-    newthief.id="thief";
+    newthief.html.id="thief";
     newthief.html.style.left =(tile_poz[tile].x-80)+"px";
     newthief.html.style.top = (tile_poz[tile].y-40)+"px";
 

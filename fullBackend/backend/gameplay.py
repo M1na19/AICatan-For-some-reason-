@@ -5,6 +5,7 @@ import backend.features as f
 import os
 import asyncio
 import random
+import evaluatoare.TradeValue as tv
 pickleLocation=os.path.abspath(".")+"/fullBackend/storage/state.pickle"
 
 def getState():
@@ -51,8 +52,6 @@ def resolve_get(rq,player):
         loop=asyncio.get_event_loop()
         answear=loop.run_until_complete(mc.best_move(game).name)
     elif(rq=="AIstart"):
-        pass
-    elif(rq=="tradeProposal"):
         pass
     elif(rq=='possibleDrumuri'):
         if(f.can_buy(game,player,[1,1,0,0,0])):
@@ -148,6 +147,8 @@ def resolve_put(rq,player,info):
                 game.hand[i][res]=0
     elif(rq=="2drumuri"):
         dezvoltari[player][3]-=1
+    elif(rq=="soldat"):
+        dezvoltari[player][1]-=1
     elif(rq=='steal'):
         player2=info[0]
         if(sum(game.hand[player2])>0):
@@ -173,6 +174,21 @@ def resolve_getInfo(rq,player,info):
         for piece in game.tiles[tile].pieces:
             if(piece.name in ('asezare','oras') and player!=piece.player):
                 answear[piece.player]=1
+    
+    elif(rq=="tradeProposal"):
+        playerProposing=info[0]
+        trade0=info[1]
+        trade1=info[2]
+        answear=False
+        if(tv.checkTradeProposal(game,trade0,trade1,player,playerProposing)):
+            answear=True
+            for res in range(len(trade0)):
+                game.hand[player][res]-=trade0[res]
+                game.hand[playerProposing][res]+=trade0[res]
+            for res in range(len(trade1)):
+                game.hand[player][res]+=trade1[res]
+                game.hand[playerProposing][res]-=trade1[res]
+        
 
 
     endState(game,dezvoltari)

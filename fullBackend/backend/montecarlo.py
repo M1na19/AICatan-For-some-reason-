@@ -18,9 +18,10 @@ discountFactor=0.8
 
 
 class node:
-    def __init__(self,name,state,parent):
+    def __init__(self,name,state,parent,info):
         self.name=name
         self.value=0
+        self.info=info
         if(parent!=None):
             self.depth=parent.depth+1
         else:self.depth=0
@@ -57,7 +58,7 @@ class node:
 
 class MonteCarlo_tree:
     def __init__(self,startstate,AIplayer):
-        self.start=node("default",startstate,None)
+        self.start=node("default",startstate,None,None)
         self.AIplayer=AIplayer
         self.nextMoves:list[node]=treeFunctions.default(self.start,self.AIplayer)
     async def makeBranch(self):
@@ -85,8 +86,7 @@ async def best_move(gamestate,AIplayer):
     for action in k.children:
         if(bestAction.value<action.value):
             bestAction=action
-    print(bestAction.name)
-    return bestAction
+    return [bestAction.name,bestAction.info]
 
 class treeFunctions:
     def default(nod:node,AIplayer):
@@ -118,7 +118,7 @@ class treeFunctions:
     def pas(nod):
         moves:list[node]=list()
         state:gs.game_state=deepcopy(nod.state)
-        moves.append(node('pass',state,nod))
+        moves.append(node('pass',state,nod,None))
         return moves
     
     def moveThief(nod):
@@ -142,7 +142,7 @@ class treeFunctions:
                         state:gs.game_state=deepcopy(nod.state)
                         state.hand[pieces.player][res]-=1
                         state.hand[state.player_turn][res]+=1
-                        newNode=node("steal",state,nod)
+                        newNode=node("steal",state,nod,[state.hottile,pieces.player])
                         newNode.usedDezv=True
                         moves.append(newNode)
         return moves
@@ -192,7 +192,7 @@ class treeFunctions:
                 if player!=state.player_turn:
                     state.hand[state.player_turn][i]+=state.hand[player][i]
                     state.hand[player][i]=0
-            newNode=node("monopol",state,nod)
+            newNode=node("monopol",state,nod,[i])
             newNode.usedDezv=True
             moves.append(newNode)
         return moves
@@ -209,7 +209,7 @@ class treeFunctions:
                 for piece2 in pieces2:
                     if(piece2.tileinfo[1]%2==1):
                         state.add_piece("drum",state.player_turn,piece2.tileinfo)
-                        newNode=node("2drum",state,nod)
+                        newNode=node("2drum",state,nod,[piece.tileinfo,piece2.tileinfo])
                         newNode.usedDezv=True
                         moves.append(newNode)
         return moves
@@ -221,7 +221,7 @@ class treeFunctions:
                 state:gs.game_state=deepcopy(nod.state)
                 state.hand[state.player_turn][res1]+=1
                 state.hand[state.player_turn][res2]+=1
-                newNode=node("2resurse",state,nod)
+                newNode=node("2resurse",state,nod,[res1,res2])
                 newNode.usedDezv=True
                 moves.append(newNode)
         return moves
@@ -253,7 +253,7 @@ class treeFunctions:
             if(piece.tileinfo[1]%2==0 and check_avail(piece,2)):
                 state:gs.game_state=deepcopy(nod.state)
                 state.add_piece("asezare",state.player_turn,piece.tileinfo)
-                moves.append(node("asezare",state,nod))
+                moves.append(node("asezare",state,nod,[piece.tileinfo]))
         return moves
 
     def buildOras(nod):
@@ -263,7 +263,7 @@ class treeFunctions:
         for oras in upgrades:
             state:gs.game_state=deepcopy(nod.state)
             state.add_piece("oras",state.player_turn,oras.tileinfo)
-            moves.append(node("oras",state,nod))
+            moves.append(node("oras",state,nod,[oras.player]))
         return moves
     
     def buildDrum(nod):
@@ -274,7 +274,7 @@ class treeFunctions:
             if(piece.tileinfo[1]%2==1):
                 state:gs.game_state=deepcopy(nod.state)
                 state.add_piece("drum",state.player_turn,piece.tileinfo)
-                moves.append(node("drum",state,nod))
+                moves.append(node("drum",state,nod,piece.tileinfo))
         return moves
     
     def buildDezv(nod):
@@ -283,7 +283,7 @@ class treeFunctions:
         for i in range(5):
             state:gs.game_state=deepcopy(nod.state)
             state.add_dezv(i,state.player_turn)
-            moves.append(node("dezvoltare",state,nod))
+            moves.append(node("dezvoltare",state,nod,None))
         return moves
 
 
@@ -306,7 +306,7 @@ class treeFunctions:
                             state.hand[state.player_turn][i]-=1
                             state.hand[player][i]+=1
                             state.hand[state.player_turn][bestCard]+=1
-                            moves.append(node("Trade",state,nod))
+                            moves.append(node("Trade",state,nod,[player,bestCard,i]))
         return moves
         
 

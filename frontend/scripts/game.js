@@ -47,10 +47,10 @@ async function TheGame()
             }
             else
             {
-                let action=""
-                while(action!="pas")
+                let action=["",""]
+                while(action[0]!="pas")
                 {
-                    action=await get("AIaction")
+                    action=await get("AIaction",i)
                     manageAction(action)
                 }
             }

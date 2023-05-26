@@ -175,6 +175,7 @@ async function development(player)
                 let tile=await moveThief(true);
                 if(tile>=0)
                 {
+                    await put('soldat',0)
                     await steal(tile,player);
                 }
                 resolve()
@@ -238,6 +239,7 @@ async function moveThief(can_abandon)
                 tileChosed=i+1;
             else
                 tileChosed=i
+            MakeAndMoveThief(tileChosed)
             await put("moveThief",-1,[tileChosed])//doesnt matter player
             for(let i=0;i<18;i++)
             {
