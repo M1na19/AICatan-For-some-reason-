@@ -102,17 +102,20 @@
             <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:-100px; height:300px;width: auto;z-index: 10;">
             <img src="images/rolling_dice.gif" style="position: absolute; top: 700px;left:50px; height:300px;width: auto;z-index: 10;">
         </div>
-        <button id="diceButton" style="position: absolute; top: 950px;left:80px; height:50px;width: 200px;z-index: 10;" id="diceButton">Roll Dice</button>
+        <button class="button" style="position: absolute; top: 950px;left:80px; height:70px;width: 200px;z-index: 10;position: absolute;color: black;" id="diceButton">Roll Dice</button>
     </div>
     <div id="myNav1" class="overlay1">
         <a href="javascript:void(0)" class="closebtn1" onclick="closeNav1()">&times;</a>
         <div style="position: relative;">
             <form action="/endgame" method="POST">
                 <button style="position: absolute;transform: translate(100%,100%);width: 30%;height: 10%px;position: absolute;color: black;" class="button" id="ExitButton">EXIT</button>
-                <input type="number" style="width:0%; height: 0%;" id="vp-dest" name="vps" value="1"></input>
-                <input type="number" style="width:0%; height: 0%;" id="wins-dest" name="wins" value="1"></input>
-                <input type="number" style="width:0%; height: 0%;" id="games-dest" name="games" value="1"></input>
+                <input type="number" style="width:0%; height: 0%;display: none" id="vp-dest" name="vps" value="1"></input>
+                <input type="number" style="width:0%; height: 0%;display: none" id="wins-dest" name="wins" value="1"></input>
+                <input type="number" style="width:0%; height: 0%;display: none" id="games-dest" name="games" value="1"></input>
             </form>
+            <button style="position: absolute;transform: translate(100%,400%);width: 30%;height: 10%px;position: absolute;color: black;" class="button">SETTINGS</button>
+            <button style="position: absolute;transform: translate(100%,800%);width: 30%;height: 10%px;position: absolute;color: black;" class="button">CLAIM VICTORY</button>
+            <button style="position: absolute;transform: translate(100%,1200%);width: 30%;height: 10%px;position: absolute;color: black;" class="button">ADMIT DEFEAT</button>
         </div>
     </div>
     <span  style="position:absolute;font-size:30px;cursor:pointer;right:0;top:0;color: bisque;" onclick="openNav()">ACTION &#9776;</span>

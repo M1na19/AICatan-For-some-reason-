@@ -44,10 +44,11 @@ app.get("/",async function (req, res) {
 });
 
 app.post("/endgame",async function (req, res) {
-  console.log(req.body);
-  User.findOneAndUpdate({user: req.cookies.user.username},
-      {$inc: {wins: req.body.wins, games: req.body.games, vps: req.body.vps}});
+  await User.findOne({username: JSON.parse(req.cookies.user).username}).updateOne({},
+      {$inc: {wins: req.body.wins, games: req.body.games, vps: req.body.vps}}).exec();
+  console.log((await User.findOne({username: JSON.parse(req.cookies.user).username})).toJSON());
   let lb_users = (await User.aggregate([{$sort: {wins: -1}}])).slice(0, 10).map((x) => {return {username: x.username, wins: x.wins}});
+  res.cookie("user", JSON.stringify((await User.findOne({username: JSON.parse(req.cookies.user).username})).toJSON()), {sameSite: "none", secure: true});
   res.cookie("toppers", JSON.stringify(lb_users), {sameSite: "none", secure: true});
   res.render("home");
 });
