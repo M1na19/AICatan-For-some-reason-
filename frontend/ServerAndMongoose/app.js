@@ -87,8 +87,14 @@ const mainfiles = [
   'images/wooltile.png',
 ]
 
-for (let path of mainfiles)
-  app.get("/" + path, (_, res) => { res.sendFile(lpath.join(__dirname, '../' + path)); });
+for (let path of mainfiles) {
+  let type = path.match(/\.(.*)/)[1];
+  type = type == 'css' ? 'text/css' :
+          type == 'js' ? 'text/javascript' :
+          type == 'gif' ? 'image/gif' :
+          'image/png';
+  app.get("/" + path, (_, res) => { res.setHeader('Content-Type', type); res.sendFile(lpath.join(__dirname, '../' + path)); });
+}
 
 
 app.get("/main", function (req, res) {
