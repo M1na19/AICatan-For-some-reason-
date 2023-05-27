@@ -69,6 +69,16 @@ Make sure you have Flask installed on your machine. You can use pip, the package
     pip install flask_cors
     pip install numpy
 
+Step 2: Setup Flask
+ 
+ FOR WINDOWS:
+    
+    set FLASK_APP=controller.py
+    
+FOR LINUX:
+
+    export FLASK_APP=controller.py
+    
 #WARNING
 
 FOR WINDOWS:
