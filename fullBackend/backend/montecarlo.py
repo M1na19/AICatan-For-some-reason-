@@ -35,7 +35,6 @@ class node:
             self.usedDezv=False
     
     async def branch(self,AIplayer,threads:int,deadline):
-        print(self.state.player_turn,self.name,self.depth)
         if(winned(self.state,self.state.player_turn)==True ):
             self.value=10
         elif(time.time()>deadline):
@@ -64,7 +63,7 @@ class MonteCarlo_tree:
     async def makeBranch(self):
         tasks=[]
         for possibility in self.nextMoves:
-            task=asyncio.create_task(possibility.branch(self.AIplayer,threadNr/len(self.nextMoves),time.time()+10))
+            task=asyncio.create_task(possibility.branch(self.AIplayer,threadNr/len(self.nextMoves),time.time()+5))
             tasks.append(task)
         await asyncio.gather(*tasks)
 
@@ -81,11 +80,13 @@ class MonteCarlo_tree:
 async def best_move(gamestate,AIplayer):
     mc=MonteCarlo_tree(gamestate,AIplayer)
     await mc.makeBranch()
+
     k=mc.start
     bestAction=k.children[0]
     for action in k.children:
         if(bestAction.value<action.value):
             bestAction=action
+    print(bestAction.name)
     return [bestAction.name,bestAction.info]
 
 class treeFunctions:
@@ -118,6 +119,8 @@ class treeFunctions:
     def pas(nod):
         moves:list[node]=list()
         state:gs.game_state=deepcopy(nod.state)
+        state.player_turn+=1
+        state.player_turn%=state.number_of_players
         moves.append(node('pass',state,nod,None))
         return moves
     
@@ -263,7 +266,7 @@ class treeFunctions:
         for oras in upgrades:
             state:gs.game_state=deepcopy(nod.state)
             state.add_piece("oras",state.player_turn,oras.tileinfo)
-            moves.append(node("oras",state,nod,[oras.player]))
+            moves.append(node("oras",state,nod,[oras.tileinfo[0],oras.tileinfo[1]]))
         return moves
     
     def buildDrum(nod):

@@ -2,7 +2,7 @@ async function buttonSendTrade()
 {
     sendTrade.addEventListener('click',async ()=>
     {
-        await Trade()
+        await Trade(0)
         data=await get('playerData',0)
         showData(data[0],data[1])
 

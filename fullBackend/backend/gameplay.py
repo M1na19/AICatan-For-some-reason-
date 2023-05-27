@@ -3,28 +3,32 @@ import backend.game_state as gs
 import backend.montecarlo as mc
 import backend.features as f
 import os
+import ast
 import asyncio
 import random
+import threading
 import evaluatoare.TradeValue as tv
 pickleLocation=os.path.abspath(".")+"/fullBackend/storage/state.pickle"
-
+lock=threading.Lock()
 def getState():
+    lock.acquire()
     with open(pickleLocation,"rb") as read_state:
         game=pickle.load(read_state)
         dezvoltari=pickle.load(read_state)
-        f.dezvoltari=dezvoltari
         read_state.close()
     f.dezvoltari=dezvoltari
     return (game,dezvoltari)
 def endState(game,dezvoltari):
-     
      with open(pickleLocation,"wb") as state:
             pickle.dump(game,state)
             pickle.dump(dezvoltari,state)
             state.close()
+     lock.release()
+     
 
 
 def start(sp,nr_p):
+    lock.acquire()
     config=f.random_config()
     game=gs.game_state(config,sp,nr_p)
     dezvoltari=[[0,0,0,0,0] for i in range(nr_p)]
@@ -39,46 +43,41 @@ def resolve_get(rq,player):
         answear=f.dice()
         game.zar(sum(answear))
     elif(rq=='playerData'):
+        game.dezvoltari=dezvoltari[player]
         answear=(game.hand[player],dezvoltari[player])
     elif(rq=='getDezv'):
+        answear=[]
         if(f.can_buy(game,player,[0,0,1,1,1])):
             f.cost(game,[0,0,1,1,1],player)
-        else:
-            return []
-        answear=f.dezvoltare()
-        game.add_dezv(answear,player)
-        dezvoltari[player][answear]+=1
+            answear=f.dezvoltare()
+            game.add_dezv(answear,player)
+            dezvoltari[player][answear]+=1
     elif(rq=="AIaction"):
-        loop=asyncio.get_event_loop()
-        answear=loop.run_until_complete(mc.best_move(game).name)
+        game.dezvoltari=dezvoltari[player]
+        answear=asyncio.run(mc.best_move(game,player))
     elif(rq=="AIstart"):
         pass
     elif(rq=='possibleDrumuri'):
+        answear=[]
         if(f.can_buy(game,player,[1,1,0,0,0])):
             f.cost(game,[1,1,0,0,0],player)
-        else:
-            return []
-        answear=[]
-        pieces=f.place_piece(game,player)
-        for piece in pieces:
-            if(piece.tileinfo[1]%2==1):
-                answear.append(piece.tileinfo)
+            pieces=f.place_piece(game,player)
+            for piece in pieces:
+                if(piece.tileinfo[1]%2==1):
+                    answear.append(piece.tileinfo)
     elif(rq=='possibleAsezari'):
+        answear=[]
         if(f.can_buy(game,player,[1,1,1,1,0])):
             f.cost(game,[1,1,1,1,0],player)
-        else:
-            return []
-        answear=[]
-        pieces=f.place_piece(game,player)
-        for piece in pieces:
-            if(piece.tileinfo[1]%2==0):
-                answear.append(piece.tileinfo)
+            pieces=f.place_piece(game,player)
+            for piece in pieces:
+                if(piece.tileinfo[1]%2==0):
+                    answear.append(piece.tileinfo)
     elif(rq=='possibleOrase'):
+        answear=[]
         if(f.can_buy(game,player,[0,0,2,0,3])):
             f.cost(game,[0,0,2,0,3],player)
-        else:
-            return []
-        answear=f.upgradeable(game,player)
+            answear=f.upgradeable(game,player)
         for i in range(len(answear)):
             answear[i]=answear[i].tileinfo
     elif(rq=='longestRoad'):
@@ -100,7 +99,9 @@ def resolve_get(rq,player):
             if(f.winned(game,player)):
                 answear=True
     elif(rq=='discard'):
-        answear=round(sum(game.hand[player])/2)
+        if(sum(game.hand[player])>7):
+            answear=round(sum(game.hand[player])/2)
+        else:answear=0
     endState(game,dezvoltari)
     return answear
 
@@ -110,23 +111,36 @@ def resolve_put(rq,player,info):
     dezvoltari=state[1]
     if(rq=="placePiece"):
         name=info[0]
-        tile=info[1]
-        poz=info[2]
-        game.add_piece(name,player,(tile,poz))
+        if(name=='oras' and f.can_buy(game,player,[0,0,2,0,3])):
+            f.cost(game,[0,0,2,0,3],player)
+            tile=info[1]
+            poz=info[2]
+            game.add_piece(name,player,(tile,poz))
+        elif(name=='drum' and f.can_buy(game,player,[1,1,0,0,0])):
+            f.cost(game,[1,1,0,0,0],player)
+            tile=info[1]
+            poz=info[2]
+            game.add_piece(name,player,(tile,poz))
+        elif(name=='asezare' and f.can_buy(game,player,[1,1,1,1,0])):
+            f.cost(game,[1,1,1,1,0],player)
+            tile=info[1]
+            poz=info[2]
+            game.add_piece(name,player,(tile,poz))
     elif(rq=="putData"):
         carti=info[0]
         dezv=info[1]
         game.hand[player]=carti
         dezvoltari[player]=dezv
     elif(rq=="pas"):
-          game.playerturn+=1
-          game.playerturn%=(game.number_of_players)
+          game.player_turn+=1
+          game.player_turn%=(game.number_of_players)
+          game.dezvoltari=dezvoltari[game.player_turn]
     elif(rq=="playersTrade"):
           player2=info[0]
           resources1=info[1]# info as 0,0,0,0,1 with 1,0,0,0,0 asta inseamna un lemn pe o piatra
           resources2=info[2]
           for i in range(5):
-            game.hand[player][i]-=resources1[i]
+            game.hand[player][i]-=int(resources1[i])
             game.hand[player][i]+=resources2[i]
             game.hand[player2][i]-=resources2[i]
             game.hand[player2][i]+=resources1[i]
@@ -134,21 +148,25 @@ def resolve_put(rq,player,info):
         newtile=info[0]
         game.hotile=newtile
     elif(rq=="gain2Resources"):
-        dezvoltari[player][2]-=1
-        resources=info[0]
-        for i in range(5):
-            game.hand[player][i]+=resources[i]
+        if(dezvoltari[player][2]>0):
+            dezvoltari[player][2]-=1
+            resources=info
+            for i in range(5):
+                game.hand[player][i]+=resources[i]
     elif(rq=="monopol"):
-        dezvoltari[player][4]-=1
-        res=info[0]
-        for i in range(game.number_of_players):
-            if(i!=player):
-                game.hand[player][res]+=game.hand[i][res]
-                game.hand[i][res]=0
+        if(dezvoltari[player][4]>0):
+            dezvoltari[player][4]-=1
+            res=info[0]
+            for i in range(game.number_of_players):
+                if(i!=player):
+                    game.hand[player][res]+=game.hand[i][res]
+                    game.hand[i][res]=0
     elif(rq=="2drumuri"):
-        dezvoltari[player][3]-=1
+        if(dezvoltari[player][3]>0):
+            dezvoltari[player][3]-=1
     elif(rq=="soldat"):
-        dezvoltari[player][1]-=1
+        if(dezvoltari[player][1]>0):
+            dezvoltari[player][1]-=1
     elif(rq=='steal'):
         player2=info[0]
         if(sum(game.hand[player2])>0):
@@ -176,18 +194,18 @@ def resolve_getInfo(rq,player,info):
                 answear[piece.player]=1
     
     elif(rq=="tradeProposal"):
-        playerProposing=info[0]
-        trade0=info[1]
-        trade1=info[2]
+        playerResponding=int(info[0])
+        trade0=ast.literal_eval(info[1])
+        trade1=ast.literal_eval(info[2])
         answear=False
-        if(tv.checkTradeProposal(game,trade0,trade1,player,playerProposing)):
+        if(f.can_buy(game,playerResponding,trade1) and tv.checkTradeProposal(game,trade0,trade1,player,playerResponding)):
             answear=True
             for res in range(len(trade0)):
                 game.hand[player][res]-=trade0[res]
-                game.hand[playerProposing][res]+=trade0[res]
+                game.hand[playerResponding][res]+=trade0[res]
             for res in range(len(trade1)):
                 game.hand[player][res]+=trade1[res]
-                game.hand[playerProposing][res]-=trade1[res]
+                game.hand[playerResponding][res]-=trade1[res]
         
 
 

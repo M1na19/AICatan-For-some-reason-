@@ -81,7 +81,7 @@ async function flashHexagon(hex)
 async function Trade(player)
 {
     getTradecardsYouwant()
-    const player2=NaN;
+    const player2=parseInt(document.getElementById("ChoosePlayer").textContent)-1;
     await new Promise(async (resolve) => {
         let resources=[0,0,0,0,0];
         for(let i=0;i<cardloc.length;i++)
@@ -95,7 +95,8 @@ async function Trade(player)
                 if(cardloc[i].mat=="grain")resources[2]++;
             }
         }
-        await put("proposalTrade",player,[player2,resources,tradecards]);
+        await get("tradeProposal",player,[player2,resources,tradecards]);
+        resolve()
     })
 }
 async function development(player)
@@ -320,6 +321,8 @@ async function steal(tile,player)
 }
 async function discard(nrCards,player)
 {
+    if(nrCards==0)
+        return
     freezeMenu()
     //warn discard
     await new Promise(async (resolve) => {
@@ -548,14 +551,21 @@ async function playerPlaceOras(player)
         await put('placePiece',player,['oras',chosedPosition[0],chosedPosition[1]]);
     unlockMenu()
 }
-async function zar()
+async function zar(player)
 {
-    dice=await get('zar',0)
+    dice=await get('zar',player)
     showDice(dice[0],dice[1])//doesnt matter player
     if(sum(dice)==7)
     {
-        await steal(await moveThief(false),0)
-        discard(await get('discard',0),0)
+        if(player==0)
+            {
+                await steal(await moveThief(false),0)
+                discard(await get('discard',0),0)
+            }
+        else
+        {
+
+        }
         for(let i=0;i<nrJucatori;i++)
         {
             //make AI discard
@@ -579,7 +589,7 @@ async function playerGame(player)
     await new Promise((resolve)=>{
         dice.addEventListener('click',async ()=>
         {
-            await zar()
+            await zar(0)
             data=await get('playerData',player)
             showData(data[0],data[1])
             unlockMenu()
@@ -598,7 +608,8 @@ async function playerGame(player)
         buttonBuildOras()
         buttonUseDevelop()
         pass.addEventListener('click', async () => {
-            await get('pas',0)
+            await put('pas',0)
+            pass.remove()
             resolve();
         });
       });

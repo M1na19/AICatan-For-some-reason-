@@ -39,7 +39,7 @@ async function TheGame()
 {
     while(!await get("gameWon",0))
     {
-        for(let i=0;i<=nrJucatori;i++)
+        for(let i=0;i<nrJucatori;i++)
         {
             if(i==0)
             {
@@ -47,12 +47,16 @@ async function TheGame()
             }
             else
             {
+                await zar(i)
                 let action=["",""]
-                while(action[0]!="pas")
+                while(action[0]!="pass")
                 {
                     action=await get("AIaction",i)
-                    manageAction(action)
+                    await manageAction(action,i)
+                    data=await get('playerData',0)
+                    showData(data[0],data[1])
                 }
+                await put('pas',i)
             }
         }
     }
@@ -62,7 +66,9 @@ async function test()
     
     await MakeMap(await post(0,4))
     await put('putData',0,[[5,5,5,5,5],[1,1,1,1,1]])
-    await put('putData',1,[[1,1,1,1,1],[1,1,1,1,1]])
+    await put('putData',1,[[5,5,5,5,5],[1,1,1,1,1]])
+    await put('putData',2,[[5,5,5,5,5],[1,1,1,1,1]])
+    await put('putData',3,[[5,5,5,5,5],[1,1,1,1,1]])
     await put('placePiece',0,['asezare',8,6])
     MakeSettlement(8,6,'town',0)
     await put('placePiece',0,['drum',8,7])
