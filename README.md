@@ -5,7 +5,7 @@
 
     Categorie: Web
     Judetul: București
-    Surse: GITHUB
+    Surse: [GITHUB](https://github.com/M1na19/AICatan-For-some-reason-/tree/main)
     Homepage: http://ramami.go.ro
 
 Descriere
@@ -48,7 +48,7 @@ Realizatori
 Impartirea Lucrului
     
     Matei Sirghe a lucrat la UI, Serverul node.js, database, evaluator si logica jocului
-    Mihai Boanta a lucrat la API, Serveril flask, AI si logica jocului
+    Mihai Boanta a lucrat la API, Serverul flask, AI si logica jocului
 
 #DOCUMENTATION AND EXPLANATION
 
