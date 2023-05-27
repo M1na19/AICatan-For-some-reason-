@@ -1,4 +1,4 @@
-#SHORT EXPLANATION
+# SHORT EXPLANATION
 
 
  Informatii generale
@@ -12,7 +12,7 @@ Descriere
 
     Play Catan Against Carlos este un joc distractiv si complex in care inteligenta umana este pusa cap la cap cu inteligenta artificiala.
 
-Tehnologii
+# Tehnologii
 
 Frontend
 
@@ -50,11 +50,11 @@ Impartirea Lucrului
     Matei Sirghe a lucrat la UI, Serverul node.js, database si evaluator
     Mihai Boanta a lucrat la API, Serverul flask, AI si logica jocului
 
-#DOCUMENTATION AND EXPLANATION
+# DOCUMENTATION AND EXPLANATION
 
     https://docs.google.com/document/d/1hQ-L3MCxd1eD-uKnd1WcKTyZc07qfhOSoCZ8NMabZ5s/edit?usp=sharing
 
-#MATERIALE CU DREPTURI DE AUTOR CARE NU NE APARTIN
+# MATERIALE CU DREPTURI DE AUTOR CARE NU NE APARTIN
 
     IMAGINI{'images/background.png','images/bricktile.png','images/desert.png','images/graintile.png','images/hexagon.png','images/oretile.png','images/player.png','images/rolling_dice.gif','images/spotlight.png','images/woodtile.png','images/wooltile.png',}
   
@@ -79,7 +79,7 @@ FOR LINUX:
 
     export FLASK_APP=controller.py
     
-#WARNING
+# WARNING
 
 FOR WINDOWS:
 
