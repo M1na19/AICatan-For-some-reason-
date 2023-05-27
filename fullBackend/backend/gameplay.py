@@ -8,7 +8,7 @@ import asyncio
 import random
 import threading
 import evaluatoare.TradeValue as tv
-pickleLocation=os.path.abspath(".")+"/fullBackend/storage/state.pickle"
+pickleLocation=os.path.abspath("..")+"//fullBackend//storage//state.pickle"
 lock=threading.Lock()
 def getState():
     lock.acquire()
