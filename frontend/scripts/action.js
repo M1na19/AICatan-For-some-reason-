@@ -1,4 +1,26 @@
 let tried_trade=false
+function thinking(found)
+{
+    if(document.getElementById("think")==null)
+    {
+        var think=document.createElement('img')
+        think.id="think"
+    }
+    else
+    {
+        var think=document.getElementById('think')
+    }
+    if(found==false)
+    {
+        think.src="https://clipartix.com/wp-content/uploads/2018/03/thinking-gif-2018-40.gif"
+    }
+    else
+    {
+        think.src="https://i.gifer.com/YkAw.gif"
+    }
+    think.style="position:aboslute;top:50%;left:85%;height:200px;width:auto;"
+    document.body.append(think)
+}
 async function manageAction(action,player)
 {
     let name=action[0]
@@ -78,7 +100,11 @@ async function manageAction(action,player)
         }
         else
         {
-            await put('playersTrade',player,[player2,[give],[recieve]])
+            let cardsgiven=[0,0,0,0,0]
+            let cardsrecived=[0,0,0,0,0]
+            cardsgiven[give]=1
+            cardsrecived[recieve]=1
+            await put('playersTrade',player,[player2,cardsgiven,cardsrecived])
         }
     }
     else if(tried_trade==true)

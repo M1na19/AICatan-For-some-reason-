@@ -32,8 +32,9 @@ def start(sp,nr_p):
     config=f.random_config()
     game=gs.game_state(config,sp,nr_p)
     dezvoltari=[[0,0,0,0,0] for i in range(nr_p)]
+    pieces=game.start()
     endState(game,dezvoltari)
-    return config
+    return [config,pieces]
 def resolve_get(rq,player):
     state=getState()
     game=state[0]
@@ -86,7 +87,7 @@ def resolve_get(rq,player):
         f.celMaiMareDrum(game,player)
         answear=game.biggestArmy
     elif(rq=='visiblePoints'):
-        answear=game.constructi[0]*2+game.constructi[1]
+        answear=game.constructi[player][0]*2+game.constructi[player][1]
         if(f.ceaMaiMareArmata(game,player)):
             answear+=2
         if(f.celMaiMareDrum(game,player)):
@@ -198,7 +199,7 @@ def resolve_getInfo(rq,player,info):
         trade0=ast.literal_eval(info[1])
         trade1=ast.literal_eval(info[2])
         answear=False
-        if(f.can_buy(game,playerResponding,trade1) and tv.checkTradeProposal(game,trade0,trade1,player,playerResponding)):
+        if(f.can_buy(game,playerResponding,trade1) and tv.checkTradeProposal(game,trade1,trade0,playerResponding,player)):
             answear=True
             for res in range(len(trade0)):
                 game.hand[player][res]-=trade0[res]

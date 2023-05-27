@@ -526,6 +526,7 @@ function resetDice()
   secondDice.textContent="#"
   diceAnimation.style.opacity="100%"
   rollDice.style.opacity="100%"
+  rollDice.textContent="ROLL DICE"
 }
 
 function showDice(x,y)

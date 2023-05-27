@@ -299,11 +299,15 @@ class treeFunctions:
         for i in range(len(cardsValue)):
             if(cardsValue[i]>cardsValue[bestCard]):
                 bestCard=i
+        myTrade=[0,0,0,0,0]
+        myTrade[bestCard]=1
         for i in range(5):
             if(state.hand[state.player_turn][i]>0):
                 for player in range(state.number_of_players):
                     if(player!=state.player_turn and state.hand[player][bestCard]>0):
-                        if(tv.checkTradeProposal(state,[i],[bestCard],state.player_turn,player)==True):
+                        yourTrade=[0,0,0,0,0]
+                        yourTrade[i]=1
+                        if(tv.checkTradeProposal(state,yourTrade,myTrade,state.player_turn,player)==True):
                             state:gs.game_state=deepcopy(nod.state)
                             state.hand[player][bestCard]-=1
                             state.hand[state.player_turn][i]-=1

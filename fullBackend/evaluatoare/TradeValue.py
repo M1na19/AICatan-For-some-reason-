@@ -3,10 +3,10 @@ import copy
 def gainOfCards(gamestate,newcards,player):
     totalvalue=0
     for i in range(len(newcards)):
-        totalvalue+=cval.cardEvaluator(gamestate,player)[newcards[i]]
-        gamestate.hand[player][newcards[i]]+=1
+        totalvalue+=cval.cardEvaluator(gamestate,player)[i]*newcards[i]
+        gamestate.hand[player][i]+=newcards[i]
     for i in range(len(newcards)):
-        gamestate.hand[player][newcards[i]]-=1
+        gamestate.hand[player][i]-=newcards[i]
     return totalvalue
 def tradeBank(gamestate,Trade,resource,player):
     simulatedGameState=copy.deepcopy(gamestate)
@@ -25,9 +25,9 @@ def checkTradeProposal(gamestate,Trade0,Trade1,player0,player1):
 # This is where the code begins
     simulatedGameState=copy.deepcopy(gamestate)
     for i in range(len(Trade0)):
-        simulatedGameState.hand[player0][Trade0[i]]-=1
+        simulatedGameState.hand[player0][i]-=Trade0[i]
     for i in range(len(Trade1)):
-        simulatedGameState.hand[player1][Trade1[i]]-=1
+        simulatedGameState.hand[player1][i]-=Trade1[i]
 
     totalvalue0=gainOfCards(simulatedGameState,Trade1,player0)-gainOfCards(simulatedGameState,Trade0,player0)
     totalvalue1=gainOfCards(simulatedGameState,Trade0,player1)-gainOfCards(simulatedGameState,Trade1,player1)

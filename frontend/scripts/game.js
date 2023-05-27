@@ -34,13 +34,22 @@ async function OnStartGame()
 
     }
 }
+async function pointsData()
+{
+    for(let i=0;i<nrJucatori;i++)
+    {
+        const vp=document.getElementById('Player'+(i+1)+'vp')
+        vp.textContent="Player"+(i+1)+" has "+await get('visiblePoints',i)+" points"
+    }
 
+}
 async function TheGame()
 {
     while(!await get("gameWon",0))
     {
         for(let i=0;i<nrJucatori;i++)
         {
+            await pointsData()
             if(i==0)
             {
                 await playerGame(i)
@@ -51,11 +60,15 @@ async function TheGame()
                 let action=["",""]
                 while(action[0]!="pass")
                 {
+                    new Promise((resolve)=>{setTimeout(()=>{thinking(false),resolve()},2000)}) 
                     action=await get("AIaction",i)
+                    thinking(true)
                     await manageAction(action,i)
                     data=await get('playerData',0)
                     showData(data[0],data[1])
                 }
+                if(document.getElementById('think'))
+                    document.getElementById('think').remove()
                 await put('pas',i)
             }
         }
@@ -63,44 +76,14 @@ async function TheGame()
 }
 async function test()
 {
+    starting=await post(0,4)
+    await MakeMap(starting[0])
+    for(let i=0;i<starting[1].length;i++)
+        if(starting[1][i][1]%2==0)
+            MakeSettlement(starting[1][i][0],starting[1][i][1],'town',Math.floor(i/4))
+        else
+            MakeSettlement(starting[1][i][0],starting[1][i][1],'road',Math.floor(i/4))
     
-    await MakeMap(await post(0,4))
-    await put('putData',0,[[5,5,5,5,5],[1,1,1,1,1]])
-    await put('putData',1,[[5,5,5,5,5],[1,1,1,1,1]])
-    await put('putData',2,[[5,5,5,5,5],[1,1,1,1,1]])
-    await put('putData',3,[[5,5,5,5,5],[1,1,1,1,1]])
-    await put('placePiece',0,['asezare',8,6])
-    MakeSettlement(8,6,'town',0)
-    await put('placePiece',0,['drum',8,7])
-    MakeSettlement(8,7,'drum',0)
-    await put('placePiece',1,['asezare',5,6])
-    MakeSettlement(5,6,'town',1)
-    await put('placePiece',1,['drum',5,7])
-    MakeSettlement(5,7,'drum',1)
-    await put('placePiece',2,['asezare',2,6])
-    MakeSettlement(2,6,'town',2)
-    await put('placePiece',2,['drum',2,7])
-    MakeSettlement(2,7,'drum',2)
-    await put('placePiece',3,['asezare',12,6])
-    MakeSettlement(12,6,'town',3)
-    await put('placePiece',3,['drum',12,7])
-    MakeSettlement(12,7,'drum',3)
-    await put('placePiece',0,['asezare',8,6])
-    MakeSettlement(8,6,'town',0)
-    await put('placePiece',0,['drum',8,7])
-    MakeSettlement(8,7,'drum',0)
-    await put('placePiece',1,['asezare',5,6])
-    MakeSettlement(5,6,'town',1)
-    await put('placePiece',1,['drum',5,7])
-    MakeSettlement(5,7,'drum',1)
-    await put('placePiece',2,['asezare',2,6])
-    MakeSettlement(2,6,'town',2)
-    await put('placePiece',2,['drum',2,7])
-    MakeSettlement(2,7,'drum',2)
-    await put('placePiece',3,['asezare',12,6])
-    MakeSettlement(12,6,'town',3)
-    await put('placePiece',3,['drum',12,7])
-    MakeSettlement(12,7,'drum',3)
     
     await TheGame()
 }

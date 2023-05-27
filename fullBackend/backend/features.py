@@ -106,11 +106,10 @@ def celMaiMareDrum(gamestate,player):
         return False
 
 def checkRoadSize(gamestate,player):
-    adiacenta=[[]]
-    count=0
+    adiacenta=[[0 for j in range(100)] for i in range(100)]
     frecv=dict()
     q=queue.Queue()
-
+    count=0
     for road in gamestate.players[player][0].neigh:
         if(road.player==player):
             q.put(road)
@@ -129,28 +128,20 @@ def checkRoadSize(gamestate,player):
             for neigh in now.neigh:
                 for road in neigh.neigh:
                     if road in frecv and road.player==player:
-                        adiacenta[frecv[now]].extend([0 for i in range(len(adiacenta[frecv[now]])-1,frecv[road])])
                         adiacenta[frecv[now]][frecv[road]]=1
-                        adiacenta[frecv[road]].extend([0 for i in range(len(adiacenta[frecv[road]])-1,frecv[now])])
                         adiacenta[frecv[road]][frecv[now]]=1
-                    else:
+                    elif(road.player==player):
                         q.put(road)
     maxim=0
     for i in range(count):
         for j in range(count):
             if(i!=j):
                 for k in range(count):
-                    if(i!=k and j!=k and len(adiacenta[i])>k and len(adiacenta[k])>j):
-                        adiacenta[i].extend([0 for i in range(len(adiacenta[i])-1,j)])
-                        adiacenta[j].extend([0 for i in range(len(adiacenta[j])-1,i)])
+                    if(i!=k and j!=k):
                         if(adiacenta[i][j]<adiacenta[i][k]+adiacenta[k][j]):
                             adiacenta[i][j]=adiacenta[j][i]=adiacenta[i][k]+adiacenta[k][j]
-
                         if(maxim<adiacenta[i][j]):
                             maxim=adiacenta[i][j]
-                    else:
-                        adiacenta[i].extend([0 for i in range(len(adiacenta[i])-1,k)])
-                        adiacenta[j].extend([0 for i in range(len(adiacenta[j])-1,k)])
                     
     return maxim
 

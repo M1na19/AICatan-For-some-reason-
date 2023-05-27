@@ -1,6 +1,5 @@
 const backgroundstyle="position: absolute; top:0%; height:100%; width:100%;color:green"
 
-var dice=document.querySelector('#diceButton')
 var develop=document.querySelector('#developButton')
 var useDevelop=document.querySelector('#useDevelopButton');
 var buildAsezare=document.querySelector("#asezareButton");
@@ -553,9 +552,10 @@ async function playerPlaceOras(player)
 }
 async function zar(player)
 {
-    dice=await get('zar',player)
-    showDice(dice[0],dice[1])//doesnt matter player
-    if(sum(dice)==7)
+    
+    let dices=await get('zar',player)
+    showDice(dices[0],dices[1])//doesnt matter player
+    if(sum(dices)==7)
     {
         if(player==0)
             {
@@ -582,12 +582,13 @@ async function playerBuyDevelopment(player)
 
 async function playerGame(player)
 {
+    resetDice()
     const pass=makeExit('PASS')
     data=await get('playerData',player)
     showData(data[0],data[1])
     lockMenu()
     await new Promise((resolve)=>{
-        dice.addEventListener('click',async ()=>
+        rollDice.addEventListener('click',async ()=>
         {
             await zar(0)
             data=await get('playerData',player)

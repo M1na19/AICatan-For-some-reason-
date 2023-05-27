@@ -1,6 +1,7 @@
 import numpy as np
 import queue
 import backend.features as f
+import random
 #doar eu si miezeu stiam ce inseamna codul asta cand l am scris, acum doar miezeu stie
 
 config= [[(0,0)],
@@ -266,6 +267,23 @@ class game_state:
             #f.celMaiMareDrum(self,self.player_turn)
         if name=="oras":
             self.constructi[player][0]+=1
+    def start(self):
+        info=[]
+        for player in range(self.number_of_players):
+            for _ in range(2):
+                rtile=random.randint(0,18)
+                rpiece=random.randint(0,5)*2
+                while(not f.check_avail(self.tiles[rtile].pieces[rpiece],2)):
+                    rtile=random.randint(0,18)
+                    rpiece=random.randint(0,5)*2
+                info.append([rtile,rpiece])
+                self.add_piece('asezare',player,[rtile,rpiece])
+                randneigh=random.randint(0,len(self.tiles[rtile].pieces[rpiece].neigh)-1)
+                while(self.tiles[rtile].pieces[rpiece].neigh[randneigh].name!='inlocuire'):
+                    randneigh=random.randint(0,self.tiles[rtile].pieces[rpiece].neigh-1)
+                self.add_piece('drum',player,self.tiles[rtile].pieces[rpiece].neigh[randneigh].tileinfo)
+                info.append(self.tiles[rtile].pieces[rpiece].neigh[randneigh].tileinfo)
+        return info
     def add_dezv(self,dezv,eu):
         self.dezvoltari[dezv]+=1
         if(dezv==0):
