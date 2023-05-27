@@ -191,16 +191,16 @@ function MakeSettlement(tile,piece,type,player)
     }
     switch(player)
     {
-      case 1:
+      case 0:
         newsettlement.html.style.filter = "invert(21%) sepia(77%) saturate(5326%) hue-rotate(336deg) brightness(92%) contrast(101%)";
         break;
-      case 2:
+      case 1:
         newsettlement.html.style.filter="invert(66%) sepia(93%) saturate(402%) hue-rotate(1deg) brightness(92%) contrast(99%)";
         break;
-      case 3:
+      case 2:
         newsettlement.html.style.filter = "invert(20%) sepia(73%) saturate(5005%) hue-rotate(238deg) brightness(84%) contrast(102%)";
         break;
-      case 4:
+      case 3:
         newsettlement.html.style.filter = "invert(100%) sepia(0%) saturate(7491%) hue-rotate(339deg) brightness(105%) contrast(103%)";
     }
 
