@@ -47,7 +47,7 @@ Realizatori
 
 Impartirea Lucrului
     
-    Matei Sirghe a lucrat la UI, Serverul node.js, database, evaluator si logica jocului
+    Matei Sirghe a lucrat la UI, Serverul node.js, database si evaluator
     Mihai Boanta a lucrat la API, Serverul flask, AI si logica jocului
 
 #DOCUMENTATION AND EXPLANATION
